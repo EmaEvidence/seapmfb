@@ -1,5 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
+import jwt_decode from 'jwt-decode';
 import {Button} from '../../common';
 import InputText from '../../common/InputText';
 import UnAuthWrapper from '../../common/UnAuthWrapper';
@@ -9,6 +10,7 @@ import {validateNonEmpty} from '../../validator';
 import {
   confirmOverwrite,
   enrollDevice,
+  loginCall,
   requestOTPCallUnAuth,
 } from '../../app/actions/auth';
 import toaster from '../../utils/toaster';
@@ -16,6 +18,7 @@ import useDeviceInfo from '../../hooks/useDeviceInfo';
 import {useRoute} from '@react-navigation/native';
 import {Header3, Paragraph} from '../../common/Text';
 import {AxiosResponse} from 'axios';
+import { saveItem } from '../../utils/localStorage';
 
 interface EnrollDeviceProps {
   navigation: INavigation;
@@ -119,7 +122,27 @@ export const EnrollDevice = ({navigation}: EnrollDeviceProps) => {
     })) as AxiosResponse;
     if (resp.status === 200) {
       toaster('Success', 'Device enrolled successfully.', 'custom');
-      navigation.navigate('Login');
+      // navigation.navigate('Login');
+      const resp = await loginCall({
+        ...route?.params?.userDate,
+        deviceId,
+        sessionId: '090qwqere',
+      });
+      // @ts-ignore
+      if (resp?.status === 200) {
+        // @ts-ignore
+        saveItem('authToken', resp.data.authenticationToken);
+        saveItem('acctNo', userData.accountNumber);
+        toaster('Success', 'Login Successful', 'custom');
+        const decoded: Record<string, string> = jwt_decode(
+          // @ts-ignore
+          resp.data.authenticationToken,
+        );
+        // @ts-ignore
+        axios.defaults.headers.common.Authorization = `Bearer ${resp.data.authenticationToken}`;
+        // @ts-ignore
+        handleMFA(resp.data.authType, decoded);
+      }
     }
   };
 

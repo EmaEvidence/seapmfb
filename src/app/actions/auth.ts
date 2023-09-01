@@ -9,15 +9,24 @@ export const accountVerify = async (account: string) => {
 };
 // resendOTPCall
 export const requestOTPCallUnAuth = async (accountNumber: string) => {
+  return postCalls('Account/deviceReg/requestOtp', {accountNumber}, '');
+};
+
+export const requestOTPAuth = async (accountNumber: string) => {
+  return postCalls('Account/deviceReg/resendOtp', {accountNumber}, '');
+};
+
+export const resendOTPCallUnAuth = async (accountNumber: string) => {
   return postCalls('Account/resendOtp', {accountNumber}, '');
+};
+
+// requestOTPCall
+export const requestOTPCallAuth = async () => {
+  return getCalls('auth/requestOtp', '');
 };
 
 export const confirmEnrollment = async (data: Record<string, string>) => {
   return postCalls('Account/ConfirmEnrollment', data, '');
-};
-// requestOTPCall
-export const requestOTPCallAuth = async () => {
-  return getCalls('auth/requestOtp', '');
 };
 
 export const loginCall = async (data: Record<string, string>) => {

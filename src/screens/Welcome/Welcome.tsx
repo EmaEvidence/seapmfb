@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, ImageBackground} from 'react-native';
+import {View, ImageBackground, Platform} from 'react-native';
 import Video from 'react-native-video';
 import {Button, Logo, RowView} from '../../common';
 import Hall from '../../assets/images/hall.jpeg';
@@ -22,7 +22,7 @@ export const Welcome = ({navigation}: WelcomeProps) => {
 
   return (
     <ImageBackground source={Hall}>
-      {!hideVideo && (
+      {!hideVideo || Platform.OS === 'android' && (
         <Video
           source={SeapVideo}
           style={styles.video}
@@ -37,7 +37,7 @@ export const Welcome = ({navigation}: WelcomeProps) => {
       )}
       <View style={styles.wrapper}>
         <Logo overrideStyle={styles.logo} />
-        {/* <Header2 overrideStyle={styles.header} text="Spring of Happiness" /> */}
+        <Header2 overrideStyle={styles.header} text="Spring of Happiness" />
         <View>
           <Button
             overrideStyle={styles.fullBtn}

@@ -185,6 +185,10 @@ export const Transfer = ({navigation}: any) => {
 
   const handleNextBeneficiary = () => {
     const isValid = validateBeneficiaryData(data, handleSetError);
+    if (selectedBeneficiaries.length === 0) {
+      toaster('Error', 'No Beneficiary Selected', 'custom');
+      return;
+    }
     if (isValid) {
       handleNext();
     }
@@ -236,10 +240,13 @@ export const Transfer = ({navigation}: any) => {
       debitAccountId: data.debitAccountId,
       narration: data.narration,
       beneficiaryId: data.beneficiaryId,
-      transaferType: 1,
+      transaferType: transferTypeNum,
       credential,
     })) as AxiosResponse<Record<string, any>>;
     if (resp.status === 200) {
+      console.log(resp.data)
+      getSummary();
+      getAccounts();
       navigation.navigate('Transaction', {transaction: resp.data});
     }
   };
@@ -253,6 +260,7 @@ export const Transfer = ({navigation}: any) => {
     const resp = (await makeNonBeneficiaryTransfer({
       amount: data.amount,
       debitAccountId: data.debitAccountId,
+      transaferType: transferTypeNum,
       narration: data.narration,
       nameEnquiryReference: data.nameEnquiryReference,
       saveBeneficiary,
@@ -377,7 +385,9 @@ export const Transfer = ({navigation}: any) => {
                 overridePickerStyle={styles.pickerStyle}
                 pickerItemStyle={styles.pickerItem}
                 placeholder="Click to select Transfer Type"
-                dropDownDirection="TOP"
+                // dropDownDirection="TOP"
+                listMode="MODAL"
+                searchable
               />
               {data.useBeneficiary === targetTypes[0] ? (
                 <>
@@ -417,6 +427,7 @@ export const Transfer = ({navigation}: any) => {
                           inValid={userError.beneficiaryId}
                           error="Select beneficiary"
                           listMode="MODAL"
+                          placeholder='Enter Name to Search Beneficiary'
                           searchable
                         />
                       )}
@@ -455,6 +466,7 @@ export const Transfer = ({navigation}: any) => {
                       }
                       onChange={handleSelectBank}
                       label={'Select Bank Name'}
+                      placeholder='Enter first letters of bank to Search'
                       name={'bank'}
                       value={data.bankCode}
                       inValid={false}

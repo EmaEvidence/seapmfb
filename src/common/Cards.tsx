@@ -48,6 +48,8 @@ export const Card = ({
     height: children ? 200 : 58,
   };
 
+
+
   return (
     <View style={[styles.card, withChildrenStyle, overrideStyle]}>
       <View style={styles.cardHeader}>
@@ -95,6 +97,7 @@ export const TransactionCard = ({
   onPress,
   transaction,
 }: TransactionCardsProps): JSX.Element => {
+  console.log(transaction.date, '=-=-=-date=-=-')
   const data = {
     icon: `${formatAmount(parseInt(transaction?.amount.toString(), 10))}`,
     title: transaction?.title,

@@ -118,6 +118,11 @@ export const Login = ({navigation}: LoginProps) => {
         );
         navigation.navigate('EnrollDevice', {
           acctNumber: userData.userId,
+          userData: {
+            ...userData,
+            deviceId,
+            sessionId: '090qwqere',
+          }
         });
       }
     }

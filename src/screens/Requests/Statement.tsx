@@ -11,7 +11,7 @@ import {getStatement} from '../../app/actions/account';
 import RNFetchBlob from 'react-native-blob-util';
 const {fs} = RNFetchBlob;
 
-const saveBase64ToFile = async (base64String: any, fileName: any) => {
+export const saveBase64ToFile = async (base64String: any, fileName: any) => {
   const pdfPath = `${fs.dirs.DocumentDir}/${fileName}.pdf`;
   await fs.writeFile(pdfPath, base64String, 'base64');
   return pdfPath;
