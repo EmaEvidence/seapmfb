@@ -72,7 +72,6 @@ export const FingerPrintComponent = ({navigation}: any) => {
   const handleCreateKeys = () => {
     return rnBiometrics.createKeys().then(resultObject => {
       const {publicKey} = resultObject;
-      console.log(publicKey, '=-=-=-=-public key');
       setPublicKey(publicKey);
       return publicKey;
     });

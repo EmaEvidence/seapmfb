@@ -16,7 +16,6 @@ export const Transaction = ({navigation}: any) => {
   // @ts-ignore
   const transaction = route?.params?.transaction || {};
 
-  console.log(transaction.receiptData, '=-=-=')
 
 //  const onShare = async () => {
 //     try {
@@ -44,9 +43,7 @@ export const Transaction = ({navigation}: any) => {
 
   const captureScreen = async () => {
     try {
-      console.log('=-=-=-=-called', 'uri')
       const uri = await ref.current?.capture();
-      // console.log('=-=-=-=-called', uri)
       let options = {
         html: `<p>${transaction.date}</p>`,
         fileName: 'receipt',
@@ -54,7 +51,6 @@ export const Transaction = ({navigation}: any) => {
       };
   
       let file = await RNHTMLtoPDF.convert(options);
-      console.log(file.filePath);
       const shareOptions = {
         title: 'Share via',
         message: 'Share the Receipt',
@@ -110,24 +106,24 @@ export const Transaction = ({navigation}: any) => {
             />
           </View>
           {
-            transaction.beneficiaryName && (
+            transaction.receiptData.creditAccountName && (
               <View style={styles.detailWrapper}>
-                <Header4 text="Beneficiary Name" />
-                <Paragraph text={transaction.beneficiaryName} />
+                <Header4 text="Beneficiary" />
+                <Paragraph text={transaction.receiptData.creditAccountName} />
               </View>
             )
           }
           {
-            transaction.beneficiaryBank && (
+            transaction.receiptData.beneficiaryBank && (
               <View style={styles.detailWrapper}>
                 <Header4 text="Beneficiary Bank" />
-                <Paragraph text={transaction.beneficiaryBank} />
+                <Paragraph text={transaction.receiptData.beneficiaryBank} />
               </View>
             )
           }
           <View style={styles.detailWrapper}>
             <Header4 text="Beneficiary Account" />
-            <Paragraph text={transaction.beneficiaryAccount || transaction.accountNumber || '-'} />
+            <Paragraph text={transaction.beneficiaryAccount || transaction.accountNumber || transaction.receiptData.creditAccount || '-'} />
           </View>
           <View style={styles.detailWrapper}>
             <Header4 text="Remarks" />

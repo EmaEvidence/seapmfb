@@ -97,7 +97,6 @@ export const TransactionCard = ({
   onPress,
   transaction,
 }: TransactionCardsProps): JSX.Element => {
-  console.log(transaction.date, '=-=-=-date=-=-')
   const data = {
     icon: `${formatAmount(parseInt(transaction?.amount.toString(), 10))}`,
     title: transaction?.title,

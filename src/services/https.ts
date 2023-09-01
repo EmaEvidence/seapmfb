@@ -8,7 +8,6 @@ const genericError = 'An Error Occurred';
 const {url} = config.dev;
 
 const handleError = (error: any, errorMsg: string) => {
-  console.log(error, '=--=-=-=error=-=-=')
   if (
     error.request.status === 0 ||
     error.request._response ===
@@ -39,7 +38,6 @@ const handleError = (error: any, errorMsg: string) => {
 };
 
 export const getCalls = async (path: string, errorMsg: string) => {
-  console.log('=-=-==-data=get-=')
   Toast.hide();
   try {
     updateLoader(true);
@@ -59,7 +57,6 @@ export const postCalls = async (
   data: Record<string, any>,
   errorMsg: string,
 ) => {
-  console.log(data, '=-=-==-data=post-=')
   Toast.hide();
   try {
     updateLoader(true);
@@ -69,7 +66,6 @@ export const postCalls = async (
     }
     return resp;
   } catch (error) {
-    console.log(error.response, error.request)
     updateLoader(false);
     // @ts-ignore
     handleError(error, errorMsg);

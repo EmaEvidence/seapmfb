@@ -188,7 +188,6 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
       });
       return;
     }
-    console.log(userData, '=-=-=-=-=-');
     const resp = await getSEAPAccountCall({
       lastName: userData.lastName,
       firstName: userData.firstName,
@@ -220,7 +219,6 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
       accountType: userData.accountType,
       accountOfficerCode: '008',
     });
-    console.log(resp.request.data, '=-=-=-=-=-', resp.response);
     if (resp?.status === 200) {
       toaster('Success', resp.data.remarks, 'custom');
       setRegSuccess({
@@ -390,13 +388,10 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
         return;
       }
       const base64Array = result.assets[0].base64?.match(/.{1,50000}/g);
-      console.log(base64Array);
       if (!base64Array) {
-        console.log(result.errorCode, '=-=-=-', result.assets);
         toaster('Error', 'Image Upload failed, Try again!', 'custom');
         return;
       }
-      console.log('----begin', result.assets)
       setData(prevState => ({
         ...prevState,
         [key]: (result.assets && result.assets[0].fileName) || '',

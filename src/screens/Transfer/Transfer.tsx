@@ -244,7 +244,6 @@ export const Transfer = ({navigation}: any) => {
       credential,
     })) as AxiosResponse<Record<string, any>>;
     if (resp.status === 200) {
-      console.log(resp.data)
       getSummary();
       getAccounts();
       navigation.navigate('Transaction', {transaction: resp.data});

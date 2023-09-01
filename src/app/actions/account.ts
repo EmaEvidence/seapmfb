@@ -50,7 +50,6 @@ export const getHistory = async (acc: number, from?: string, to?: string) => {
       : `Banking/account/history?accountNumber=${acc}&FromDate=&ToDate=&Page=&PageSize=`;
   const resp = await getCalls(url, '');
   if (resp) {
-    console.log(resp.data, '=-=-=-debits=-=--')
     appDispatch(setHistory({data: resp.data?.transactions, acc}));
     return resp;
   }
@@ -113,7 +112,6 @@ export const getDebits = async (data: any) => {
   if (resp) {
     // @ts-ignore
     appDispatch(setDebits({debits: resp?.data?.transactions}));
-    console.log(resp.data, '=-=-=-debits=-=--')
     return resp;
   }
 };
