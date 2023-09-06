@@ -3,7 +3,7 @@ import 'react-native-gesture-handler';
 import RNRestart from 'react-native-restart';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {AppState, Image, SafeAreaView, StatusBar} from 'react-native';
+import {AppState, Image, SafeAreaView, StatusBar, Text, View} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {
@@ -72,8 +72,6 @@ import {EnrollDevice} from '../screens/EnrollDevice';
 import toaster from '../utils/toaster';
 import useDeviceInfo from '../hooks/useDeviceInfo';
 
-import { View } from "react-native";
-import { Text } from "react-native-svg"
 
 const {Navigator, Screen} = createBottomTabNavigator();
 
@@ -275,19 +273,18 @@ export function Route() {
     const initialRouteName = 'Onboarding';
     return (
       <>
-        {/* {onboardingIsDone && <SafeAreaView />} */}
         <MainStack.Navigator
           screenOptions={{
             headerShown: false,
           }}
-          initialRouteName={initialRouteName}>
+          // initialRouteName={initialRouteName}
+        >
           <MainStack.Screen component={Onboarding} name="Onboarding" />
           <MainStack.Screen component={Welcome} name="Welcome" />
           <MainStack.Screen component={Login} name="Login" />
           <MainStack.Screen component={SignUp} name="SignUp" />
           <MainStack.Screen component={GetSeapAccount} name="GetSeapAccount" />
           <MainStack.Screen component={ForgotPassword} name="ForgotPassword" />
-          {/* @ts-ignore */}
           <MainStack.Screen component={SetPassword} name="SetPassword" />
           <MainStack.Screen component={VerifyEmail} name="VerifyEmail" />
           <MainStack.Screen component={Passcode} name="Passcode" />
@@ -298,13 +295,6 @@ export function Route() {
             name="TransactionPassword"
           />
           <MainStack.Screen component={EnrollDevice} name="EnrollDevice" />
-          {/* <MainStack.Screen
-        component={Terms}
-        name="Terms"
-        options={{
-          headerShown: true,
-        }}
-      /> */}
           <MainStack.Screen component={LoanTypes} name="LoanTypes" />
           <MainStack.Screen component={LoanDetails} name="LoanDetails" />
           <MainStack.Screen component={LoanForm} name="LoanForm" />
@@ -342,8 +332,8 @@ export function Route() {
 
 // export const Route = () => {
 //   return (
-//     <View style={{width: 400, height: 400, backgroundColor: 'red'}}>
-//       <Text style={{color: 'red'}}>RoutesRoutesRoutesRoutesRoutesRoutesRoutesRoutesRoutesRoutesRoutesRoutesRoutesRoutesRoutesRoutesRoutesRoutesRoutesRoutesRoutesRoutesRoutesRoutesRoutesRoutesRoutesRoutesRoutesRoutesRoutesRoutesRoutesRoutesRoutesRoutesRoutesRoutes</Text>
+//     <View style={{width: '100%', height: '100%', backgroundColor: 'red'}}>
+//       <Welcome navigation={{navigate: (itm) => {}}} />
 //     </View>
 //   )
 // }

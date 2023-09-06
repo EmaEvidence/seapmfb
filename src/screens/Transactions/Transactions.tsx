@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity, View, FlatList} from 'react-native';
 import DatePicker from 'react-native-date-picker';
-import {FlatList} from 'react-native-gesture-handler';
 import {getHistory} from '../../app/actions/account';
 import {useAppSelector} from '../../app/hooks';
 import {AccountSelector, Button, TransactionCard} from '../../common';

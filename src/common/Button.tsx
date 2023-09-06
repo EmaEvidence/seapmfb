@@ -1,8 +1,9 @@
 import React from 'react';
-import {TouchableOpacity, StyleSheet, TextStyle, ViewStyle} from 'react-native';
+import {Pressable, StyleSheet, TextStyle, ViewStyle} from 'react-native';
 import {height, width} from '../utils/constants';
 import {colors, fontSizes} from '../utils/theme';
 import {Header5} from './Text';
+import { Alert } from 'react-native';
 
 interface ButtonProps {
   label: string;
@@ -20,9 +21,16 @@ export const Button = ({
   renderContent,
 }: ButtonProps) => {
   return (
-    <TouchableOpacity
-      style={[styles.container, overrideStyle]}
-      onPress={() => onPress()}>
+    <Pressable
+      // style={[styles.container, overrideStyle]}
+      style={({ pressed }) => [
+        styles.container, overrideStyle,
+        { opacity: pressed ? 0.5 : 1.0 },
+      ]}
+      onPress={() => {
+        Alert.alert('Clicked')
+        onPress()
+      }}>
       {renderContent ? (
         renderContent()
       ) : (
@@ -31,7 +39,7 @@ export const Button = ({
           text={label}
         />
       )}
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 
@@ -41,13 +49,14 @@ const styles = StyleSheet.create({
   container: {
     width: width * 0.25,
     height: height * 0.05,
-    maxHeight: 40,
-    minHeight: 35,
+    maxHeight: 50,
+    minHeight: 45,
     borderRadius: 200,
     backgroundColor: colors.sMainBlue,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    zIndex: 990999,
   },
   text: {
     color: colors.twhite,

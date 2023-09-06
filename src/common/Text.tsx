@@ -36,9 +36,9 @@ export const Header4 = ({text, overrideStyle}: TextProps) => {
   );
 };
 
-export const Header5 = ({text, overrideStyle}: TextProps) => {
+export const Header5 = ({text, overrideStyle, ...rest}: TextProps) => {
   return (
-    <Text style={[styles.text, styles.header5, overrideStyle]}>{text}</Text>
+    <Text style={[styles.text, styles.header5, overrideStyle]} {...rest}>{text}</Text>
   );
 };
 

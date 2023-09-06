@@ -5,10 +5,10 @@ import {
   View,
   TextStyle,
   ViewStyle,
+  FlatList,
 } from 'react-native';
 import {Paragraph} from './Text';
 import {colors} from '../utils/theme';
-import {FlatList} from 'react-native-gesture-handler';
 
 interface Props {
   chips: Array<string>;

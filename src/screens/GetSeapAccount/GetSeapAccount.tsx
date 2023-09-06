@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View} from 'react-native';
+import {View, ScrollView} from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import {getBranches, getSEAPAccountCall} from '../../app/actions/auth';
@@ -10,7 +10,6 @@ import UnAuthWrapper from '../../common/UnAuthWrapper';
 import toaster from '../../utils/toaster';
 import {validateEmail, validateNonEmpty, validatePhone} from '../../validator';
 import styles from './GetSeapAccount.styles';
-import {ScrollView} from 'react-native-gesture-handler';
 
 interface GetSeapAccountProps {
   navigation: {

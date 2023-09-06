@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, ImageBackground, Platform} from 'react-native';
+import {View, ImageBackground, Platform, Alert} from 'react-native';
 import Video from 'react-native-video';
 import {Button, Logo, RowView} from '../../common';
 import Hall from '../../assets/images/hall.jpeg';
@@ -17,24 +17,25 @@ interface WelcomeProps {
 export const Welcome = ({navigation}: WelcomeProps) => {
   const [hideVideo, setHideVideo] = useState(false);
   const moveToAuth = (route: string) => {
+    Alert.alert('Clicked')
     return navigation.navigate(route);
   };
 
   return (
-    <ImageBackground source={Hall}>
-      {!hideVideo || Platform.OS === 'android' && (
-        <Video
-          source={SeapVideo}
-          style={styles.video}
-          muted={true}
-          repeat={false}
-          resizeMode={'cover'}
-          rate={1.0}
-          ignoreSilentSwitch={'obey'}
-          paused={false}
-          onEnd={() => setHideVideo(true)}
-        />
-      )}
+    // <ImageBackground source={Hall}>
+    //   {!hideVideo || Platform.OS === 'android' && (
+    //     <Video
+    //       source={SeapVideo}
+    //       style={styles.video}
+    //       muted={true}
+    //       repeat={false}
+    //       resizeMode={'cover'}
+    //       rate={1.0}
+    //       ignoreSilentSwitch={'obey'}
+    //       paused={false}
+    //       onEnd={() => setHideVideo(true)}
+    //     />
+    //   )}
       <View style={styles.wrapper}>
         <Logo overrideStyle={styles.logo} />
         <Header2 overrideStyle={styles.header} text="Spring of Happiness" />
@@ -63,7 +64,7 @@ export const Welcome = ({navigation}: WelcomeProps) => {
           </RowView>
         </View>
       </View>
-    </ImageBackground>
+    // {/* </ImageBackground> */}
   );
 };
 
