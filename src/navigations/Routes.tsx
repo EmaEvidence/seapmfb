@@ -1,10 +1,9 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import 'react-native-gesture-handler';
 import RNRestart from 'react-native-restart';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {AppState, Image, SafeAreaView, StatusBar, Text, View} from 'react-native';
-import {createStackNavigator} from '@react-navigation/stack';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {
   Onboarding,
@@ -75,7 +74,7 @@ import useDeviceInfo from '../hooks/useDeviceInfo';
 
 const {Navigator, Screen} = createBottomTabNavigator();
 
-const MainStack = createStackNavigator();
+const MainStack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 const routes = ['Home', 'Payments', 'Loans', 'Help'];
@@ -277,7 +276,7 @@ export function Route() {
           screenOptions={{
             headerShown: false,
           }}
-          // initialRouteName={initialRouteName}
+          initialRouteName={initialRouteName}
         >
           <MainStack.Screen component={Onboarding} name="Onboarding" />
           <MainStack.Screen component={Welcome} name="Welcome" />

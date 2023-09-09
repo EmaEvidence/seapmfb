@@ -65,7 +65,7 @@ export const Onboarding = ({navigation}: OnboardingProps) => {
 
   const moveToAuth = () => {
     saveItem('onboardingDone', 'true');
-    return navigation.navigate('Login');
+    return navigation.navigate('Welcome');
   };
 
   const handleScrollIndex = (offset: number) => {

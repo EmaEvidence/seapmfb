@@ -3,7 +3,6 @@ import {Pressable, StyleSheet, TextStyle, ViewStyle} from 'react-native';
 import {height, width} from '../utils/constants';
 import {colors, fontSizes} from '../utils/theme';
 import {Header5} from './Text';
-import { Alert } from 'react-native';
 
 interface ButtonProps {
   label: string;
@@ -28,7 +27,6 @@ export const Button = ({
         { opacity: pressed ? 0.5 : 1.0 },
       ]}
       onPress={() => {
-        Alert.alert('Clicked')
         onPress()
       }}>
       {renderContent ? (
