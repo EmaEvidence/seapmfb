@@ -1,4 +1,4 @@
-import {StyleSheet, Pressable, Platform} from 'react-native';
+import {StyleSheet, Pressable, Platform, TouchableOpacity} from 'react-native';
 import React, {useEffect} from 'react';
 import {Header3, Paragraph} from './Text';
 import Button from './Button';
@@ -22,18 +22,22 @@ export const CustomToaster = ({
   }, []);
 
   return (
-    <Pressable
+    <TouchableOpacity
       style={[styles.wrapper, failureStyle, shadow]}
-      onPress={() => Toast.hide()}>
+      onPress={() => {
+        Toast.hide()
+      }}>
       <Header3 text={text1} />
       <Paragraph text={text2} />
       <Button
         overrideStyle={styles.btn}
         label="close"
-        onPress={() => Toast.hide()}
+        onPress={() => {
+          Toast.hide()
+        }}
         overrideLabelStyle={styles.btnLabel}
       />
-    </Pressable>
+    </TouchableOpacity>
   );
 };
 

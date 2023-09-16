@@ -370,6 +370,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: height * 0.06,
     maxHeight: 60,
+    minHeight: 40,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -388,7 +389,7 @@ const styles = StyleSheet.create({
     width: '80%',
     textAlign: 'right',
     position: 'absolute',
-    top: 65,
+    top: 60,
   },
   checkboxWrapper: {
     flexDirection: 'row',

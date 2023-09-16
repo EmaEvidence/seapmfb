@@ -2,9 +2,10 @@ import {useRoute} from '@react-navigation/native';
 import React from 'react';
 import ViewShot from 'react-native-view-shot';
 import Share from 'react-native-share';
-import {View, Image} from 'react-native';
+import {View, Image, Platform, ImageBackground} from 'react-native';
 import {Button, Header, Logo, RowView} from '../../common';
 import {Header4, Paragraph} from '../../common/Text';
+import LogoImage from '../../assets/images/logo.png';
 import styles from './Transactions.styles';
 
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
@@ -42,40 +43,49 @@ export const Transaction = ({navigation}: any) => {
 //   };
 
   const captureScreen = async () => {
-    try {
+    if (Platform.OS === 'ios') {
+      try {
+        const uri = await ref.current?.capture();
+        console.log(uri)
+        const shareOptions = {
+          title: 'Share via',
+          message: 'Share the Receipt',
+          url: uri,
+          social: Share.Social.EMAIL,
+        };
+        await Share.open(shareOptions);
+      } catch (error) {
+        toaster(
+          'Error',
+          'Receipt download failed',
+          'custom',
+        );
+      }
+    } else {
       const uri = await ref.current?.capture();
-      let options = {
-        html: `<p>${transaction.date}</p>`,
-        fileName: 'receipt',
-        directory: 'Documents',
-      };
-  
-      let file = await RNHTMLtoPDF.convert(options);
-      const shareOptions = {
-        title: 'Share via',
-        message: 'Share the Receipt',
-        url: file.filePath,
-        social: Share.Social.EMAIL,
-        email: 'recipient@gmail.com', // Replace with the recipient's email
-      };
-
-      await Share.open(shareOptions);
-    } catch (error) {
-      console.error('Error:', error);
+      console.log('0-0=-=-android-==-=-=-', uri)
     }
   };
 
-  // const createPDF = async () => {
-  //   let options = {
-  //     html: '<h1>PDF TEST</h1>',
-  //     fileName: 'receipt',
-  //     directory: 'Documents',
-  //   };
+  const genReceipt = () => {
+    return `
+      <div>
+        <h2>${1 + 1}</h2>
+      </div> 
+    `;
+  }
 
-  //   let file = await RNHTMLtoPDF.convert(options)
-  //   console.log(file.filePath);
-  // }
+  const createPDF = async () => {
+    let options = {
+      html: '<h1>PDF TEST</h1>',
+      fileName: `${Date.now()}_receipt`,
+      directory: 'Documents',
+    };
 
+    let file = await RNHTMLtoPDF.convert(options)
+    console.log(file.filePath);
+    return file;
+  }
 
   return (
     <View style={styles.wrapper} collapsable={false}>
@@ -85,12 +95,26 @@ export const Transaction = ({navigation}: any) => {
         showBackBtn
         overrideGoBack={() => navigation.goBack()}
       />
-      <ViewShot ref={ref} options={{ format: 'jpg', quality: 0.9 }}>
+      <ViewShot
+        ref={ref}
+        options={{
+          format: 'jpg',
+          quality: 0.9,
+          fileName: 'receipt'
+        }}
+      >
         <View style={styles.receipt} collapsable={false}>
+          <Image
+            source={LogoImage}
+            resizeMethod='resize'
+            resizeMode='contain'
+            style={{opacity: 0.1, position: 'absolute', width: '100%', height: '100%'}}
+          />
           <Logo
             overrideStyle={{
-              width: 500,
+              width: 50,
               marginBottom: 20,
+              height: 50,
             }}
           />
           <Header4 text="Transaction Reciept" />

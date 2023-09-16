@@ -18,13 +18,17 @@ import useDeviceInfo from '../../hooks/useDeviceInfo';
 import {useRoute} from '@react-navigation/native';
 import {Header3, Paragraph} from '../../common/Text';
 import {AxiosResponse} from 'axios';
-import { saveItem } from '../../utils/localStorage';
+import axios from 'axios';
+import { loadItem, saveItem } from '../../utils/localStorage';
+import { login } from '../../app/slices/auth';
+import { useAppDispatch } from '../../app/hooks';
 
 interface EnrollDeviceProps {
   navigation: INavigation;
 }
 
 export const EnrollDevice = ({navigation}: EnrollDeviceProps) => {
+  const dispatch = useAppDispatch();
   const route = useRoute();
   const [step, setStep] = useState(0);
   const [selectedDevice, setDevice] = useState('');
@@ -60,6 +64,22 @@ export const EnrollDevice = ({navigation}: EnrollDeviceProps) => {
       ...prevState,
       [label]: value,
     }));
+  };
+
+  const handleMFA = async (
+    authType: string,
+    user: Record<string, string | number>,
+  ) => {
+    const isMFASet = await loadItem('isMFASet');
+    saveItem('user', JSON.stringify(user.UserData));
+    if ((!isMFASet && !authType) || user.SDData === 0) {
+      navigation.replace('MFAChoice', {isFrom: 'login'});
+    } else if ((user.SDData as number) > 0 && !isMFASet) {
+      saveItem('isMFASet', user.SDate.toString());
+      dispatch(login(user.UserData));
+    } else {
+      dispatch(login(user.UserData));
+    }
   };
 
   const handleSubmit = async () => {
@@ -124,7 +144,7 @@ export const EnrollDevice = ({navigation}: EnrollDeviceProps) => {
       toaster('Success', 'Device enrolled successfully.', 'custom');
       // navigation.navigate('Login');
       const resp = await loginCall({
-        ...route?.params?.userDate,
+        ...route?.params?.userData,
         deviceId,
         sessionId: '090qwqere',
       });

@@ -81,7 +81,7 @@ export const styles = StyleSheet.create({
     height: 250,
     backgroundColor: colors.sMainBlue,
     borderRadius: 20,
-    padding: '4%',
+    padding: '6%',
     marginRight: 10,
     justifyContent: 'space-between',
   },
