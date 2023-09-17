@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {colors} from '../../utils/theme';
-import {width} from '../../utils/constants';
+import {width,height} from '../../utils/constants';
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 20,
     width,
-    height: '100%',
+    height,
   },
   content: {
     height: '40%',

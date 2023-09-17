@@ -20,27 +20,29 @@ export const Transaction = ({navigation}: any) => {
   const transaction = route?.params?.transaction || {};
 
   const captureScreen = async () => {
-    if (Platform.OS === 'ios') {
-      try {
-        const uri = await ref.current?.capture();
-        const shareOptions = {
-          title: 'Share via',
-          message: 'Share the Receipt',
-          url: uri,
-          social: Share.Social.EMAIL,
-        };
-        await Share.open(shareOptions);
-      } catch (error) {
-        getRecieptFrmHTML();
-        // toaster(
-        //   'Error',
-        //   'Receipt download failed',
-        //   'custom',
-        // );
-      }
-    } else {
-      getRecieptFrmHTML();
-    }
+    getRecieptFrmHTML();
+    // if (Platform.OS === 'ios') {
+    //   try {
+    //     // const uri = await ref.current?.capture();
+    //     // const shareOptions = {
+    //     //   title: 'Share via',
+    //     //   message: 'Share the Receipt',
+    //     //   url: uri,
+    //     //   social: Share.Social.EMAIL,
+    //     // };
+    //     // await Share.open(shareOptions);
+    //     getRecieptFrmHTML();
+    //   } catch (error) {
+    //     getRecieptFrmHTML();
+    //     // toaster(
+    //     //   'Error',
+    //     //   'Receipt download failed',
+    //     //   'custom',
+    //     // );
+    //   }
+    // } else {
+    //   getRecieptFrmHTML();
+    // }
   };
 
   const getRecieptFrmHTML = async () => {
@@ -77,7 +79,7 @@ export const Transaction = ({navigation}: any) => {
       <div width="400px" style="position: relative; passing: 50px; margin: auto; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 50px;">
         <img src="${logoImg}" style="width: 80px; height: 80px" />
         <h1>SEAP MFB</h1>
-        <h2 >Transaction Reciept</h2>
+        <h2 >Transaction Receipt</h2>
         <div style="border-top: 1px solid black; border-bottom: 1px solid black; padding: 50px; width: 400px;">
           <table border="0" style="width: 100%; margin: auto; font-size: 20px; font-weight: 600;">
             <tr>
@@ -86,7 +88,7 @@ export const Transaction = ({navigation}: any) => {
             </tr>
             <tr>
               <td>Date</td>
-              <td>${new Date(transaction?.transactionDate)?.toDateString() || '-'}</td>
+              <td>${(transaction?.transactionDate && new Date(transaction?.transactionDate)?.toDateString()) || '-'}</td>
             </tr>
             <tr>
               <td>Beneficiary</td>
@@ -98,11 +100,11 @@ export const Transaction = ({navigation}: any) => {
             </tr>
             <tr>
               <td>Beneficiary Account</td>
-              <td>${transaction.beneficiaryAccount || transaction.accountNumber || transaction.receiptData.creditAccount || '-'}</td>
+              <td>${transaction?.beneficiaryAccount || transaction?.accountNumber || transaction?.receiptData?.creditAccount || '-'}</td>
             </tr>
             <tr>
               <td>Remark</td>
-              <td>${transaction.paymentNarration || transaction.narration}</td>
+              <td>${transaction?.paymentNarration || transaction?.narration}</td>
             </tr>
             <tr>
               <td>Amount</td>
@@ -157,7 +159,7 @@ export const Transaction = ({navigation}: any) => {
                 height: 50,
               }}
             />
-            <Header4 text="Transaction Reciept" />
+            <Header4 text="Transaction Receipt" />
             <View style={styles.divider} />
             <View style={styles.detailWrapper}>
               <Header4 text="Reference" />
@@ -170,24 +172,24 @@ export const Transaction = ({navigation}: any) => {
               />
             </View>
             {
-              transaction.receiptData.creditAccountName && (
+              transaction?.receiptData?.creditAccountName && (
                 <View style={styles.detailWrapper}>
                   <Header4 text="Beneficiary" />
-                  <Paragraph text={transaction.receiptData.creditAccountName} />
+                  <Paragraph text={transaction.receiptData?.creditAccountName} />
                 </View>
               )
             }
             {
-              transaction.receiptData.beneficiaryBank && (
+              transaction.receiptData?.beneficiaryBank && (
                 <View style={styles.detailWrapper}>
                   <Header4 text="Beneficiary Bank" />
-                  <Paragraph text={transaction.receiptData.beneficiaryBank} />
+                  <Paragraph text={transaction.receiptData?.beneficiaryBank} />
                 </View>
               )
             }
             <View style={styles.detailWrapper}>
               <Header4 text="Beneficiary Account" />
-              <Paragraph text={transaction.beneficiaryAccount || transaction.accountNumber || transaction.receiptData.creditAccount || '-'} />
+              <Paragraph text={transaction.beneficiaryAccount || transaction.accountNumber || transaction.receiptData?.creditAccount || '-'} />
             </View>
             <View style={styles.detailWrapper}>
               <Header4 text="Remarks" />
@@ -239,7 +241,7 @@ export const Transaction = ({navigation}: any) => {
             height: 50,
           }}
         />
-        <Header4 text="Transaction Reciept" />
+        <Header4 text="Transaction Receipt" />
         <View style={styles.divider} />
         <View style={styles.detailWrapper}>
           <Header4 text="Reference" />
@@ -252,24 +254,24 @@ export const Transaction = ({navigation}: any) => {
           />
         </View>
         {
-          transaction.receiptData.creditAccountName && (
+          transaction.receiptData?.creditAccountName && (
             <View style={styles.detailWrapper}>
               <Header4 text="Beneficiary" />
-              <Paragraph text={transaction.receiptData.creditAccountName} />
+              <Paragraph text={transaction.receiptData?.creditAccountName} />
             </View>
           )
         }
         {
-          transaction.receiptData.beneficiaryBank && (
+          transaction.receiptData?.beneficiaryBank && (
             <View style={styles.detailWrapper}>
               <Header4 text="Beneficiary Bank" />
-              <Paragraph text={transaction.receiptData.beneficiaryBank} />
+              <Paragraph text={transaction?.receiptData?.beneficiaryBank} />
             </View>
           )
         }
         <View style={styles.detailWrapper}>
           <Header4 text="Beneficiary Account" />
-          <Paragraph text={transaction.beneficiaryAccount || transaction.accountNumber || transaction.receiptData.creditAccount || '-'} />
+          <Paragraph text={transaction?.beneficiaryAccount || transaction?.accountNumber || transaction?.receiptData?.creditAccount || '-'} />
         </View>
         <View style={styles.detailWrapper}>
           <Header4 text="Remarks" />
@@ -278,12 +280,12 @@ export const Transaction = ({navigation}: any) => {
               width: '50%',
               textAlign: 'right'
             }}
-            text={transaction.paymentNarration || transaction.narration}
+            text={transaction?.paymentNarration || transaction?.narration}
           />
         </View>
         <View style={styles.detailWrapper}>
           <Header4 text="Amount" />
-          <Paragraph text={`NGA ${transaction.amount}`} />
+          <Paragraph text={`NGA ${transaction?.amount}`} />
         </View>
         <View style={styles.divider} />
       </View>

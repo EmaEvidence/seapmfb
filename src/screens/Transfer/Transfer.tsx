@@ -7,6 +7,7 @@ import {
   getAcctName,
   getBanks,
   getBeneficiaries,
+  getHistory,
   getSummary,
   makeBeneficiaryTransfer,
   makeNonBeneficiaryTransfer,
@@ -246,6 +247,7 @@ export const Transfer = ({navigation}: any) => {
     if (resp.status === 200) {
       getSummary();
       getAccounts();
+      getHistory(1);
       navigation.navigate('Transaction', {transaction: resp.data});
     }
   };
@@ -272,6 +274,7 @@ export const Transfer = ({navigation}: any) => {
       }
       getSummary();
       getAccounts();
+      getHistory(1);
       navigation.navigate('Transaction', {transaction: resp.data});
     }
   };

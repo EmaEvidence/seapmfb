@@ -47,7 +47,7 @@ import {
   validatePostPaid,
   validatePrePaid,
 } from '../../validator';
-import {getSummary, getAccounts} from '../../app/actions/account';
+import {getSummary, getAccounts, getHistory} from '../../app/actions/account';
 
 const initialUserData = {
   category: '',
@@ -468,6 +468,7 @@ export const Payments = ({navigation}: {navigation: any}) => {
       setStep(0);
       getSummary(true);
       getAccounts();
+      getHistory(1);
       toaster(
         'Success',
         'Your Bill payment has being registered successfully',
