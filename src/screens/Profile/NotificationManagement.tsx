@@ -12,7 +12,6 @@ const notifTypes = [
   'App Updates',
   'Transactions',
   'New Services',
-  'Loans',
 ];
 
 export const NotificationManagement = ({navigation}: any) => {
@@ -23,7 +22,6 @@ export const NotificationManagement = ({navigation}: any) => {
     'App Updates': false,
     Transactions: false,
     'New Services': false,
-    Loans: false,
   });
 
   const handleSetNotifcation = (notType: string) => {

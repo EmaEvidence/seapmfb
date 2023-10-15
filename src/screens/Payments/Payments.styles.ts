@@ -21,13 +21,6 @@ export const styles = StyleSheet.create({
     width: '100%',
     flexWrap: 'wrap',
   },
-  loanCard: {
-    width: Dimensions.get('screen').width * 0.3,
-    margin: 20,
-    height: 170,
-    borderRadius: 10,
-    backgroundColor: colors.sLightBlue,
-  },
   logo: {
     width: 50,
     height: 50,
@@ -39,19 +32,6 @@ export const styles = StyleSheet.create({
     fontWeight: '500',
     color: colors.twhite,
     textAlign: 'center',
-  },
-  loanCardTitle: {
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: 0,
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
-    position: 'absolute',
-    bottom: 0,
-    backgroundColor: colors.sMainBlue,
-    width: '100%',
-    height: '25%',
-    paddingHorizontal: 10,
-    justifyContent: 'center',
   },
   dataWrapper: {
     alignItems: 'center',

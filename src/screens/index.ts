@@ -10,7 +10,6 @@ export * from './Payments';
 export * from './Help';
 export * from './Notification';
 export * from './Profile';
-export * from './Loans';
 export * from './MFA';
 export * from './Transactions';
 export * from './Transfer';

@@ -1,5 +1,4 @@
 import {Dimensions} from 'react-native';
-import LoanServices from '../assets/images/loans.jpeg';
 import Hall from '../assets/images/hall.jpeg';
 import ATM from '../assets/images/atm.jpeg';
 
@@ -38,9 +37,5 @@ export const advertContents = [
   {
     img: Hall,
     text: 'Conducive Bank Hall',
-  },
-  {
-    img: LoanServices,
-    text: 'Low Interest Loan Services',
   },
 ];

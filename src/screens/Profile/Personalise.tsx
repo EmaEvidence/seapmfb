@@ -37,7 +37,6 @@ export const Personalize = ({navigation}: any) => {
     'Font Size': 'Default',
     Transactions: false,
     'New Services': false,
-    Loans: false,
     'Change Language': 'English',
   });
   const personaliseTypes = [

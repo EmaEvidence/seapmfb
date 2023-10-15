@@ -36,7 +36,9 @@ export const UnAuthWrapper = ({
             />
           </View>
           <View>{children}</View>
-          <View>
+          <View style={{
+            marginBottom: 60
+          }}>
             <Button
               overrideStyle={styles.button}
               label={linkText}
@@ -69,6 +71,7 @@ const styles = StyleSheet.create({
     height: '100%',
     paddingHorizontal: '5%',
     paddingVertical: '5%',
+    // marginBottom: 50,
     justifyContent: 'space-between',
   },
   headerStyle: {

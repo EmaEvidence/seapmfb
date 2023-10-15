@@ -41,11 +41,6 @@ export const Onboarding = ({navigation}: OnboardingProps) => {
         'Banking comfortably from anywhere within Nigeria with our multichannel Banking platforms.',
     },
     {
-      img: S3,
-      title: 'GET A LOAN',
-      detail: 'At a very low interest rate and convinient repay plan.',
-    },
-    {
       img: S2,
       title: 'FUND TRANSFER',
       detail: 'Transaction made easy send money to any bank in Nigeria.',

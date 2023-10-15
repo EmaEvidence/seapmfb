@@ -17,13 +17,10 @@ import {
   Payments,
   Notification,
   Profile,
-  Loans,
   Passcode,
   MFAChoice,
   FingerPrint,
   NQR,
-  LoanTypes,
-  LoanDetails,
   Transactions,
   Transaction,
   Transfer,
@@ -32,7 +29,6 @@ import {
   NotificationManagement,
   EditProfile,
   ContactUs,
-  LoanForm,
   ChangePin,
   ChangePassword,
   SetupBiometric,
@@ -55,8 +51,6 @@ import Payment from '../assets/images/payment.png';
 import PaymentBlur from '../assets/images/paymentBlur.png';
 import Chat from '../assets/images/chat.png';
 import ChatBlur from '../assets/images/chatBlur.png';
-import Loan from '../assets/images/loan.png';
-import LoanBlur from '../assets/images/loanBlur.png';
 import {DrawerContent, Loader} from '../common';
 import {GetSeapAccount} from '../screens/GetSeapAccount';
 import {loadItem, removeItem} from '../utils/localStorage';
@@ -77,7 +71,7 @@ const {Navigator, Screen} = createBottomTabNavigator();
 const MainStack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
-const routes = ['Home', 'Payments', 'Loans', 'Help'];
+const routes = ['Home', 'Payments', 'Help'];
 
 axios.interceptors.response.use(
   response => {
@@ -106,8 +100,6 @@ const MainAuthPage = () => {
             iconName = focused ? HomeIcon : HomeBlur;
           } else if (route.name === routes[1]) {
             iconName = focused ? Payment : PaymentBlur;
-          } else if (route.name === routes[2]) {
-            iconName = focused ? Loan : LoanBlur;
           } else if (route.name === routes[3]) {
             iconName = focused ? Chat : ChatBlur;
           }
@@ -122,7 +114,6 @@ const MainAuthPage = () => {
       })}>
       <Screen component={Home} name={routes[0]} />
       <Screen component={Payments} name={routes[1]} />
-      <Screen component={Loans} name={routes[2]} />
       {/* <Screen component={Analytics} name={routes[3]} /> */}
     </Navigator>
   );
@@ -234,9 +225,6 @@ export function Route() {
       }}>
       <MainStack.Screen component={MainAuthPage} name="HomeScreen" />
       <MainStack.Screen component={Notification} name="Notification" />
-      <MainStack.Screen component={LoanTypes} name="LoanTypes" />
-      <MainStack.Screen component={LoanDetails} name="LoanDetails" />
-      <MainStack.Screen component={LoanForm} name="LoanForm" />
       <MainStack.Screen component={Transactions} name="Transactions" />
       <MainStack.Screen component={Debits} name="Debits" />
       <MainStack.Screen component={Transaction} name="Transaction" />
@@ -294,9 +282,6 @@ export function Route() {
             name="TransactionPassword"
           />
           <MainStack.Screen component={EnrollDevice} name="EnrollDevice" />
-          <MainStack.Screen component={LoanTypes} name="LoanTypes" />
-          <MainStack.Screen component={LoanDetails} name="LoanDetails" />
-          <MainStack.Screen component={LoanForm} name="LoanForm" />
         </MainStack.Navigator>
       </>
     );
