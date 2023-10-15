@@ -48,6 +48,8 @@ import {colors, fontSizes} from '../utils/theme';
 import HomeIcon from '../assets/images/home.png';
 import HomeBlur from '../assets/images/homeBlur.png';
 import Payment from '../assets/images/payment.png';
+import TransferIcon from '../assets/images/transfer.png';
+import TransferBlurIcon from '../assets/images/TransferBlur.png';
 import PaymentBlur from '../assets/images/paymentBlur.png';
 import Chat from '../assets/images/chat.png';
 import ChatBlur from '../assets/images/chatBlur.png';
@@ -71,7 +73,7 @@ const {Navigator, Screen} = createBottomTabNavigator();
 const MainStack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
-const routes = ['Home', 'Payments', 'Help'];
+const routes = ['Home', 'Transfer', 'Payments', 'Help'];
 
 axios.interceptors.response.use(
   response => {
@@ -99,6 +101,8 @@ const MainAuthPage = () => {
           if (route.name === routes[0]) {
             iconName = focused ? HomeIcon : HomeBlur;
           } else if (route.name === routes[1]) {
+            iconName = focused ? TransferIcon : TransferBlurIcon;
+          } else if (route.name === routes[2]) {
             iconName = focused ? Payment : PaymentBlur;
           } else if (route.name === routes[3]) {
             iconName = focused ? Chat : ChatBlur;
@@ -113,7 +117,8 @@ const MainAuthPage = () => {
         },
       })}>
       <Screen component={Home} name={routes[0]} />
-      <Screen component={Payments} name={routes[1]} />
+      <Screen component={Transfer} name={routes[1]} />
+      <Screen component={Payments} name={routes[2]} />
       {/* <Screen component={Analytics} name={routes[3]} /> */}
     </Navigator>
   );
