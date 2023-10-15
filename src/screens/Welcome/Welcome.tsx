@@ -50,15 +50,15 @@ export const Welcome = ({navigation}: WelcomeProps) => {
             onPress={() => moveToAuth('SignUp')}
           />
           <RowView justify="isBtw" align="isCenter">
-            <Button
+            {/* <Button
               label="Get a Loan"
               onPress={() => moveToAuth('LoanTypes')}
               overrideStyle={styles.halfBtn}
-            />
+            /> */}
             <Button
               label="Get an Account"
               onPress={() => moveToAuth('GetSeapAccount')}
-              overrideStyle={styles.halfBtn}
+              overrideStyle={styles.fullBtn}
             />
           </RowView>
         </View>

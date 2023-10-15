@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, ScrollView, TouchableOpacity, Image} from 'react-native';
+import {View, Text, ScrollView, TouchableOpacity, Image} from 'react-native';
 import {Paragraph} from '../../common/Text';
 import AdvanceLoan from '../../assets/images/advanceLoan.png';
 import PayrollLoan from '../../assets/images/payrollLoan.png';

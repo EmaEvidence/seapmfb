@@ -1,8 +1,7 @@
 import React from 'react';
-import {Platform, StyleSheet, View} from 'react-native';
+import {Platform, StyleSheet, View, TouchableOpacity} from 'react-native';
 import {Header1, Header4} from './Text';
 import {colors, fontSizes} from '../utils/theme';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import { useAppSelector } from '../app/hooks';
 
 export const Header = ({
