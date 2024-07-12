@@ -20,8 +20,7 @@
 		54517CF34D164363B0D12246 /* Poppins-ExtraLightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 63286AFD94F147A0961984A2 /* Poppins-ExtraLightItalic.ttf */; };
 		56EB9E43CF614954A0628FD2 /* Poppins-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D35700CFC5C3441A888351D3 /* Poppins-ExtraBold.ttf */; };
 		603C4A667A0C4D248E67EBE3 /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BCB274D1476542ACBD673FD1 /* Poppins-Regular.ttf */; };
-		725D921A19E683EB7863CDDF /* libPods-seapmfb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 771DEEB51EB8DFA6880FED51 /* libPods-seapmfb.a */; };
-		7A6FACACB19FA98A08C45668 /* libPods-seapmfb-seapmfbTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 49B644099D28C00BEF9F8389 /* libPods-seapmfb-seapmfbTests.a */; };
+		81237D2676320589C2803FFD /* libPods-seapmfb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D49ABB9C24818DBA0A29C7A /* libPods-seapmfb.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		851EA02435054788A551D49B /* Poppins-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7FB8F7B5C05B4101896CD7B2 /* Poppins-Light.ttf */; };
 		86AC4AD05D6346FABE35EA84 /* Poppins-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8E89E8DE5C0B4594B7AFD437 /* Poppins-LightItalic.ttf */; };
@@ -29,6 +28,7 @@
 		A1CA8CB48EC446828739154D /* Poppins-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 27B45CDA3A164179B10DE019 /* Poppins-BlackItalic.ttf */; };
 		A2DFF6F8037A432EB0D24318 /* Poppins-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ADABE2975C0C48CA8A6C0129 /* Poppins-Black.ttf */; };
 		ACF5A16D73064321815CEA5D /* Poppins-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A4161B3B85994162A3860DB6 /* Poppins-Thin.ttf */; };
+		EAF89D861546E8DD7E060DCD /* libPods-seapmfb-seapmfbTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 73AECE6E3FCC8D0458271993 /* libPods-seapmfb-seapmfbTests.a */; };
 		EB285933A4D44C10B8EF9951 /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1EE03870550F4DFFB66946C6 /* Poppins-SemiBold.ttf */; };
 		F15C5AAF9256404E86EC073A /* Poppins-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FDC431594A324BCF828FBCB1 /* Poppins-Bold.ttf */; };
 		FE7C15E148B94C15AC0186C9 /* Poppins-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 04A84B9F857F45DC8D7FC2BC /* Poppins-ExtraLight.ttf */; };
@@ -45,6 +45,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		000CADC517600A89A2A2EA8B /* Pods-seapmfb-seapmfbTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-seapmfb-seapmfbTests.debug.xcconfig"; path = "Target Support Files/Pods-seapmfb-seapmfbTests/Pods-seapmfb-seapmfbTests.debug.xcconfig"; sourceTree = "<group>"; };
 		00E356EE1AD99517003FC87E /* seapmfbTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = seapmfbTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* seapmfbTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = seapmfbTests.m; sourceTree = "<group>"; };
@@ -56,29 +57,28 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = seapmfb/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = seapmfb/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = seapmfb/main.m; sourceTree = "<group>"; };
-		1473C21E93DAE4E6C91C4E49 /* Pods-seapmfb.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-seapmfb.release.xcconfig"; path = "Target Support Files/Pods-seapmfb/Pods-seapmfb.release.xcconfig"; sourceTree = "<group>"; };
 		1EE03870550F4DFFB66946C6 /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-SemiBold.ttf"; path = "../src/assets/fonts/Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
 		27B45CDA3A164179B10DE019 /* Poppins-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-BlackItalic.ttf"; path = "../src/assets/fonts/Poppins-BlackItalic.ttf"; sourceTree = "<group>"; };
 		37D817A4BD47430AB3031998 /* Poppins-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Italic.ttf"; path = "../src/assets/fonts/Poppins-Italic.ttf"; sourceTree = "<group>"; };
 		3E21DAA5022E4116BE5F420D /* Poppins-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-MediumItalic.ttf"; path = "../src/assets/fonts/Poppins-MediumItalic.ttf"; sourceTree = "<group>"; };
-		49B644099D28C00BEF9F8389 /* libPods-seapmfb-seapmfbTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-seapmfb-seapmfbTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4D49ABB9C24818DBA0A29C7A /* libPods-seapmfb.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-seapmfb.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		63286AFD94F147A0961984A2 /* Poppins-ExtraLightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-ExtraLightItalic.ttf"; path = "../src/assets/fonts/Poppins-ExtraLightItalic.ttf"; sourceTree = "<group>"; };
-		771DEEB51EB8DFA6880FED51 /* libPods-seapmfb.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-seapmfb.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		73AECE6E3FCC8D0458271993 /* libPods-seapmfb-seapmfbTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-seapmfb-seapmfbTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FB8F7B5C05B4101896CD7B2 /* Poppins-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Light.ttf"; path = "../src/assets/fonts/Poppins-Light.ttf"; sourceTree = "<group>"; };
+		80B711FB1B8CC8F3970C15D9 /* Pods-seapmfb.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-seapmfb.debug.xcconfig"; path = "Target Support Files/Pods-seapmfb/Pods-seapmfb.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = seapmfb/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		871EB75DAB3F4216AC4A7E00 /* Poppins-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-ExtraBoldItalic.ttf"; path = "../src/assets/fonts/Poppins-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
 		8E89E8DE5C0B4594B7AFD437 /* Poppins-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-LightItalic.ttf"; path = "../src/assets/fonts/Poppins-LightItalic.ttf"; sourceTree = "<group>"; };
-		9FBA61823638E5A3BE9E49E4 /* Pods-seapmfb-seapmfbTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-seapmfb-seapmfbTests.debug.xcconfig"; path = "Target Support Files/Pods-seapmfb-seapmfbTests/Pods-seapmfb-seapmfbTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A223941A78F9421C81154C6A /* Poppins-ThinItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-ThinItalic.ttf"; path = "../src/assets/fonts/Poppins-ThinItalic.ttf"; sourceTree = "<group>"; };
 		A4161B3B85994162A3860DB6 /* Poppins-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Thin.ttf"; path = "../src/assets/fonts/Poppins-Thin.ttf"; sourceTree = "<group>"; };
 		ADABE2975C0C48CA8A6C0129 /* Poppins-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Black.ttf"; path = "../src/assets/fonts/Poppins-Black.ttf"; sourceTree = "<group>"; };
 		BCB274D1476542ACBD673FD1 /* Poppins-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Regular.ttf"; path = "../src/assets/fonts/Poppins-Regular.ttf"; sourceTree = "<group>"; };
 		C4F25EEB777545D780A72C8E /* Poppins-SemiBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-SemiBoldItalic.ttf"; path = "../src/assets/fonts/Poppins-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
-		CC736CFB6ACD3E540BEC1C6C /* Pods-seapmfb.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-seapmfb.debug.xcconfig"; path = "Target Support Files/Pods-seapmfb/Pods-seapmfb.debug.xcconfig"; sourceTree = "<group>"; };
-		CD79B44CC2BD097F159EA353 /* Pods-seapmfb-seapmfbTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-seapmfb-seapmfbTests.release.xcconfig"; path = "Target Support Files/Pods-seapmfb-seapmfbTests/Pods-seapmfb-seapmfbTests.release.xcconfig"; sourceTree = "<group>"; };
 		D35700CFC5C3441A888351D3 /* Poppins-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-ExtraBold.ttf"; path = "../src/assets/fonts/Poppins-ExtraBold.ttf"; sourceTree = "<group>"; };
 		D912B9DB2C3D447C8A8185E4 /* Poppins-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-BoldItalic.ttf"; path = "../src/assets/fonts/Poppins-BoldItalic.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		F31C4E03B922D426CA8D2A11 /* Pods-seapmfb.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-seapmfb.release.xcconfig"; path = "Target Support Files/Pods-seapmfb/Pods-seapmfb.release.xcconfig"; sourceTree = "<group>"; };
+		F5DC47075D2C107451E6B87E /* Pods-seapmfb-seapmfbTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-seapmfb-seapmfbTests.release.xcconfig"; path = "Target Support Files/Pods-seapmfb-seapmfbTests/Pods-seapmfb-seapmfbTests.release.xcconfig"; sourceTree = "<group>"; };
 		FDC431594A324BCF828FBCB1 /* Poppins-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Bold.ttf"; path = "../src/assets/fonts/Poppins-Bold.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -87,7 +87,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7A6FACACB19FA98A08C45668 /* libPods-seapmfb-seapmfbTests.a in Frameworks */,
+				EAF89D861546E8DD7E060DCD /* libPods-seapmfb-seapmfbTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,7 +95,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				725D921A19E683EB7863CDDF /* libPods-seapmfb.a in Frameworks */,
+				81237D2676320589C2803FFD /* libPods-seapmfb.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -136,8 +136,8 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				771DEEB51EB8DFA6880FED51 /* libPods-seapmfb.a */,
-				49B644099D28C00BEF9F8389 /* libPods-seapmfb-seapmfbTests.a */,
+				4D49ABB9C24818DBA0A29C7A /* libPods-seapmfb.a */,
+				73AECE6E3FCC8D0458271993 /* libPods-seapmfb-seapmfbTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -202,10 +202,10 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				CC736CFB6ACD3E540BEC1C6C /* Pods-seapmfb.debug.xcconfig */,
-				1473C21E93DAE4E6C91C4E49 /* Pods-seapmfb.release.xcconfig */,
-				9FBA61823638E5A3BE9E49E4 /* Pods-seapmfb-seapmfbTests.debug.xcconfig */,
-				CD79B44CC2BD097F159EA353 /* Pods-seapmfb-seapmfbTests.release.xcconfig */,
+				80B711FB1B8CC8F3970C15D9 /* Pods-seapmfb.debug.xcconfig */,
+				F31C4E03B922D426CA8D2A11 /* Pods-seapmfb.release.xcconfig */,
+				000CADC517600A89A2A2EA8B /* Pods-seapmfb-seapmfbTests.debug.xcconfig */,
+				F5DC47075D2C107451E6B87E /* Pods-seapmfb-seapmfbTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -217,12 +217,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "seapmfbTests" */;
 			buildPhases = (
-				240B7BA0A43196CEE8E3EB32 /* [CP] Check Pods Manifest.lock */,
+				46F68B0EC0E00F5075467ACD /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				F0C9EBA2A7D9C6EB577AA186 /* [CP] Embed Pods Frameworks */,
-				1B9781192497F848D2A8250B /* [CP] Copy Pods Resources */,
+				56A10574AECC2AF301668FC6 /* [CP] Embed Pods Frameworks */,
+				A55DF26D28DEB306B2FCCCD9 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -238,14 +238,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "seapmfb" */;
 			buildPhases = (
-				409F1C570F81670DE2A2929E /* [CP] Check Pods Manifest.lock */,
+				43B72F5DFA9174A237D81DD9 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				827D20E6AB402D932BB1F0A6 /* [CP] Embed Pods Frameworks */,
-				53CE39D2F3EC25B9FBD176FD /* [CP] Copy Pods Resources */,
+				C60360B6B96C7771CDA55A16 /* [CP] Embed Pods Frameworks */,
+				5DA20DB95C03682DFE4011D9 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -346,46 +346,7 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		1B9781192497F848D2A8250B /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-seapmfb-seapmfbTests/Pods-seapmfb-seapmfbTests-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-seapmfb-seapmfbTests/Pods-seapmfb-seapmfbTests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-seapmfb-seapmfbTests/Pods-seapmfb-seapmfbTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		240B7BA0A43196CEE8E3EB32 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-seapmfb-seapmfbTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		409F1C570F81670DE2A2929E /* [CP] Check Pods Manifest.lock */ = {
+		43B72F5DFA9174A237D81DD9 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -407,7 +368,46 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		53CE39D2F3EC25B9FBD176FD /* [CP] Copy Pods Resources */ = {
+		46F68B0EC0E00F5075467ACD /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-seapmfb-seapmfbTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		56A10574AECC2AF301668FC6 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-seapmfb-seapmfbTests/Pods-seapmfb-seapmfbTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-seapmfb-seapmfbTests/Pods-seapmfb-seapmfbTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-seapmfb-seapmfbTests/Pods-seapmfb-seapmfbTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5DA20DB95C03682DFE4011D9 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -424,7 +424,24 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-seapmfb/Pods-seapmfb-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		827D20E6AB402D932BB1F0A6 /* [CP] Embed Pods Frameworks */ = {
+		A55DF26D28DEB306B2FCCCD9 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-seapmfb-seapmfbTests/Pods-seapmfb-seapmfbTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-seapmfb-seapmfbTests/Pods-seapmfb-seapmfbTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-seapmfb-seapmfbTests/Pods-seapmfb-seapmfbTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C60360B6B96C7771CDA55A16 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -439,23 +456,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-seapmfb/Pods-seapmfb-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		F0C9EBA2A7D9C6EB577AA186 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-seapmfb-seapmfbTests/Pods-seapmfb-seapmfbTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-seapmfb-seapmfbTests/Pods-seapmfb-seapmfbTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-seapmfb-seapmfbTests/Pods-seapmfb-seapmfbTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
@@ -510,9 +510,12 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9FBA61823638E5A3BE9E49E4 /* Pods-seapmfb-seapmfbTests.debug.xcconfig */;
+			baseConfigurationReference = 000CADC517600A89A2A2EA8B /* Pods-seapmfb-seapmfbTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = JRR2AC73V4;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -529,18 +532,27 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.seapmfb.seapmobile;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Seap1;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/seapmfb.app/seapmfb";
 			};
 			name = Debug;
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CD79B44CC2BD097F159EA353 /* Pods-seapmfb-seapmfbTests.release.xcconfig */;
+			baseConfigurationReference = F5DC47075D2C107451E6B87E /* Pods-seapmfb-seapmfbTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = JRR2AC73V4;
 				INFOPLIST_FILE = seapmfbTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -553,15 +565,21 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.seapmfb.seapmobile;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Seap1;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/seapmfb.app/seapmfb";
 			};
 			name = Release;
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CC736CFB6ACD3E540BEC1C6C /* Pods-seapmfb.debug.xcconfig */;
+			baseConfigurationReference = 80B711FB1B8CC8F3970C15D9 /* Pods-seapmfb.debug.xcconfig */;
 			buildSettings = {
 				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -570,7 +588,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = KLCW57UWV2;
+				DEVELOPMENT_TEAM = JRR2AC73V4;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = seapmfb/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Seap-Mobile";
@@ -585,22 +603,23 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.seapmfb.seap-mobile";
+				PRODUCT_BUNDLE_IDENTIFIER = com.seapmfb.seapmobile;
 				PRODUCT_NAME = seapmfb;
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SUPPORTED_PLATFORMS = "appletvos appletvsimulator driverkit iphoneos iphonesimulator macosx watchos watchsimulator";
-				SUPPORTS_MACCATALYST = YES;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,3,4";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1473C21E93DAE4E6C91C4E49 /* Pods-seapmfb.release.xcconfig */;
+			baseConfigurationReference = F31C4E03B922D426CA8D2A11 /* Pods-seapmfb.release.xcconfig */;
 			buildSettings = {
 				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -609,7 +628,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = KLCW57UWV2;
+				DEVELOPMENT_TEAM = JRR2AC73V4;
 				INFOPLIST_FILE = seapmfb/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Seap-Mobile";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
@@ -623,14 +642,15 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.seapmfb.seap-mobile";
+				PRODUCT_BUNDLE_IDENTIFIER = com.seapmfb.seapmobile;
 				PRODUCT_NAME = seapmfb;
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SUPPORTED_PLATFORMS = "appletvos appletvsimulator driverkit iphoneos iphonesimulator macosx watchos watchsimulator";
-				SUPPORTS_MACCATALYST = YES;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,3,4";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
@@ -696,7 +716,10 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_CFLAGS = "$(inherited)  ";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DFOLLY_NO_CONFIG",
@@ -761,7 +784,10 @@
 					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_CFLAGS = "$(inherited)  ";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DFOLLY_NO_CONFIG",

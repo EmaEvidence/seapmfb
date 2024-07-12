@@ -369,7 +369,7 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     height: height * 0.06,
-    maxHeight: 60,
+    maxHeight: 50,
     minHeight: 40,
     display: 'flex',
     alignItems: 'center',
