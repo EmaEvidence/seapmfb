@@ -114,6 +114,8 @@ const MainAuthPage = () => {
           fontWeight: '700',
           color: colors.sMainBlue,
           fontFamily: 'Trebuchet MS',
+          border: 1,
+          borderColor: 'black'
         },
       })}>
       <Screen component={Home} name={routes[0]} />

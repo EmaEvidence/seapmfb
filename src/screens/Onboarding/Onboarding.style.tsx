@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   btn: {
     paddingHorizontal: 10,
     width: width * 0.4,
-    backgroundColor: colors.twhite,
+    backgroundColor: 'transparent',//colors.twhite,
   },
   btnLabel: {
     color: colors.sYellow,

@@ -67,7 +67,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.twhite,
   },
   wrapper: {
-    backgroundColor: colors.twhite,
+    // backgroundColor: colors.twhite,
+    // backgroundColor: colors.sYellow,/
     height: '100%',
     paddingHorizontal: '5%',
     paddingVertical: '5%',

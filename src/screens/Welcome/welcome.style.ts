@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     width: '47%',
     marginVertical: 10,
     minHeight: 50,
-    backgroundColor: 'transparent',
+    // backgroundColor: 'transparent',
     borderWidth: 2,
     borderColor: colors.sMainBlue,
   },

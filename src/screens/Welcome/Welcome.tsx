@@ -39,16 +39,18 @@ export const Welcome = ({navigation}: WelcomeProps) => {
         <Logo overrideStyle={styles.logo} />
         <Header2 overrideStyle={styles.header} text="Spring of Happiness" />
         <View>
-          <Button
-            overrideStyle={styles.fullBtn}
-            label="Login"
-            onPress={() => moveToAuth('Login')}
-          />
-          <Button
-            overrideStyle={styles.fullBtn}
-            label="Register"
-            onPress={() => moveToAuth('SignUp')}
-          />
+          <RowView justify="isBtw" align="isCenter">
+            <Button
+              overrideStyle={styles.halfBtn}
+              label="Login"
+              onPress={() => moveToAuth('Login')}
+            />
+            <Button
+              overrideStyle={styles.halfBtn}
+              label="Register"
+              onPress={() => moveToAuth('SignUp')}
+            />
+          </RowView>
           <RowView justify="isBtw" align="isCenter">
             <Button
               label="Get an Account"
