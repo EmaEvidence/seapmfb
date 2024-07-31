@@ -1,8 +1,10 @@
 import React from 'react';
-import {SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
+import {ImageBackground, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 import {Button, Logo} from '.';
 import {colors, fontSizes} from '../utils/theme';
 import {Header1, Paragraph} from './Text';
+import { SEAPTHEME } from '../utils/theme';
+import LogoImage from '../assets/images/logo.png';
 
 interface UnAuthWrapperProps {
   children: React.ReactNode;
@@ -25,29 +27,38 @@ export const UnAuthWrapper = ({
 }: UnAuthWrapperProps) => {
   return (
     <SafeAreaView style={styles.safeView}>
-      <View style={styles.wrapper}>
-        <ScrollView showsVerticalScrollIndicator={false}>
+      <ImageBackground
+        source={LogoImage}
+        imageStyle={styles.bgImgImg}
+        style={styles.bgImg}
+        resizeMethod='auto'
+        resizeMode='contain'>
+      <View style={styles.wrapper}
+    >
+        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.content}>
           <View style={styles.textWrapper}>
-            <Logo />
+            {/* <Logo /> */}
             <Header1 text={header} overrideStyle={styles.headerStyle} />
-            <Paragraph
+            {/* <Paragraph
               overrideStyle={styles.descriptionStyle}
               text={description}
-            />
+            /> */}
           </View>
           <View>{children}</View>
           <View style={{
-            marginBottom: 60
+            marginBottom: 60,
+            flexDirection: 'row',
+            justifyContent: 'space-around'
           }}>
             <Button
-              overrideStyle={styles.button}
+              overrideStyle={[styles.button, SEAPTHEME.halfBtn]}
               label={linkText}
               onPress={onLinkPress}
               overrideLabelStyle={styles.buttonLabel}
             />
             {linkText1 && onLinkPress1 && (
               <Button
-                overrideStyle={styles.button}
+                overrideStyle={[styles.button, SEAPTHEME.halfBtn]}
                 label={linkText1}
                 onPress={onLinkPress1}
                 overrideLabelStyle={styles.buttonLabel}
@@ -56,6 +67,7 @@ export const UnAuthWrapper = ({
           </View>
         </ScrollView>
       </View>
+      </ImageBackground>
     </SafeAreaView>
   );
 };
@@ -67,19 +79,18 @@ const styles = StyleSheet.create({
     backgroundColor: colors.twhite,
   },
   wrapper: {
-    // backgroundColor: colors.twhite,
-    // backgroundColor: colors.sYellow,/
     height: '100%',
     paddingHorizontal: '5%',
     paddingVertical: '5%',
-    // marginBottom: 50,
     justifyContent: 'space-between',
   },
   headerStyle: {
     marginTop: '5%',
-    textAlign: 'center',
+    textAlign: 'left',
     color: colors.sMainBlue,
     fontWeight: '600',
+    fontSize: fontSizes.bigHeader,
+    width: '60%',
   },
   descriptionStyle: {
     textAlign: 'center',
@@ -90,7 +101,7 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.paragragh,
   },
   textWrapper: {
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   button: {
     width: '100%',
@@ -104,7 +115,16 @@ const styles = StyleSheet.create({
   buttonLabel: {
     color: colors.sMainBlue,
     textDecorationColor: colors.sMainBlue,
-    // textDecorationStyle: 'solid',
-    // textDecorationLine: 'underline',
   },
+  content: {
+    justifyContent: 'center',
+    height: '100%'
+  },
+  bgImgImg: {
+    opacity: 0.04
+  },
+  bgImg: {
+    backgroundColor: colors.sLightBlue,
+    // opacity: 0.6,
+  }
 });

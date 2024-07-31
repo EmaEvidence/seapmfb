@@ -405,13 +405,13 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
 
   return (
     <UnAuthWrapper
-      header="Get SEAP Account"
+      header="Get a SEAP Account"
       description={
         !regSuccess.refId
           ? 'Enter your details to begin the journey to unequal virtual banking experience.'
           : ''
       }
-      linkText="Have an accout? Sign In"
+      linkText="Sign In"
       onLinkPress={() => navigation.navigate('Login')}
       linkText1="Sign Up"
       onLinkPress1={() => navigation.navigate('SignUp')}>

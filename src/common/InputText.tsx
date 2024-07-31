@@ -406,7 +406,7 @@ const styles = StyleSheet.create({
     width: '100%',
     minHeight: 40,
     paddingHorizontal: '5%',
-    backgroundColor: colors.sTextYellow,
+    backgroundColor: 'transparent',
     position: 'relative',
     textAlignVertical: 'center',
     justifyContent: 'center',
@@ -420,7 +420,7 @@ const styles = StyleSheet.create({
   textInputWrapper: {
     height: '100%',
     width: '100%',
-    backgroundColor: colors.twhite,
+    backgroundColor: 'transparent',
     position: 'relative',
     textAlignVertical: 'center',
     justifyContent: 'center',

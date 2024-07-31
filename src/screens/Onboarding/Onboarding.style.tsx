@@ -40,10 +40,13 @@ const styles = StyleSheet.create({
   btn: {
     paddingHorizontal: 10,
     width: width * 0.4,
-    backgroundColor: 'transparent',//colors.twhite,
+    textAlign: 'right',
+    backgroundColor: 'transparent',
   },
   btnLabel: {
     color: colors.sYellow,
+    width: '100%',
+    textAlign: 'right'
   },
   bottomWrapper: {
     paddingBottom: 70,

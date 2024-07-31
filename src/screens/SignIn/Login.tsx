@@ -132,7 +132,7 @@ export const Login = ({navigation}: LoginProps) => {
     <UnAuthWrapper
       header={lang.signIn}
       description={lang.signInText}
-      linkText={lang.signUp}
+      linkText={'Signup'}
       onLinkPress={() => navigation.navigate('SignUp')}
       linkText1={lang.getSeap}
       onLinkPress1={() => navigation.navigate('GetSeapAccount')}>

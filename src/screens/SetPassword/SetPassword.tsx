@@ -106,7 +106,7 @@ export const SetPassword = ({navigation, route}: SetPasswordProps) => {
     <UnAuthWrapper
       header="Set Password"
       description="Onboarding details dsiuf duiusdd sdfusdfs sdufsdf sdfiudsfsdf sdifusdfsdfhosdfpos sdufsdf sdufsdfsdois sd"
-      linkText="Have an accout? Sign In"
+      linkText="Sign In"
       onLinkPress={() => navigation.navigate('SignUp')}>
       <View>
         {isFrom === 'forgotPassword' ? (

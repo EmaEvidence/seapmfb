@@ -47,7 +47,7 @@ export const Welcome = ({navigation}: WelcomeProps) => {
             />
             <Button
               overrideStyle={styles.halfBtn}
-              label="Register"
+              label="Signup"
               onPress={() => moveToAuth('SignUp')}
             />
           </RowView>

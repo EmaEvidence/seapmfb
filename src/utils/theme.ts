@@ -68,6 +68,7 @@ export const fontSizes = {
   header3: isSmall ? 20 : 24,
   header4: isSmall ? 18 : 20,
   header5: isSmall ? 16 : 18,
+  bigHeader: isSmall ? 24 : 28,
 };
 
 export const SEAPTHEME = StyleSheet.create({
@@ -224,5 +225,8 @@ export const SEAPTHEME = StyleSheet.create({
   extendableBadgeItemContainer: {
     marginVertical: 3,
     marginEnd: 7,
+  },
+  halfBtn: {
+    width: '47%',
   },
 });

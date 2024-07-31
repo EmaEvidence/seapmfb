@@ -49,7 +49,7 @@ export const VerifyEmail = ({navigation}: VerifyEmailProps) => {
     <UnAuthWrapper
       header="Verify Account"
       description="Onboarding details dsiuf duiusdd sdfusdfs sdufsdf sdfiudsfsdf sdifusdfsdfhosdfpos sdufsdf sdufsdfsdois sd"
-      linkText="Don’t have an accout? Sign Up"
+      linkText="Sign Up"
       onLinkPress={() => navigation.navigate('SignUp')}>
       <View>
         <Paragraph text="Enter code sent to your mail." />

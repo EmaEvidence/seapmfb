@@ -150,7 +150,7 @@ export const SignUp = ({navigation}: SignUpProps) => {
       onLinkPress={() => navigation.navigate('Login')}
       linkText1={lang.getSeap}
       onLinkPress1={() => navigation.navigate('GetSeapAccount')}>
-      <View>
+      <View style={{marginBottom: 20}}>
         {step === 0 && (
           <>
             <InputText

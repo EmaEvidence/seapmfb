@@ -13,10 +13,10 @@ const texts = {
   next: 'Next',
   // auth
   verifyError: 'Error Verifying Phone Number',
-  signUp: 'Sign Up',
+  signUp: 'Create your Account',
   signUpText:
     'Enter your Account Number to create your unique space in our virtual Banking Hall',
-  signIn: 'Sign In',
+  signIn: 'Login to your Account',
   signInText:
     'Enter Account Number and Password to access your virtual banking hall.',
   forgotPass: 'Forgot Password',
@@ -40,10 +40,10 @@ const texts = {
   refereeName: "Referee's Name",
   refereePhone: "Referee's Phone",
   selectBranch: 'Select a Branch',
-  haveAnAcc: 'Have an Account? Sign In',
+  haveAnAcc: 'Sign In',
   submit: 'Submit',
   accNum: 'Account Number',
-  getSeap: 'Get a SEAP Account',
+  getSeap: 'Get SEAP',
   // home
   hello: 'Hello',
   yourBalance: 'Your Balance',
