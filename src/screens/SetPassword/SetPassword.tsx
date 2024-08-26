@@ -14,11 +14,10 @@ import {loadItem} from '../../utils/localStorage';
 import toaster from '../../utils/toaster';
 import {validatePassword} from '../../validator';
 import styles from './SetPassword.styles';
+import { INavigation } from '../../types';
 
 interface SetPasswordProps {
-  navigation: {
-    navigate: (route: string) => void;
-  };
+  navigation: INavigation;
   route: {
     params: Record<string, string>;
   };
@@ -104,6 +103,7 @@ export const SetPassword = ({navigation, route}: SetPasswordProps) => {
 
   return (
     <UnAuthWrapper
+      goBack={navigation.goBack}
       header="Set Password"
       description="Onboarding details dsiuf duiusdd sdfusdfs sdufsdf sdfiudsfsdf sdifusdfsdfhosdfpos sdufsdf sdufsdfsdois sd"
       linkText="Sign In"

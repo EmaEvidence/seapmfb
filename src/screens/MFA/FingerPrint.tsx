@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactNativeBiometrics from 'react-native-biometrics';
 import {Image, TouchableOpacity, View} from 'react-native';
 import FingerPrintImg from '../../assets/images/fingerprint.png';
@@ -14,6 +14,7 @@ import {setTransactionBiometric} from '../../app/actions/auth';
 import toaster from '../../utils/toaster';
 import {appDispatch} from '../../app/store';
 import {setAuthType} from '../../app/slices/auth';
+import { AxiosResponse } from 'axios';
 // https://www.npmjs.com/package/react-native-biometrics
 
 interface Props {
@@ -38,6 +39,7 @@ export const FingerPrint = ({navigation}: Props) => {
       header="Set Your Fingerprint"
       description="Add a fingerprint to make your account more secure."
       linkText={isAuthenticated ? 'Back' : 'Skip'}
+      goBack={navigation.goBack}
       onLinkPress={() => handleSkip()}>
       <FingerPrintComponent navigation={navigation} />
     </UnAuthWrapper>
@@ -49,7 +51,7 @@ export default FingerPrint;
 let epochTimeSeconds = Math.round(new Date().getTime() / 1000).toString();
 let payload = epochTimeSeconds + 'mfbseapmfb';
 
-export const FingerPrintComponent = ({navigation}: any) => {
+export const FingerPrintComponent = ({navigation, label}: any) => {
   const [pKey, setPublicKey] = useState('');
   const rnBiometrics = new ReactNativeBiometrics({
     allowDeviceCredentials: true,
@@ -90,9 +92,9 @@ export const FingerPrintComponent = ({navigation}: any) => {
             biometricData: signature,
             pkFile: pKey,
             setAsDefault: true,
-          });
+          }) as AxiosResponse;
           if (resp.status === 200) {
-            appDispatch(setAuthType(data.authType as unknown as number));
+            // appDispatch(setAuthType(data.authType as unknown as number));
             toaster(
               'Success',
               'Biometric Authentication set successfully.',
@@ -120,7 +122,7 @@ export const FingerPrintComponent = ({navigation}: any) => {
       </TouchableOpacity>
       <Paragraph
         overrideStyle={styles.fingerMessage}
-        text="Please put your finger on the fingerprint icon to get started."
+        text={label || "Please put your finger on the fingerprint icon to get started."}
       />
     </View>
   );

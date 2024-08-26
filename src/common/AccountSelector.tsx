@@ -40,7 +40,6 @@ export const AccountSelector = ({
   }
 
   return (
-    <>
       <GenericDropdown
         data={accounts.map(account => ({
           label: account,
@@ -60,9 +59,10 @@ export const AccountSelector = ({
         listMode="MODAL"
         searchable={true}
         placeholder="Click to select an Account"
-        overrideStyle={{}}
+        overrideStyle={{
+          height: 100
+        }}
       />
-    </>
   );
 };
 

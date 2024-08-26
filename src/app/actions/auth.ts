@@ -41,7 +41,7 @@ export const getBranches = async () => {
   return getCalls('Onboarding/ListBranches', '');
 };
 
-export const getSEAPAccountCall = async (data: Record<string, string>) => {
+export const getSEAPAccountCall = async (data: Record<string, string | number>) => {
   return postCalls('Onboarding/Create', data, '');
 };
 

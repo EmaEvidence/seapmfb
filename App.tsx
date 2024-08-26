@@ -8,7 +8,7 @@ import {Provider} from 'react-redux';
 import {store} from './src/app/store';
 import CustomToaster from './src/common/CustomToaster';
 import {fontSizes} from './src/utils/theme';
-import { View, Text } from 'react-native';
+import { PaperProvider } from 'react-native-paper';
 
 const toastConfig = {
   success: (props: any) => (
@@ -50,18 +50,20 @@ const App = () => {
 
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <Route />
-        <Toast
-          // @ts-ignore
-          // ref={ref => Toast.setRef(ref)}
-          visibilityTime={10000}
-          autoHide={false}
-          onPress={() => Toast.hide()}
-          // @ts-ignore
-          config={toastConfig}
-        />
-      </NavigationContainer>
+      <PaperProvider>
+        <NavigationContainer>
+          <Route />
+          <Toast
+            // @ts-ignore
+            // ref={ref => Toast.setRef(ref)}
+            visibilityTime={10000}
+            autoHide={false}
+            onPress={() => Toast.hide()}
+            // @ts-ignore
+            config={toastConfig}
+          />
+        </NavigationContainer>
+      </PaperProvider>
     </Provider>
   );
 };

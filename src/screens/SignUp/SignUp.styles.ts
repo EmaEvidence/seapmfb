@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
     width: '45%',
   },
   button: {
-    borderRadius: 5,
+    borderRadius: 400,
     width: '100%',
   },
 });

@@ -84,6 +84,7 @@ export const TransactionPassword = ({route, navigation}: Props) => {
 
   return (
     <UnAuthWrapper
+      goBack={navigation.goBack}
       header="Create Transaction Password"
       description="Add a Transaction Password to make your account more secure."
       linkText={isAuthenticated ? 'Back' : 'Skip'}

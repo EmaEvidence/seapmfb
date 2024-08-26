@@ -1,21 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import {
-  TextInput,
   StyleSheet,
   View,
-  TouchableOpacity,
   ViewStyle,
   TextStyle,
-  Platform,
   TextInputProps,
-  useColorScheme,
 } from 'react-native';
-import {Picker} from '@react-native-picker/picker';
+import { TextInput as TextInputNP } from 'react-native-paper';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import {height} from '../utils/constants';
 import {colors, fontSizes} from '../utils/theme';
 import {Paragraph, Header5} from './Text';
-import DropDownPicker, {ValueType} from 'react-native-dropdown-picker';
+import DropDownPicker, { type ValueType} from 'react-native-dropdown-picker';
 
 interface InputTextProps extends TextInputProps {
   inputType?: 'number';
@@ -38,6 +34,7 @@ interface InputTextProps extends TextInputProps {
   placeholderColor?: string;
   readonly?: boolean;
   onPress?: () => void;
+  overrideNPInputWrapper?: ViewStyle;
 }
 
 const InputText = ({
@@ -56,120 +53,70 @@ const InputText = ({
   onFocus,
   numberOfLines,
   multiline,
-  overrideInputWrapperStyle,
+  overrideNPInputWrapper,
   placeholderColor,
   readonly,
   onPress,
   inputType,
+  inputMode,
+  keyboardType,
 }: InputTextProps) => {
   const [isFocus, setIsFocus] = useState(false);
   return (
-    <View style={[styles.container, overrideStyle]}>
-      <View style={styles.labelContainer}>
-        {label && <Header5 text={label} overrideStyle={styles.label} />}
-        {subLabel && (
-          <Paragraph text={`(${subLabel})`} overrideStyle={styles.subLabel} />
-        )}
-      </View>
-      <View style={[styles.textInputWrapper, overrideInputWrapperStyle]}>
-        <TextInput
-          numberOfLines={numberOfLines || 1}
-          placeholder={placeholder}
-          value={value}
-          editable={readonly}
-          onChangeText={text => {
-            // @ts-ignore
-            if (inputType && isNaN(text)) {
-              return;
-            }
-            onChange(name, text);
-          }}
-          style={[
-            styles.textInputStyle,
-            overrideInputStyle,
-            isFocus ? styles.textInputFocus : {},
-          ]}
-          secureTextEntry={obsureText}
-          onBlur={() => {
-            onBlur && onBlur();
-            setIsFocus(false);
-          }}
-          onFocus={() => {
-            onFocus && onFocus();
-            setIsFocus(true);
-          }}
-          onPressIn={() => {
-            onFocus && onFocus();
-            onPress && onPress();
-          }}
-          multiline={multiline}
-          placeholderTextColor={placeholderColor}
-        />
-      </View>
-
+    <View style={[styles.npTextContainerStyle, overrideNPInputWrapper]}>
+      <TextInputNP
+        key={label}
+        label={label}
+        numberOfLines={numberOfLines || 1}
+        placeholder={placeholder}
+        value={value}
+        mode="outlined"
+        dense
+        outlineColor={colors.sLighterBlue}
+        activeOutlineColor={colors.sMainBlue}
+        editable={readonly}
+        onChangeText={text => {
+          // @ts-ignore
+          if (inputType && isNaN(text)) {
+            return;
+          }
+          onChange(name, text);
+        }}
+        style={[
+          styles.npTextStyle,
+          // overrideInputStyle,
+        ]}
+        secureTextEntry={obsureText}
+        onBlur={() => {
+          onBlur && onBlur();
+          setIsFocus(false);
+        }}
+        onFocus={() => {
+          onFocus && onFocus();
+          setIsFocus(true);
+        }}
+        onPressIn={() => {
+          onFocus && onFocus();
+          onPress && onPress();
+        }}
+        multiline={multiline}
+        placeholderTextColor={placeholderColor}
+        error={inValid}
+        inputMode={inputMode}
+        keyboardType={keyboardType}
+      />
       {inValid && (
         <Paragraph
-          overrideStyle={styles.errorText}
+          overrideStyle={styles.errorTextNP}
           text={errorText as string}
         />
       )}
     </View>
+    
   );
 };
 
 export default InputText;
-
-interface CustomPickerWithModalProps {
-  overrideStyle: ViewStyle;
-  onPress: () => void;
-  label: string;
-  subLabel: string;
-  data: Array<string>;
-  value: string;
-}
-
-export const CustomPickerWithModal = ({
-  value,
-  overrideStyle,
-  onPress,
-  label,
-  subLabel,
-}: CustomPickerWithModalProps) => {
-  return (
-    <View style={[styles.container, overrideStyle]}>
-      <View style={styles.labelContainer}>
-        {label && <Header5 text={label} overrideStyle={styles.label} />}
-        {subLabel && (
-          <Paragraph text={`(${subLabel})`} overrideStyle={styles.subLabel} />
-        )}
-      </View>
-      <TouchableOpacity
-        style={[styles.textInputStyle, styles.touchableInput]}
-        onPress={() => onPress()}>
-        <Paragraph text={value} />
-      </TouchableOpacity>
-      {/* <Paragraph overrideStyle={styles.errorText} text={'error jhjhj'} /> */}
-    </View>
-  );
-};
-
-interface CustomPickerProps {
-  overrideStyle: ViewStyle | ViewStyle[];
-  onChange: (name: string, text: string) => void;
-  label: string;
-  subLabel?: string;
-  data: Array<string>;
-  name: string;
-  value: string;
-  inValid: boolean;
-  error: string;
-  overridePickerStyle?: ViewStyle;
-  pickerItemStyle?: ViewStyle;
-  pickerStyle?: ViewStyle;
-  mode?: 'dropdown' | 'dialog';
-  zIndex?: number;
-  zIndexInverse?: number;
-}
 
 interface GenericPickerProps {
   overrideStyle: ViewStyle | ViewStyle[];
@@ -193,59 +140,6 @@ interface GenericPickerProps {
   placeholder?: string;
 }
 
-export const CustomPicker = ({
-  overrideStyle,
-  onChange,
-  label,
-  subLabel,
-  data,
-  name,
-  value,
-  inValid,
-  error,
-  overridePickerStyle,
-  pickerStyle,
-  pickerItemStyle,
-  mode = Platform.OS === 'ios' ? 'dropdown' : 'dialog',
-}: CustomPickerProps) => {
-  const colorScheme = useColorScheme();
-  // const [open, setOpen] = useState(false);
-  return (
-    <View style={[styles.container, overrideStyle]}>
-      <View style={styles.labelContainer}>
-        {label && <Header5 text={label} overrideStyle={styles.label} />}
-        {subLabel && (
-          <Paragraph text={`(${subLabel})`} overrideStyle={styles.subLabel} />
-        )}
-      </View>
-      <View
-        style={[
-          styles.textInputStyle,
-          styles.dropDownWrapper,
-          overridePickerStyle,
-        ]}>
-        <Picker
-          mode={mode}
-          selectedValue={value}
-          style={[styles.picker, pickerStyle]}
-          onValueChange={val => onChange(name, val)}
-          itemStyle={[styles.pickerItem, pickerItemStyle]}>
-          {data.map(item => (
-            <Picker.Item
-              style={styles.itemText}
-              label={item}
-              value={item}
-              key={item}
-              color={colorScheme === 'light' ? colors.sMainBlue : colors.tblue}
-            />
-          ))}
-        </Picker>
-      </View>
-      {inValid && <Paragraph overrideStyle={styles.errorText} text={error} />}
-    </View>
-  );
-};
-
 export const Checkbox = ({
   value,
   overrideStyle,
@@ -257,7 +151,7 @@ export const Checkbox = ({
   overrideInputWrapperStyle,
 }: InputTextProps) => {
   return (
-    <View style={[styles.container, overrideStyle]}>
+    <View style={[styles.container, styles.npTextContainerStyle, overrideStyle]}>
       <View
         style={[
           styles.textInputWrapper,
@@ -320,18 +214,25 @@ export const GenericDropdown = ({
 
   return (
     <View style={[styles.container, overrideStyle]}>
-      <View style={styles.labelContainer}>
-        {label && <Header5 text={label} overrideStyle={styles.label} />}
-        {subLabel && (
-          <Paragraph text={`(${subLabel})`} overrideStyle={styles.subLabel} />
-        )}
-      </View>
       <View
         style={[
           styles.textInputStyle,
           styles.dropDownWrapper,
           overridePickerStyle,
+          {
+            
+          }
         ]}>
+        {label && <Paragraph text={label} overrideStyle={[styles.label, { 
+          fontSize: 11,
+          lineHeight: 12,
+          position: 'absolute',
+          zIndex: 9999,
+          left: 10,
+          top: value ? -5 : 16,
+          paddingHorizontal: 5,
+          backgroundColor: 'white'
+        }]} />}
         <DropDownPicker
           open={open}
           value={value}
@@ -341,13 +242,12 @@ export const GenericDropdown = ({
           setItems={setItems}
           theme="LIGHT"
           mode="BADGE"
-          placeholder={props.placeholder || `Select ${name}`}
           placeholderStyle={styles.placeholderStyle}
           listMode={props.listMode}
           dropDownDirection={props.dropDownDirection}
           searchable={props.searchable}
-          containerStyle={styles.autoComplete}
-          style={styles.style}
+          containerStyle={[styles.autoComplete, { height: 55 } ]}
+          style={[styles.style, { height: 30 }]}
           searchContainerStyle={styles.searchContainerStyle}
           searchTextInputStyle={styles.searchTextInputStyle}
           listItemLabelStyle={styles.listItemLabelStyle}
@@ -359,7 +259,7 @@ export const GenericDropdown = ({
         />
       </View>
       {inValid && (
-        <Paragraph overrideStyle={styles.errorText} text={error as string} />
+        <Paragraph overrideStyle={[styles.errorTextNP, { bottom: -18}]} text={error as string} />
       )}
     </View>
   );
@@ -391,12 +291,37 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 60,
   },
+  errorTextNP: {
+    alignSelf: 'flex-end',
+    color: 'red',
+    fontWeight: 'bold',
+    fontSize: fontSizes.bodyText,
+    width: '80%',
+    textAlign: 'right',
+    position: 'absolute',
+    bottom: -11,
+  },
   checkboxWrapper: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
   },
   checkboxLabel: {
     marginLeft: 20,
+  },
+  npTextContainerStyle: {
+    width: '100%',
+    height: 55,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+    marginVertical: '3%',
+  },
+  npTextStyle: {
+    height: 48,
+    marginTop: -4,
+    width: '100%',
+    color: colors.sMainBlue,
   },
   textInputStyle: {
     borderRadius: 6,
@@ -482,7 +407,7 @@ const styles = StyleSheet.create({
   dropDownWrapper: {
     paddingHorizontal: 0,
     borderWidth: 0,
-    marginTop: 4,
+    marginTop: 15,
   },
   style: {
     borderColor: colors.sMainBlue,

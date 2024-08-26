@@ -12,6 +12,7 @@ import useLanguage from '../../hooks/useLanguage';
 interface ForgotPasswordProps {
   navigation: {
     navigate: (route: string, ...arg: any) => void;
+    goBack: () => void;
   };
 }
 
@@ -96,6 +97,7 @@ export const ForgotPassword = ({navigation}: ForgotPasswordProps) => {
       header={lang.forgotPass}
       description={descrip}
       linkText={lang.haveAnAcc}
+      goBack={navigation.goBack}
       onLinkPress={() => navigation.navigate('Login')}>
       <View>
         {step === 0 ? (

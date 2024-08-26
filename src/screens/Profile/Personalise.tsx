@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Switch, View} from 'react-native';
 import {Paragraph} from '../../common/Text';
-import {CustomPicker, Header} from '../../common';
+import {GenericDropdown, Header} from '../../common';
 import styles from './Profile.styles';
 import {colors} from '../../utils/theme';
 import {langType} from '../../app/slices/language';
@@ -135,10 +135,10 @@ export const Personalize = ({navigation}: any) => {
                   value={notifications[item.title] as boolean}
                 />
               ) : (
-                <CustomPicker
+                <GenericDropdown
                   label={''}
                   subLabel={''}
-                  data={item.options || []}
+                  data={[]}
                   value={(notifications[item.title] as string) || ''}
                   onChange={(_name: string, _text: string) => {
                     item.onChange ? item.onChange(_text) : null;

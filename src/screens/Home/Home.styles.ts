@@ -44,7 +44,7 @@ export const styles = StyleSheet.create({
   },
   section: {
     width: '100%',
-    marginVertical: 15,
+    marginVertical: 10,
   },
   limitLabel: {
     bottom: 15,
@@ -139,6 +139,10 @@ export const styles = StyleSheet.create({
   },
   menu: {
     marginRight: 10,
+  },
+  menuIcon: {
+    width: 30,
+    height: 30
   },
   noTransaction: {
     textAlign: 'center',

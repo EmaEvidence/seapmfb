@@ -10,58 +10,65 @@ import UnAuthWrapper from '../../common/UnAuthWrapper';
 import toaster from '../../utils/toaster';
 import {validateEmail, validateNonEmpty, validatePhone} from '../../validator';
 import styles from './GetSeapAccount.styles';
+import { INavigation } from '../../types';
 
 interface GetSeapAccountProps {
-  navigation: {
-    navigate: (route: string) => void;
-  };
+  navigation: INavigation;
 }
 
-const genderData = ['Male', 'Female'];
-
-const acctTypes = [
-  {
-    name: 'Savings',
-    code: '200',
-  },
-  {
-    name: 'Current',
-    code: '100',
-  },
-  {
-    name: 'Salary(SEAP MFI)',
-    code: '109',
-  },
-];
-
-const idMeans = [
-  {
-    name: 'NIMC',
-    code: 3,
-  },
-  {
-    name: 'National ID Card',
-    code: 1,
-  },
-  {
-    name: "Driver's License",
-    code: 2,
-  },
-  {
-    name: 'International Passport',
-    code: 4,
-  },
-  {
-    name: 'Permanent Voters Card',
-    code: 5,
-  },
-  {
-    name: 'Others',
-    code: 6,
-  },
-];
-
 export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
+  const [genderData] = useState([
+    {
+      label: 'Female',
+      value: 'Female'
+    },
+    {
+      label: 'Male',
+      value: 'Male'
+    }
+  ]);
+
+  const [acctTypes] = useState([
+    {
+      label: 'Savings',
+      value: '200',
+    },
+    {
+      label: 'Current',
+      value: '100',
+    },
+    {
+      label: 'Salary(SEAP MFI)',
+      value: '109',
+    },
+  ]);
+
+  const [idMeans] = useState([
+    {
+      label: 'NIMC',
+      value: '3',
+    },
+    {
+      label: 'National ID Card',
+      value: '1',
+    },
+    {
+      label: "Driver's License",
+      value: '2',
+    },
+    {
+      label: 'International Passport',
+      value: '4',
+    },
+    {
+      label: 'Permanent Voters Card',
+      value: '5',
+    },
+    {
+      label: 'Others',
+      value: '6',
+    },
+  ]);
   const [step, setStep] = useState(0);
   const [regSuccess, setRegSuccess] = useState({
     remarks: '',
@@ -86,7 +93,7 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
     otherNames: '',
     city: '',
     address: '',
-    gender: genderData[0],
+    gender: genderData[0].value,
     dateOfBirth: '',
     phoneNo: '',
     placeOfBirth: '',
@@ -107,7 +114,7 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
     identificationImageBase64: '',
     identificationImageType: '',
     identificationNumber: '',
-    accountType: '',
+    accountType: acctTypes[0].value,
     accountOfficerCode: '',
   });
   const [userError, setError] = useState({
@@ -145,8 +152,10 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
     const resp = await getBranches();
     if (resp?.status === 200) {
       setBranchesObj(resp.data.branchData);
-      const newBranches = resp.data.branchData.map(
-        (item: Record<string, string>) => item.name,
+      const newBranches = resp.data.branchData.filter((item: Record<string, string>) => item.name).map(
+        (item: Record<string, string>) => {
+          if (item.name) return  item.name
+        },
       );
       setBranches(newBranches);
       setData({
@@ -176,14 +185,18 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
   };
 
   const handleSubmit = async () => {
-    const {referred, referralName, referralPhoneNo} = userData;
+    const {referred, referralName, referralPhoneNo, nextOfKinName, nextOfKinPhoneNumber} = userData;
     const refNameError = !validateNonEmpty(referralName);
     const refPhoneError = !validatePhone(referralPhoneNo);
-    if (referred === 'yes' && (refNameError || refPhoneError)) {
+    const kinNameError = !validateNonEmpty(nextOfKinName);
+    const kinPhoneError = !validatePhone(nextOfKinPhoneNumber);
+    if ((referred === 'yes' && (refNameError || refPhoneError)) || kinNameError || kinPhoneError) {
       setError({
         ...userError,
         referralName: refNameError,
         referralPhoneNo: refPhoneError,
+        nextOfKinName: kinNameError,
+        nextOfKinPhoneNumber: kinPhoneError,
       });
       return;
     }
@@ -202,21 +215,21 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
       nextOfKinPhoneNumber: userData.nextOfKinPhoneNumber,
       referralName: userData.referralName,
       referralPhoneNo: userData.referralPhoneNo,
-      branchCode:
-        branchesObj.find(item => item.name === userData.branchCode)
-          ?.branchCode || '004',
+      // branchCode:
+      //   branchesObj.find(item => item.name === userData.branchCode)
+      //     ?.branchCode || '004',
       bankVerificationNumber: userData.bankVerificationNumber,
       email: userData.email,
       // @ts-ignore
-      imageBase64: userData.imageBase64.join(),
+      imageBase64: userData.imageBase64,//.join(),
       // @ts-ignore
-      signatureBase64: userData.signatureBase64.join(),
+      signatureBase64: userData.signatureBase64,//.join(),
       // @ts-ignore
-      identificationImageBase64: userData.identificationImageBase64.join(),
-      identificationImageType: userData.identificationImageType,
+      identificationImageBase64: userData.identificationImageBase64,//.join(),
+      identificationImageType: parseInt(userData.identificationImageType),
       identificationNumber: userData.identificationNumber,
       accountType: userData.accountType,
-      accountOfficerCode: '008',
+      // accountOfficerCode: '008',
     });
     if (resp?.status === 200) {
       toaster('Success', resp.data.remarks, 'custom');
@@ -224,14 +237,14 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
         refId: resp.data.referenceId,
         remarks: resp.data.remarks,
       });
-      setStep(6);
+      setStep(3);
       setData({
         lastName: '',
         firstName: '',
         otherNames: '',
         city: '',
         address: '',
-        gender: genderData[0],
+        gender: genderData[0].value,
         dateOfBirth: '',
         phoneNo: '',
         placeOfBirth: '',
@@ -252,61 +265,51 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
         identificationImageBase64: '',
         identificationImageType: '',
         identificationNumber: '',
-        accountType: '',
+        accountType: acctTypes[0].value,
         accountOfficerCode: '',
       });
     }
   };
 
   const handleNext1 = () => {
-    const {firstName, lastName, otherNames, branchCode} = userData;
+    const {
+      firstName,
+      lastName,
+      otherNames,
+      branchCode,
+      email,
+      phoneNo,
+      dateOfBirth,
+      accountType,
+      placeOfBirth,
+      address,
+      gender
+    } = userData;
     const fError = !validateNonEmpty(firstName);
     const lError = !validateNonEmpty(lastName);
     const oError = !validateNonEmpty(otherNames);
+    const emailError = !validateEmail(email);
+    const phoneError = !validatePhone(phoneNo);
+    const genderError = !validateNonEmpty(gender);
+    const dobError = !validateNonEmpty(dateOfBirth);
+    const acctTypeError = !validateNonEmpty(accountType);
+    const addressError = !validateNonEmpty(address);
+    const placeError = !validateNonEmpty(placeOfBirth);
     const branchError = false; //!validateNonEmpty(branchCode);
-    if (fError || lError || oError || branchError) {
+    if (fError || lError || oError || branchError || emailError || phoneError ||
+      genderError || dobError || acctTypeError || placeError || addressError
+    ) {
       setError({
         ...userError,
         firstName: fError,
         lastName: lError,
         otherNames: oError,
         branchCode: branchError,
-      });
-      return;
-    }
-    handleNext();
-  };
-
-  const handleNext2 = () => {
-    const {email, phoneNo, gender, dateOfBirth, accountType} = userData;
-    const emailError = !validateEmail(email);
-    const phoneError = !validatePhone(phoneNo);
-    const genderError = !validateNonEmpty(gender);
-    const dobError = !validateNonEmpty(dateOfBirth);
-    const acctTypeError = !validateNonEmpty(accountType);
-    if (emailError || phoneError || genderError || dobError) {
-      setError({
-        ...userError,
         email: emailError,
         phoneNo: phoneError,
         gender: genderError,
         dateOfBirth: dobError,
         accountType: acctTypeError,
-      });
-      return;
-    }
-    handleNext();
-  };
-
-  const handleNext3 = () => {
-    const {city, address, placeOfBirth} = userData;
-    const cityError = !validateNonEmpty(city);
-    const addressError = !validateNonEmpty(address);
-    const placeError = !validateNonEmpty(placeOfBirth);
-    if (cityError || addressError || placeError) {
-      setError({
-        ...userError,
-        city: cityError,
         address: addressError,
         placeOfBirth: placeError,
       });
@@ -315,8 +318,18 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
     handleNext();
   };
 
-  const handleNext4 = () => {
-    const {bankVerificationNumber, nationalIdentityNo, image} = userData;
+  const handleNext2 = () => {
+    const {
+      city,
+      bankVerificationNumber, 
+      nationalIdentityNo, 
+      image, 
+      identificationImage,
+      signature,
+      identificationNumber,
+      identificationImageType
+    } = userData;
+    const cityError = !validateNonEmpty(city);
     const bankError = !(
       validateNonEmpty(bankVerificationNumber) &&
       bankVerificationNumber.length === 11
@@ -325,52 +338,23 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
       validateNonEmpty(nationalIdentityNo) && nationalIdentityNo.length === 11
     );
     const imageError = !validateNonEmpty(image);
-    if (bankError || nimcError || imageError) {
-      setError({
-        ...userError,
-        bankVerificationNumber: bankError,
-        nationalIdentityNo: nimcError,
-        imageBase64: imageError,
-      });
-      return;
-    }
-    handleNext();
-  };
-
-  const handleNext5 = () => {
-    const {
-      identificationImage,
-      signature,
-      identificationNumber,
-      identificationImageType,
-    } = userData;
     const signError = !validateNonEmpty(signature);
     const idTypeError = !validateNonEmpty(identificationImageType);
     const idImageError = !validateNonEmpty(identificationImage);
     const idNumError = !validateNonEmpty(identificationNumber);
-    if (idNumError || signError || idTypeError || idImageError) {
+    if (cityError || bankError || nimcError || imageError || idTypeError || signError || idNumError || idImageError ) {
       setError({
         ...userError,
+        city: cityError,
+        bankVerificationNumber: bankError,
+        nationalIdentityNo: nimcError,
+        imageBase64: imageError,
         identificationImage: idImageError,
         identificationNumber: idNumError,
         signature: signError,
         identificationImageType: idTypeError,
       });
-      return;
-    }
-    handleNext();
-  };
-
-  const handleNext6 = () => {
-    const {nextOfKinName, nextOfKinPhoneNumber} = userData;
-    const kinNameError = !validateNonEmpty(nextOfKinName);
-    const kinPhoneError = !validatePhone(nextOfKinPhoneNumber);
-    if (kinNameError || kinPhoneError) {
-      setError({
-        ...userError,
-        nextOfKinName: kinNameError,
-        nextOfKinPhoneNumber: kinPhoneError,
-      });
+      toaster('Error', 'Invalid data', 'custom');
       return;
     }
     handleNext();
@@ -386,7 +370,7 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
         toaster('Error', 'Image size must not be more than 400kb!', 'custom');
         return;
       }
-      const base64Array = result.assets[0].base64?.match(/.{1,50000}/g);
+      const base64Array = result.assets[0].base64 //?.match(/.{1,50000}/g);
       if (!base64Array) {
         toaster('Error', 'Image Upload failed, Try again!', 'custom');
         return;
@@ -411,20 +395,22 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
           ? 'Enter your details to begin the journey to unequal virtual banking experience.'
           : ''
       }
-      linkText="Sign In"
+      linkText=""
       onLinkPress={() => navigation.navigate('Login')}
       linkText1="Sign Up"
+      goBack={navigation.goBack}
       onLinkPress1={() => navigation.navigate('SignUp')}>
       <View style={styles.formWrapper}>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           {step === 0 && (
             <>
-              <GenericDropdown
+              {
+                branches.length ? <GenericDropdown
                 data={branches.map((item: string) => ({
                   label: item,
                   value: item,
                 }))}
-                label="Select a Branch"
+                label=""
                 overrideStyle={styles.textInput}
                 name="branchCode"
                 onChange={handleTextChange}
@@ -435,48 +421,57 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
                 listMode="MODAL"
                 searchable
                 placeholder="Select a Branch"
-              />
-              <InputText
-                label="Firstname"
-                overrideStyle={styles.textInput}
-                name="firstName"
-                onChange={handleTextChange}
-                value={userData.firstName}
-                errorText="Please enter your Firstname!"
-                inValid={userError.firstName}
-                placeholder="e.g Ayoade"
-              />
-              <InputText
-                name="lastName"
-                onChange={handleTextChange}
-                label="Lastname"
-                overrideStyle={styles.textInput}
-                value={userData.lastName}
-                errorText="Please enter your Lastname!"
-                inValid={userError.lastName}
-                placeholder="e.g Sanusi"
-              />
-              <InputText
-                name="otherNames"
-                onChange={handleTextChange}
-                label="Othername"
-                overrideStyle={styles.textInput}
-                value={userData.otherNames}
-                errorText="Please enter a valid Name!"
-                inValid={userError.otherNames}
-                placeholder="e.g Emeka"
-              />
-              <View style={styles.buttonWrapper}>
-                <Button
-                  overrideStyle={styles.button}
-                  label={'Next'}
-                  onPress={handleNext1}
+              /> : null}
+              <RowView justify='isBtw'>
+                <InputText
+                  overrideNPInputWrapper={styles.halfBtn}
+                  label="Firstname"
+                  overrideStyle={[styles.textInput, styles.halfInput]}
+                  name="firstName"
+                  onChange={handleTextChange}
+                  value={userData.firstName}
+                  errorText="Please enter your Firstname!"
+                  inValid={userError.firstName}
+                  placeholder="e.g Ayoade"
                 />
-              </View>
-            </>
-          )}
-          {step === 1 && (
-            <>
+                <InputText
+                  overrideNPInputWrapper={styles.halfBtn}
+                  name="lastName"
+                  onChange={handleTextChange}
+                  label="Lastname"
+                  overrideStyle={[styles.textInput, styles.halfInput]}
+                  value={userData.lastName}
+                  errorText="Please enter your Lastname!"
+                  inValid={userError.lastName}
+                  placeholder="e.g Sanusi"
+                />
+              </RowView>
+              <RowView justify='isBtw'>
+                <InputText
+                  overrideNPInputWrapper={styles.halfBtn}
+                  name="otherNames"
+                  onChange={handleTextChange}
+                  label="Othername"
+                  overrideStyle={styles.textInput}
+                  value={userData.otherNames}
+                  errorText="Please enter a valid Name!"
+                  inValid={userError.otherNames}
+                  placeholder="e.g Emeka"
+                />
+                <InputText
+                  overrideNPInputWrapper={styles.halfBtn}
+                  name="phoneNo"
+                  onChange={handleTextChange}
+                  label="Phone Number"
+                  overrideStyle={[styles.textInput, styles.halfInput]}
+                  value={userData.phoneNo}
+                  errorText="Please enter a valid Phone!"
+                  inValid={userError.phoneNo}
+                  placeholder="e.g 07012120011"
+                  inputMode='tel'
+                  keyboardType='phone-pad'
+                />
+              </RowView>
               <InputText
                 name="email"
                 onChange={handleTextChange}
@@ -486,52 +481,12 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
                 errorText="Please enter a valid Email!"
                 inValid={userError.email}
                 placeholder="e.g email@mail.com"
+                inputMode='email'
+                keyboardType='email-address'
               />
-              <RowView justify={'isBtw'}>
-                <GenericDropdown
-                  data={acctTypes.map((item: Record<string, string>) => ({
-                    label: item.name,
-                    value: item.code,
-                  }))}
-                  label="Account Type"
-                  overrideStyle={[styles.textInput, styles.halfInput]}
-                  name="accountType"
-                  onChange={handleTextChange}
-                  value={userData.accountType || ''}
-                  error="Select account Type!"
-                  inValid={userError.accountType}
-                  dropDownDirection="TOP"
-                  placeholder="e.g. Savings"
-                />
-                <GenericDropdown
-                  data={genderData.map((item: string) => ({
-                    label: item,
-                    value: item,
-                  }))}
-                  label="Gender"
-                  overrideStyle={[styles.textInput, styles.halfInput]}
-                  name="gender"
-                  onChange={handleTextChange}
-                  value={userData.gender || ''}
-                  error="Select a gender!"
-                  inValid={userError.gender}
-                  dropDownDirection="TOP"
-                  placeholder="e.g. Male"
-                  zIndex={9000}
-                />
-              </RowView>
-              <RowView justify={'isBtw'}>
+              <RowView justify='isBtw'>
                 <InputText
-                  name="phoneNo"
-                  onChange={handleTextChange}
-                  label="Phone Number"
-                  overrideStyle={[styles.textInput, styles.halfInput]}
-                  value={userData.phoneNo}
-                  errorText="Please enter a valid Phone!"
-                  inValid={userError.phoneNo}
-                  placeholder="e.g 07012120011"
-                />
-                <InputText
+                  overrideNPInputWrapper={styles.halfBtn}
                   name="dateOfBirth"
                   onChange={handleTextChange}
                   label="Date of Birth"
@@ -542,26 +497,188 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
                   onPress={() => setOpenDate(true)}
                   readonly
                 />
+                <DatePicker
+                  date={new Date()}
+                  onDateChange={date => {
+                    handleTextChange('dateOfBirth', date.toISOString());
+                  }}
+                  modal={true}
+                  open={openDate}
+                  onConfirm={date =>
+                    handleTextChange('dateOfBirth', date.toISOString())
+                  }
+                  onCancel={() => setOpenDate(false)}
+                  title={'Date of Birth'}
+                  confirmText="Done"
+                  cancelText="Cancel"
+                  mode="date"
+                  maximumDate={new Date()}
+                  minimumDate={new Date('1920-01-01')}
+                  androidVariant="iosClone"
+                />
+                <GenericDropdown
+                  data={acctTypes}
+                  key={'accountType'}
+                  label="Account Type"
+                  overrideStyle={[styles.textInput, styles.halfInput]}
+                  name="accountType"
+                  onChange={handleTextChange}
+                  value={userData.accountType || ''}
+                  error="Select account Type!"
+                  inValid={userError.accountType}
+                  listMode="MODAL"
+                  placeholder="Account Type e.g. Savings"
+                />
               </RowView>
-              <DatePicker
-                date={new Date()}
-                onDateChange={date => {
-                  handleTextChange('dateOfBirth', date.toISOString());
-                }}
-                modal={true}
-                open={openDate}
-                onConfirm={date =>
-                  handleTextChange('dateOfBirth', date.toISOString())
-                }
-                onCancel={() => setOpenDate(false)}
-                title={'Date of Birth'}
-                confirmText="Done"
-                cancelText="Cancel"
-                mode="date"
-                maximumDate={new Date()}
-                minimumDate={new Date('1920-01-01')}
-                androidVariant="iosClone"
+              <RowView justify={'isBtw'}>
+                <GenericDropdown
+                  data={genderData}
+                  label="Gender"
+                  overrideStyle={[styles.textInput, styles.halfInput]}
+                  name="gender"
+                  onChange={handleTextChange}
+                  value={userData.gender || ''}
+                  error="Select a gender!"
+                  inValid={userError.gender}
+                  listMode="MODAL"
+                  placeholder="Gender e.g Male"
+                />
+                <InputText
+                  overrideNPInputWrapper={styles.halfBtn}
+                  name="placeOfBirth"
+                  onChange={handleTextChange}
+                  label="Place of Birth"
+                  overrideStyle={styles.textInput}
+                  value={userData.placeOfBirth}
+                  errorText="Enter a valid place of birth!"
+                  inValid={userError.placeOfBirth}
+                  placeholder="e.g Ibadan"
+                />
+              </RowView>
+              <InputText
+                  name="address"
+                  onChange={handleTextChange}
+                  label="Address"
+                  overrideStyle={styles.textInput}
+                  value={userData.address}
+                  errorText="Please enter a valid Address!"
+                  inValid={userError.address}
+                  placeholder="e.g 2 Alaka Street, Oke Iho"
+                />
+              <View style={styles.buttonWrapper}>
+                <Button
+                  overrideStyle={styles.button}
+                  label={'Next'}
+                  onPress={handleNext1}
+                />
+              </View>
+            </>
+          )}
+          {step === 1 && (
+            <>  
+              <RowView justify={'isBtw'}>
+                <InputText
+                  name="city"
+                  overrideNPInputWrapper={styles.halfBtn}
+                  onChange={handleTextChange}
+                  label="City"
+                  overrideStyle={styles.textInput}
+                  value={userData.city}
+                  errorText="Please enter a valid City!"
+                  inValid={userError.city}
+                  placeholder="e.g Ibadan"
+                />
+                <GenericDropdown
+                  data={idMeans}
+                  label="Means of Identification"
+                  overrideStyle={[styles.textInput, styles.halfInput]}
+                  name="identificationImageType"
+                  onChange={handleTextChange}
+                  value={userData.identificationImageType || ''}
+                  error="Please select an option!"
+                  inValid={userError.identificationImageType}
+                  listMode="MODAL"
+                  searchable={true}
+                  placeholder="e.g. NIMC"
+                  zIndex={9000}
+                />
+              </RowView>
+              <RowView justify={'isBtw'}>
+                <InputText
+                  overrideNPInputWrapper={styles.halfBtn}
+                  name="identificationImage"
+                  onChange={handleTextChange}
+                  label="Image of ID"
+                  overrideStyle={styles.textInput}
+                  value={userData.identificationImage}
+                  errorText="Invalid Image!"
+                  inValid={userError.identificationImage}
+                  readonly
+                  onPress={() => handleGetImage('identificationImage')}
+                  placeholder="e.g Image of NIMC Card"
+                />
+                <InputText
+                  overrideNPInputWrapper={styles.halfBtn}
+                  name="identificationNumber"
+                  onChange={handleTextChange}
+                  label="ID's number"
+                  overrideStyle={styles.textInput}
+                  value={userData.identificationNumber}
+                  errorText="Please enter a valid Number!"
+                  inValid={userError.identificationNumber}
+                  placeholder="e.g A1203456B"
+                />
+              </RowView>
+              <InputText
+                label="National Identification Number(NIN)"
+                overrideStyle={styles.textInput}
+                name="nationalIdentityNo"
+                onChange={handleTextChange}
+                value={userData.nationalIdentityNo}
+                errorText="Please enter your National Identity Number!"
+                inValid={userError.nationalIdentityNo}
+                placeholder="e.g 10101010101"
+                inputMode='numeric'
+                keyboardType='numeric'
               />
+              <InputText
+                name="bankVerificationNumber"
+                onChange={handleTextChange}
+                label="Bank Verification Number (BVN)"
+                overrideStyle={styles.textInput}
+                value={userData.bankVerificationNumber}
+                errorText="Please enter a valid Bank Verification Number!"
+                inValid={userError.bankVerificationNumber}
+                placeholder="e.g 10101010101"
+                inputMode='numeric'
+                keyboardType='numeric'
+              />
+              <RowView justify={'isBtw'}>
+                <InputText
+                  overrideNPInputWrapper={styles.halfBtn}
+                  name="image"
+                  onChange={handleTextChange}
+                  label="Your Image"
+                  overrideStyle={styles.textInput}
+                  value={userData.image}
+                  errorText="Please enter a valid Image!"
+                  inValid={userError.image}
+                  readonly
+                  onPress={() => handleGetImage('image')}
+                />
+                <InputText
+                  overrideNPInputWrapper={styles.halfBtn}
+                  name="signature"
+                  onChange={handleTextChange}
+                  label="Signature Image"
+                  overrideStyle={styles.textInput}
+                  value={userData.signature}
+                  errorText="Invalid Image!"
+                  inValid={userError.signature}
+                  readonly
+                  onPress={() => handleGetImage('signature')}
+                />
+              </RowView>
               <View style={[styles.buttonWrapper, styles.row]}>
                 <Button
                   overrideStyle={[styles.button, styles.halfBtn]}
@@ -578,166 +695,7 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
           )}
           {step === 2 && (
             <>
-              <InputText
-                name="city"
-                onChange={handleTextChange}
-                label="City"
-                overrideStyle={styles.textInput}
-                value={userData.city}
-                errorText="Please enter a valid City!"
-                inValid={userError.city}
-                placeholder="e.g Ibadan"
-              />
-              <InputText
-                name="address"
-                onChange={handleTextChange}
-                label="Address"
-                overrideStyle={styles.textInput}
-                value={userData.address}
-                errorText="Please enter a valid Address!"
-                inValid={userError.address}
-                placeholder="e.g 2 Alaka Street, Oke Iho"
-              />
-              <InputText
-                name="placeOfBirth"
-                onChange={handleTextChange}
-                label="Place of Birth"
-                overrideStyle={styles.textInput}
-                value={userData.placeOfBirth}
-                errorText="Please enter a valid place of birth!"
-                inValid={userError.placeOfBirth}
-                placeholder="e.g Ibadan"
-              />
-              <View style={[styles.buttonWrapper, styles.row]}>
-                <Button
-                  overrideStyle={[styles.button, styles.halfBtn]}
-                  label={'Prev'}
-                  onPress={handlePrev}
-                />
-                <Button
-                  overrideStyle={[styles.button, styles.halfBtn]}
-                  label={'Next'}
-                  onPress={handleNext3}
-                />
-              </View>
-            </>
-          )}
-          {step === 3 && (
-            <>
-              <InputText
-                label="National Identification Number(NIN)"
-                overrideStyle={styles.textInput}
-                name="nationalIdentityNo"
-                onChange={handleTextChange}
-                value={userData.nationalIdentityNo}
-                errorText="Please enter your National Identity Number!"
-                inValid={userError.nationalIdentityNo}
-                placeholder="e.g 10101010101"
-              />
-              <InputText
-                name="bankVerificationNumber"
-                onChange={handleTextChange}
-                label="Bank Verification Number (BVN)"
-                overrideStyle={styles.textInput}
-                value={userData.bankVerificationNumber}
-                errorText="Please enter a valid Bank Verification Number!"
-                inValid={userError.bankVerificationNumber}
-                placeholder="e.g 10101010101"
-              />
-              <InputText
-                name="image"
-                onChange={handleTextChange}
-                label="Image"
-                overrideStyle={styles.textInput}
-                value={userData.image}
-                errorText="Please enter a valid Image!"
-                inValid={userError.image}
-                readonly
-                onPress={() => handleGetImage('image')}
-              />
-              <View style={[styles.buttonWrapper, styles.row]}>
-                <Button
-                  overrideStyle={[styles.button, styles.halfBtn]}
-                  label={'Prev'}
-                  onPress={handlePrev}
-                />
-                <Button
-                  overrideStyle={[styles.button, styles.halfBtn]}
-                  label={'Next'}
-                  onPress={handleNext4}
-                />
-              </View>
-            </>
-          )}
-          {step === 4 && (
-            <>
-              <GenericDropdown
-                data={idMeans.map((item: Record<string, string | number>) => ({
-                  label: item.name,
-                  value: item.code,
-                }))}
-                label="Means of Identification"
-                overrideStyle={[styles.textInput]}
-                name="identificationImageType"
-                onChange={handleTextChange}
-                value={userData.identificationImageType || ''}
-                error="Select a Means of Identification!"
-                inValid={userError.identificationImageType}
-                listMode="MODAL"
-                searchable={true}
-                placeholder="e.g. NIMC"
-                zIndex={9000}
-              />
-              <InputText
-                name="identificationNumber"
-                onChange={handleTextChange}
-                label="Identification Number"
-                overrideStyle={styles.textInput}
-                value={userData.identificationNumber}
-                errorText="Please enter a valid Number!"
-                inValid={userError.identificationNumber}
-                placeholder="e.g A1203456B"
-              />
-              <InputText
-                name="identificationImage"
-                onChange={handleTextChange}
-                label="Identification Image"
-                overrideStyle={styles.textInput}
-                value={userData.identificationImage}
-                errorText="Please enter a valid Image!"
-                inValid={userError.identificationImage}
-                readonly
-                onPress={() => handleGetImage('identificationImage')}
-                placeholder="e.g Image of NIMC Card"
-              />
-              <InputText
-                name="signature"
-                onChange={handleTextChange}
-                label="Signature Image"
-                overrideStyle={styles.textInput}
-                value={userData.signature}
-                errorText="Please enter a valid Image!"
-                inValid={userError.signature}
-                readonly
-                onPress={() => handleGetImage('signature')}
-              />
-              <View style={[styles.buttonWrapper, styles.row]}>
-                <Button
-                  overrideStyle={[styles.button, styles.halfBtn]}
-                  label={'Prev'}
-                  onPress={handlePrev}
-                />
-                <Button
-                  overrideStyle={[styles.button, styles.halfBtn]}
-                  label={'Next'}
-                  onPress={handleNext5}
-                />
-              </View>
-            </>
-          )}
-          {step === 5 && (
-            <>
-              <InputText
+             <InputText
                 name="nextOfKinName"
                 onChange={handleTextChange}
                 label="Next of Kin(Fullname)"
@@ -756,28 +714,14 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
                 errorText="Please enter a valid Phone Number!"
                 inValid={userError.nextOfKinPhoneNumber}
                 placeholder="e.g +2347012121100"
+                inputMode='tel'
+                keyboardType='phone-pad'
               />
-              <View style={[styles.buttonWrapper, styles.row]}>
-                <Button
-                  overrideStyle={[styles.button, styles.halfBtn]}
-                  label={'Prev'}
-                  onPress={handlePrev}
-                />
-                <Button
-                  overrideStyle={[styles.button, styles.halfBtn]}
-                  label={'Next'}
-                  onPress={handleNext6}
-                />
-              </View>
-            </>
-          )}
-          {step === 6 && (
-            <>
               <Checkbox
                 name="referred"
                 onChange={handleTextChange}
                 label="Were you referred?"
-                overrideStyle={styles.textInput}
+                // overrideStyle={styles.textInput}
                 value={userData.referred}
                 errorText="Please enter a valid Name!"
                 inValid={userError.referred}
@@ -803,9 +747,11 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
                     errorText="Please enter a valid Phone Number!"
                     inValid={userError.referralPhoneNo}
                     placeholder="e.g 07010101010"
+                    inputMode='tel'
+                    keyboardType='phone-pad'
                   />
                 </>
-              )}
+                )}
               <View style={[styles.buttonWrapper, styles.row]}>
                 <Button
                   overrideStyle={[styles.button, styles.halfBtn]}
@@ -820,7 +766,7 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
               </View>
             </>
           )}
-          {step === 7 && (
+          {step === 3 && (
             <View style={styles.successWrapper}>
               <Header2 text="Success" overrideStyle={styles.successText} />
               <View>

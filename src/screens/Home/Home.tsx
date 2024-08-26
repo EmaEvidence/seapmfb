@@ -16,7 +16,7 @@ import {Paragraph} from '../../common/Text';
 import {categories} from '../../store';
 import styles from './Home.styles';
 import TransferIcon from '../../assets/images/transfer.png';
-import MenuIcon from '../../assets/images/menu.png';
+import MenuIcon from '../../assets/images/accountIcon.png';
 import ShowIcon from '../../assets/images/show.png';
 import HideIcon from '../../assets/images/hide.png';
 import AcctMore from '../../assets/images/acctmore.png';
@@ -107,7 +107,7 @@ export const Home = ({navigation}: {navigation: any}) => {
             <TouchableOpacity
               style={styles.menu}
               onPress={() => navigation.openDrawer()}>
-              <Image source={MenuIcon} />
+              <Image style={styles.menuIcon} source={MenuIcon} />
             </TouchableOpacity>
           );
         }}

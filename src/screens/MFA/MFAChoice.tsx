@@ -44,6 +44,7 @@ export const MFAChoice = ({navigation, route}: Props) => {
       header="How will you like to authorize transactions on this device?"
       description=""
       linkText="Skip"
+      goBack={navigation.goBack}
       onLinkPress={() => handleSkip()}>
       <View>
         <MFAChoiceComponent

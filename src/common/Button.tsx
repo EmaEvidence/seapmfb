@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: colors.twhite,
-    fontWeight: '500',
-    fontSize: fontSizes.paragragh2,
+    fontWeight: '400',
+    fontSize: fontSizes.paragragh1,
   },
 });

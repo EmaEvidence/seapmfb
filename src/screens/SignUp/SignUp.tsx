@@ -15,11 +15,10 @@ import toaster from '../../utils/toaster';
 // import {saveItem} from '../../utils/localStorage';
 import {validatePassword, validateNonEmpty} from '../../validator';
 import styles from './SignUp.styles';
+import { INavigation } from '../../types';
 
 interface SignUpProps {
-  navigation: {
-    navigate: (route: string) => void;
-  };
+  navigation: INavigation;
 }
 
 export const SignUp = ({navigation}: SignUpProps) => {
@@ -144,6 +143,7 @@ export const SignUp = ({navigation}: SignUpProps) => {
   };
   return (
     <UnAuthWrapper
+      goBack={navigation.goBack}
       header={lang.signUp}
       description="Enter your Account Number to create your unique space in our virtual Banking Hall."
       linkText={lang.haveAnAcc}

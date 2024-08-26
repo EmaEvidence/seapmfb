@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {View} from 'react-native';
 import {Button, Header} from '../../common';
 import styles from './Profile.styles';
-import InputText, {CustomPicker} from '../../common/InputText';
+import InputText, {ç, GenericDropdown} from '../../common/InputText';
 import ResetComponent from './ResetComponent';
 import {secretQuestions} from '../../utils/constants';
 import {validateNonEmpty, validatePin} from '../../validator';
@@ -66,31 +66,31 @@ export const ChangeSecret = ({navigation}: any) => {
       <Header
         overrideGoBack={() => navigation.navigate('Security')}
         showBackBtn
-        title={'Reset Secret Question'}
+        title={'Reset secret question'}
         navigation={navigation}
       />
       <View style={styles.content}>
         <View style={styles.securityFormWrapper}>
-          <InputText
-            name="otp"
-            onChange={handleTextChange}
-            label="Enter OTP"
-            obsureText={true}
-            overrideStyle={styles.textInput}
-            value={userData.otp}
-            errorText="Please enter OTP sent to you!"
-            inValid={userError.otp}
-          />
-          <CustomPicker
-            mode="dialog"
-            data={secretQuestions}
-            name="secretQuestion"
-            onChange={handleTextChange}
-            label="Secret Question"
-            overrideStyle={styles.textInput}
+          <GenericDropdown
+            data={secretQuestions.map(que => ({
+              label: que,
+              value: que,
+            }))}
+            onChange={(name, val) => {
+              handleTextChange(name, val);
+              if (val) {
+                handleTextChange('secretQuestion', val);
+              }
+            }}
+            label={''}
+            name={'secretQuestion'}
             value={userData.secretQuestion}
-            error="Please select a secret question!"
             inValid={userError.secretQuestion}
+            error={'Please select a secret question!'}
+            listMode="MODAL"
+            searchable={true}
+            placeholder="Secret question"
+            overrideStyle={{}}
           />
           <InputText
             label="New Secret Answer"
@@ -111,6 +111,16 @@ export const ChangeSecret = ({navigation}: any) => {
             value={userData.confirmationAnswer}
             errorText="Please enter matching answer!"
             inValid={userError.confirmationAnswer}
+          />
+          <InputText
+            name="otp"
+            onChange={handleTextChange}
+            label="Enter OTP"
+            obsureText={true}
+            overrideStyle={styles.textInput}
+            value={userData.otp}
+            errorText="Please enter OTP sent to you!"
+            inValid={userError.otp}
           />
           <View style={styles.buttonWrapper}>
             <Button

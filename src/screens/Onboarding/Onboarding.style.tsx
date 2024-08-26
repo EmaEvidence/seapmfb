@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {colors} from '../../utils/theme';
+import {colors, fontSizes} from '../../utils/theme';
 import {width,height} from '../../utils/constants';
 
 const styles = StyleSheet.create({
@@ -49,6 +49,8 @@ const styles = StyleSheet.create({
     textAlign: 'right'
   },
   bottomWrapper: {
+    position: 'absolute',
+    bottom: '10%',
     paddingBottom: 70,
     paddingHorizontal: 30,
   },
@@ -66,7 +68,7 @@ const styles = StyleSheet.create({
   },
   detail: {
     color: colors.twhite,
-    fontSize: 18,
+    fontSize: fontSizes.paragragh1,
   },
 });
 

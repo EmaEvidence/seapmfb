@@ -182,8 +182,10 @@ export const EnrollDevice = ({navigation}: EnrollDeviceProps) => {
           ? 'Select Device to overwrite'
           : 'This device is not Enrolled to Access your account. Get OTP to Enroll this device.'
       }
-      linkText="Go Back"
-      onLinkPress={() => navigation.navigate('Login')}>
+      linkText=""
+      onLinkPress={() => navigation.navigate('Login')}
+      goBack={navigation.goBack}
+    >
       <View>
         {step === 0 && (
           <>

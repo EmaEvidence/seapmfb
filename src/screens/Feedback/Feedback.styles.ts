@@ -162,6 +162,8 @@ export const styles = StyleSheet.create({
     margin: 'auto',
     alignSelf: 'center',
     paddingTop: 20,
+    borderWidth: 1,
+    borderColor: 'black'
   },
   title: {
     color: colors.sMainBlue,

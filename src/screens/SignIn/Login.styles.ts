@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
     marginTop: 20,
   },
   button: {
-    borderRadius: 5,
+    borderRadius: 200,
     width: '100%',
   },
   fgtPswordbutton: {

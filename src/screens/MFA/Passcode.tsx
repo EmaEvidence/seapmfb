@@ -85,6 +85,7 @@ export const Passcode = ({route, navigation}: Props) => {
   return (
     <UnAuthWrapper
       header="Create Pass Code"
+      goBack={navigation.goBack}
       description="Add a Passcode to make your account more secure."
       linkText={isAuthenticated ? 'Back' : 'Skip'}
       onLinkPress={() => handleSkip()}>

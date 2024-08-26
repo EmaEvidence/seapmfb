@@ -3,7 +3,7 @@ import {colors} from '../../utils/theme';
 
 export const styles = StyleSheet.create({
   textInput: {
-    marginVertical: 25,
+    marginVertical: 10,
   },
   formWrapper: {
     marginVertical: 10,
@@ -13,9 +13,10 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 20,
+    height: 70
   },
   button: {
-    borderRadius: 5,
+    borderRadius: 500,
     width: '100%',
   },
   row: {
@@ -23,7 +24,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   halfBtn: {
-    width: '45%',
+    width: '48%',
   },
   successWrapper: {
     width: '90%',

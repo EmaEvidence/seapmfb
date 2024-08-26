@@ -121,7 +121,7 @@ export const Security = ({navigation}: any) => {
             )}
           </View>
           <Button
-            label="Reset Secret Question"
+            label="Reset secret question"
             overrideStyle={styles.securityBtn}
             overrideLabelStyle={styles.actionText}
             onPress={() => navigation.navigate('ChangeSecret')}

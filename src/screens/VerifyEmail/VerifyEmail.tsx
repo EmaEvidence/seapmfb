@@ -12,11 +12,10 @@ import UnAuthWrapper from '../../common/UnAuthWrapper';
 import {loadItem} from '../../utils/localStorage';
 import toaster from '../../utils/toaster';
 import styles from './VerifyEmail.styles';
+import { INavigation } from '../../types';
 
 interface VerifyEmailProps {
-  navigation: {
-    navigate: (route: string) => void;
-  };
+  navigation: INavigation;
 }
 
 export const VerifyEmail = ({navigation}: VerifyEmailProps) => {
@@ -47,6 +46,7 @@ export const VerifyEmail = ({navigation}: VerifyEmailProps) => {
 
   return (
     <UnAuthWrapper
+      goBack={navigation.goBack}
       header="Verify Account"
       description="Onboarding details dsiuf duiusdd sdfusdfs sdufsdf sdfiudsfsdf sdifusdfsdfhosdfpos sdufsdf sdufsdfsdois sd"
       linkText="Sign Up"

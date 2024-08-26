@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import {View} from 'react-native';
-import axios from 'axios';
+import {View, ScrollView} from 'react-native';
+import axios, { AxiosResponse } from 'axios';
 import jwt_decode from 'jwt-decode';
 import {Button} from '../../common';
 import InputText from '../../common/InputText';
@@ -15,6 +15,8 @@ import useDeviceInfo from '../../hooks/useDeviceInfo';
 import {useAppDispatch} from '../../app/hooks';
 import {login} from '../../app/slices/auth';
 import useLanguage from '../../hooks/useLanguage';
+import { FingerPrintComponent } from '../MFA';
+import useRefreshToken from '../../hooks/useRefreshToken';
 
 interface LoginProps {
   navigation: INavigation;
@@ -89,20 +91,17 @@ export const Login = ({navigation}: LoginProps) => {
         ...userData,
         deviceId,
         sessionId: '090qwqere',
-      });
-      // @ts-ignore
+      }) as AxiosResponse;
       if (resp?.status === 200) {
-        // @ts-ignore
+        console.log(resp?.data)
         saveItem('authToken', resp.data.authenticationToken);
+        saveItem('refreshToken', resp.data.refreshToken);
         saveItem('acctNo', userId);
         toaster('Success', 'Login Successful', 'custom');
         const decoded: Record<string, string> = jwt_decode(
-          // @ts-ignore
           resp.data.authenticationToken,
         );
-        // @ts-ignore
         axios.defaults.headers.common.Authorization = `Bearer ${resp.data.authenticationToken}`;
-        // @ts-ignore
         handleMFA(resp.data.authType, decoded);
       }
       if (
@@ -128,15 +127,18 @@ export const Login = ({navigation}: LoginProps) => {
     }
   };
 
+  const {refreshToken} = useRefreshToken();
+
   return (
     <UnAuthWrapper
       header={lang.signIn}
+      goBack={navigation.goBack}
       description={lang.signInText}
       linkText={'Signup'}
       onLinkPress={() => navigation.navigate('SignUp')}
       linkText1={lang.getSeap}
       onLinkPress1={() => navigation.navigate('GetSeapAccount')}>
-      <View>
+      <ScrollView>
         <InputText
           name="userId"
           onChange={handleTextChange}
@@ -160,7 +162,7 @@ export const Login = ({navigation}: LoginProps) => {
         <View style={styles.buttonWrapper}>
           <Button
             overrideStyle={styles.button}
-            label={lang.signIn}
+            label="Login"
             onPress={handleSubmit}
           />
           <Button
@@ -170,7 +172,10 @@ export const Login = ({navigation}: LoginProps) => {
             onPress={() => navigation.navigate('ForgotPassword')}
           />
         </View>
-      </View>
+        {
+          refreshToken && <FingerPrintComponent label="Use Biometric to unlock the app" />
+        }
+      </ScrollView>
     </UnAuthWrapper>
   );
 };

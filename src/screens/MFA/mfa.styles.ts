@@ -21,6 +21,7 @@ export const styles = StyleSheet.create({
     width: 'auto',
     paddingHorizontal: 20,
     marginVertical: 10,
+    borderRadius: 300
   },
   button: {
     borderRadius: 5,
@@ -52,8 +53,8 @@ export const styles = StyleSheet.create({
     marginBottom: 20,
   },
   fingerWrapper: {
-    width: 100,
-    height: 100,
+    width: 80,
+    height: 80,
     marginBottom: 40,
     alignSelf: 'center',
   },

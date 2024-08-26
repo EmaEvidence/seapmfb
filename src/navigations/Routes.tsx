@@ -34,7 +34,7 @@ import {
   SetupBiometric,
   AccountOthers,
   AccountRequests,
-  Personalize,
+  // Personalize,
   Statement,
   TransactionPassword,
   ChangeSecret,
@@ -114,14 +114,12 @@ const MainAuthPage = () => {
           fontWeight: '700',
           color: colors.sMainBlue,
           fontFamily: 'Trebuchet MS',
-          border: 1,
           borderColor: 'black'
         },
       })}>
       <Screen component={Home} name={routes[0]} />
       <Screen component={Transfer} name={routes[1]} />
       <Screen component={Payments} name={routes[2]} />
-      {/* <Screen component={Analytics} name={routes[3]} /> */}
     </Navigator>
   );
 };
@@ -247,7 +245,7 @@ export function Route() {
       <MainStack.Screen component={SetupBiometric} name="SetupBiometric" />
       <MainStack.Screen component={AccountOthers} name="AccountOthers" />
       <MainStack.Screen component={AccountRequests} name="AccountRequests" />
-      <MainStack.Screen component={Personalize} name="Personalise" />
+      {/* <MainStack.Screen component={Personalize} name="Personalise" /> */}
       <MainStack.Screen component={Statement} name="Statement" />
       <MainStack.Screen component={Passcode} name="Passcode" />
       <MainStack.Screen component={FingerPrint} name="FingerPrint" />
