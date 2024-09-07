@@ -105,6 +105,33 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  secCard: {
+    width: '100%',
+    height: 60,
+    borderRadius: 5,
+    borderWidth: 1,
+    marginBottom: 20,
+    borderColor: colors.sLighterBlue,
+    paddingHorizontal: 16,
+    paddingVertical: 5,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: colors.sTextYellow
+  },
+  secTitle: {
+    color: colors.sMainBlue
+  },
+  secDetail: {
+    // color: colors.sLightBlue
+  },
+  authTypeWrapper: {
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+  },
+  halfBtn: {
+    width: '48%',
+  },
 });
 
 export default styles;

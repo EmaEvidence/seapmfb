@@ -1,10 +1,11 @@
 import React from 'react';
 import {
   StyleSheet,
-  Text,
+  // Text,
   TextStyle,
   TextProps as BaseTextProps,
 } from 'react-native';
+import { Text } from 'react-native-paper';
 import {colors, fontSizes} from '../utils/theme';
 
 interface TextProps extends BaseTextProps {
@@ -42,9 +43,9 @@ export const Header5 = ({text, overrideStyle, ...rest}: TextProps) => {
   );
 };
 
-export const Paragraph = ({text, overrideStyle}: TextProps) => {
+export const Paragraph = ({text, overrideStyle, onPress}: TextProps) => {
   return (
-    <Text style={[styles.text, styles.paragraph, overrideStyle]}>{text}</Text>
+    <Text style={[styles.text, styles.paragraph, overrideStyle]} onPress={onPress}>{text}</Text>
   );
 };
 

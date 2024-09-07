@@ -33,6 +33,7 @@ export const colors = {
   sMainBlue: '#182880',
   sYellow: '#DEBF16',
   sLightBlue: '#EEF4FF',
+  sTransparentBlue: '#EEF4FF80',
   sTextYellow: '#FAFAFA',
   sLighterBlue: '#4F5783',
   sRed: 'red',

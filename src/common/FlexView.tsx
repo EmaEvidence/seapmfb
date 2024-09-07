@@ -5,7 +5,7 @@ interface Props {
   children: JSX.Element | JSX.Element[];
   justify: 'isCenter' | 'isArd' | 'isBtw' | 'isStart' | 'isEnd';
   align?: 'isCenter' | 'isArd' | 'isBtw' | 'isStart' | 'isEnd';
-  overrideStyle?: ViewStyle;
+  overrideStyle?: ViewStyle | ViewStyle[];
 }
 
 export const ColumnView = ({

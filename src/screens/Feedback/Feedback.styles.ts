@@ -141,7 +141,7 @@ export const styles = StyleSheet.create({
     marginTop: 20,
   },
   button: {
-    borderRadius: 5,
+    borderRadius: 50,
     width: '100%',
   },
   textColor: {
@@ -151,19 +151,15 @@ export const styles = StyleSheet.create({
     marginVertical: 25,
   },
   messageInput: {
-    marginVertical: 70,
-    height: 200,
+    height: 155,
   },
   inputStyle: {
     height: 150,
   },
   feedbackWrapper: {
-    width: Dimensions.get('screen').width * 0.8,
+    width: Dimensions.get('screen').width * 0.9,
     margin: 'auto',
     alignSelf: 'center',
-    paddingTop: 20,
-    borderWidth: 1,
-    borderColor: 'black'
   },
   title: {
     color: colors.sMainBlue,

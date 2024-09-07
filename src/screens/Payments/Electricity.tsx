@@ -35,20 +35,25 @@ export const Electricity = ({
           name={'customerReference'}
           label="Meter Number"
           onBlur={onReferenceBlur}
-          overrideStyle={[styles.electricityInput, styles.inputStyle]}
+          overrideNPInputWrapper={[styles.electricityInput, styles.inputStyle]}
           inValid={errorObj.customerReference}
           errorText="Enter Meter Number"
           placeholder="e.g 10101010101"
+          autoFocus
+          keyboardType='numeric'
+          inputMode='numeric'
         />
         <InputText
           value={amount}
           onChange={handleTextChange}
           name={'amount'}
-          label="Amount"
-          overrideStyle={[styles.electricityInput, styles.inputStyle]}
+          label="Amount(₦)"
+          overrideNPInputWrapper={[styles.electricityInput, styles.inputStyle]}
           inValid={errorObj.amount}
           errorText="Enter Amount"
           placeholder="e.g 1000"
+          keyboardType='numeric'
+          inputMode='numeric'
         />
       </View>
       {name && <Paragraph text={name} />}
@@ -72,8 +77,10 @@ export const Electricity = ({
         label="Email Address"
         inValid={errorObj.contactEmail}
         errorText="Enter Email"
-        overrideStyle={styles.inputStyle}
+        overrideNPInputWrapper={styles.inputStyle}
         placeholder="e.g email@mail.com"
+        keyboardType='email-address'
+        inputMode='email'
       />
       <View style={styles.electricityWrapper}>
         <InputText
@@ -81,13 +88,15 @@ export const Electricity = ({
           onChange={handleTextChange}
           name={'customerPhoneNumber'}
           label="Phone"
-          overrideStyle={[styles.electricityInput, styles.inputStyle]}
+          overrideNPInputWrapper={[styles.electricityInput, styles.inputStyle]}
           inValid={errorObj.customerPhoneNumber}
           errorText="Enter Phone"
           placeholder="e.g 07010101010"
+          keyboardType='phone-pad'
+          inputMode='tel'
         />
         <GenericDropdown
-          overrideStyle={[styles.electricityInput, styles.inputStyle]}
+          overrideStyle={[styles.electricityInput, styles.inputStyle, { marginTop: 14}]}
           value={contactType || ''}
           onChange={handleTextChange}
           name={'contactType'}

@@ -25,7 +25,7 @@ export const TransactionPassword = ({route, navigation}: Props) => {
   const [userData, setData] = useState({
     confirmPassword: '',
     password: '',
-    setAsDefault: setAsDefault ? 'Yes' : '',
+    setAsDefault: true,
   });
 
   const [userError, setError] = useState<Record<string, boolean>>({
@@ -62,7 +62,7 @@ export const TransactionPassword = ({route, navigation}: Props) => {
     const resp = (await setTransactionPassword({
       ...userData,
       // @ts-ignore
-      setAsDefault: !!userData.setAsDefault,
+      setAsDefault: userData.setAsDefault,
     })) as AxiosResponse<any>;
     if (resp?.status === 200) {
       setAuthTypeCall({
@@ -110,14 +110,14 @@ export const TransactionPassword = ({route, navigation}: Props) => {
           errorText="Passwords do not match!"
           inValid={userError.confirmPassword}
         />
-        {hideDefault && (
+        {/* {hideDefault && (
           <Checkbox
             label="Set as Default"
             name="setAsDefault"
             onChange={handleTextChange}
             value={userData.setAsDefault}
           />
-        )}
+        )} */}
         <View style={styles.buttonWrapper}>
           <Button
             overrideStyle={styles.button}

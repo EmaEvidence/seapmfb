@@ -88,16 +88,10 @@ export const Feedback = ({navigation}: any) => {
   return (
     <View style={styles.wrapper}>
       <Header
-        title={params?.title || 'Feedback or Complaints'}
+        title={params?.title || 'Your Feedback makes us better.'}
         navigation={navigation}
-        showBackBtn
-        overrideGoBack={() => navigation.goBack()}
       />
       <View style={styles.feedbackWrapper}>
-        <Header2
-          text={params?.subject || 'Your Feedback makes us better.'}
-          overrideStyle={styles.title}
-        />
         <AccountSelector
           value={userData.userAccountNo}
           handleTextChange={(label: string, val: string) => {
@@ -118,7 +112,7 @@ export const Feedback = ({navigation}: any) => {
         />
         <InputText
           label={'Message'}
-          overrideStyle={styles.messageInput}
+          overrideNPInputWrapper={styles.messageInput}
           obsureText={true}
           name="message"
           onChange={handleTextChange}
@@ -127,7 +121,7 @@ export const Feedback = ({navigation}: any) => {
           inValid={userError.message}
           multiline
           numberOfLines={4}
-          overrideInputWrapperStyle={styles.inputStyle}
+          overrideNPInputStyle={styles.inputStyle}
           placeholder="Your Message"
         />
         <View style={styles.buttonWrapper}>

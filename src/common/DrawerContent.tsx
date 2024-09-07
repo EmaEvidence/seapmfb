@@ -8,7 +8,7 @@ import {LogOutBtn} from '../screens';
 
 const content = [
   {name: 'Beneficiaries', link: 'Beneficiaries'},
-  {name: 'Feedback', link: 'Feedback'},
+  // {name: 'Feedback', link: 'Feedback'},
   {name: 'Settings', link: 'Profile'},
   {name: 'Share', link: 'Profile'},
 ];

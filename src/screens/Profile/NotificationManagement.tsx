@@ -33,7 +33,7 @@ export const NotificationManagement = ({navigation}: any) => {
   return (
     <View style={styles.wrapper}>
       <Header
-        overrideGoBack={() => navigation.navigate('Profile')}
+        overrideGoBack={() => navigation.navigate('Settings')}
         showBackBtn
         title={'Manage Notification'}
         navigation={navigation}

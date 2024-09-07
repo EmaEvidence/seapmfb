@@ -1,11 +1,12 @@
 import {Platform, StyleSheet} from 'react-native';
 import {colors, fontSizes} from '../../utils/theme';
-import {height} from '../../utils/constants';
+import {height, width} from '../../utils/constants';
+import { Beneficiaries } from '../Beneficiaries';
 
 export const styles = StyleSheet.create({
   wrapper: {
     height: '100%',
-    backgroundColor: colors.twhite,
+    backgroundColor: colors.sTextYellow,
     paddingHorizontal: '5%',
   },
   actionBtn: {
@@ -39,12 +40,13 @@ export const styles = StyleSheet.create({
     marginBottom: 10,
   },
   paymentWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    height: '100%',
+    height,
     flexWrap: 'wrap',
-    padding: '1%',
+    paddingHorizontal: '1%',
+    width: '100%',
   },
   pickerStyle: {
     width: '100%',
@@ -67,12 +69,15 @@ export const styles = StyleSheet.create({
   },
   buttonWrapper: {
     width: '100%',
+    // flex: 0.45,
+    flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 20,
+    alignSelf: 'flex-end'
   },
   button: {
-    borderRadius: 5,
+    borderRadius: 50,
     width: '100%',
   },
   row: {
@@ -86,8 +91,8 @@ export const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     width: '25%',
     textAlign: 'left',
-    borderWidth: 1,
-    borderColor: colors.sMainBlue,
+    // borderWidth: 1,
+    // borderColor: colors.sMainBlue,
     borderRadius: 5,
     marginBottom: 3,
     maxHeight: 60,
@@ -98,6 +103,8 @@ export const styles = StyleSheet.create({
     width: '100%',
     textAlign: 'center',
     fontSize: fontSizes.bodyText2,
+    // textDecorationLine: 1,
+    // textDecorationStyle: 'solid'
   },
   confirm: {
     padding: 20,
@@ -125,6 +132,123 @@ export const styles = StyleSheet.create({
     color: colors.sMainBlue,
     marginTop: 20,
   },
+  beneficiariesWrapper: {
+    height: '100%',
+    width: width * 0.85,
+    marginTop: 10,
+  },
+  secCard: {
+    width: '100%',
+    height: 60,
+    borderRadius: 5,
+    // borderWidth: 1,
+    marginBottom: 10,
+    borderColor: colors.sLighterBlue,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: colors.twhite,
+  },
+  icon: {
+    width: 40,
+    height: 40,
+    backgroundColor: colors.sLightBlue, padding: 3, borderRadius: 5,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 8,
+    textAlign: 'center',
+    paddingTop: 7,
+    color: colors.sMainBlue
+  },
+  acct: {
+    fontSize: fontSizes.bodyText
+  },
+  acctName: {
+    fontWeight: '400',
+    color: colors.sMainBlue,
+    width: '90%',
+    height: 18,
+    overflow: 'hidden',
+  },
+  fullWidth: {
+    width: '100%',
+    // borderWidth: 1,
+  },
+  receipientWrapper: {
+    padding: 15,
+    borderRadius: 5,
+    backgroundColor: colors.twhite,
+    marginBottom: 10,
+  },
+  amountWrapper: {
+    padding: 20,
+    borderRadius: 5,
+    backgroundColor: colors.twhite,
+    height: 'auto'
+  },
+  amtInput: {
+    backgroundColor: 'transparent',
+    textAlign: 'left',
+    borderWidth: 0,
+    fontSize: fontSizes.bigHeader,
+    width: 'auto',
+    paddingHorizontal: 0,
+    paddingLeft: 5,
+    color: colors.sMainBlue,
+  },
+  amtInputWrapper: {
+    // borderColor: 'transparent',
+    borderWidth: 0,
+    width: 'auto',
+    paddingHorizontal: 0
+  },
+  remarkInput: {
+    height: 100,
+    justifyContent: 'flex-start',
+    backgroundColor: 'transparent',
+  },
+  amtText: {
+    paddingHorizontal: 0,
+    width: 'auto',
+    minWidth: 20,
+    color: colors.sMainBlue,
+    fontSize: fontSizes.bigHeader
+  },
+  balanceText: {
+    fontSize: fontSizes.paragragh,
+    // lineHeight: fontSizes.paragragh2,
+    borderColor: colors.sMainBlue,
+    // borderWidth: 1,
+    borderRadius: 40,
+    paddingHorizontal: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+    paddingTop: 4,
+    textAlign:'center',
+    color: colors.sMainBlue
+  },
+  blueText: {
+    color: colors.sMainBlue
+  },
+  transparentBtn: {
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: colors.sMainBlue
+  },
+  transparentBtnLabel: {
+    color: colors.sMainBlue
+  },
+  bankIcon: {
+    marginRight: 20,
+    backgroundColor: colors.sLightBlue,
+    padding: 3,
+    borderRadius: 5,
+    color: colors.sMainBlue,
+  }
 });
 
 export default styles;

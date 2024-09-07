@@ -47,6 +47,9 @@ export const styles = StyleSheet.create({
   halfInput: {
     width: '48%',
   },
+  balDrpdwnMt: {
+    marginTop: 15
+  }
 });
 
 export default styles;

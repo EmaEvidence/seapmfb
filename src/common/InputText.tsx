@@ -30,11 +30,15 @@ interface InputTextProps extends TextInputProps {
   overrideInputStyle?: TextStyle;
   numberOfLines?: number;
   multiline?: boolean;
-  overrideInputWrapperStyle?: ViewStyle;
+  overrideInputWrapperStyle?: ViewStyle | ViewStyle[];
   placeholderColor?: string;
   readonly?: boolean;
   onPress?: () => void;
-  overrideNPInputWrapper?: ViewStyle;
+  overrideNPInputWrapper?: ViewStyle | ViewStyle[];
+  overrideNPInputStyle?: ViewStyle | ViewStyle[];
+  outlineColor?: string;
+  activeOutlineColor?: string;
+  contentStyle?: ViewStyle;
 }
 
 const InputText = ({
@@ -54,12 +58,20 @@ const InputText = ({
   numberOfLines,
   multiline,
   overrideNPInputWrapper,
+  overrideNPInputStyle,
   placeholderColor,
   readonly,
   onPress,
   inputType,
   inputMode,
   keyboardType,
+  autoCapitalize,
+  autoCorrect,
+  returnKeyType,
+  autoFocus,
+  outlineColor = colors.sLighterBlue,
+  activeOutlineColor = colors.sMainBlue,
+  contentStyle,
 }: InputTextProps) => {
   const [isFocus, setIsFocus] = useState(false);
   return (
@@ -72,8 +84,8 @@ const InputText = ({
         value={value}
         mode="outlined"
         dense
-        outlineColor={colors.sLighterBlue}
-        activeOutlineColor={colors.sMainBlue}
+        outlineColor={outlineColor}
+        activeOutlineColor={activeOutlineColor}
         editable={readonly}
         onChangeText={text => {
           // @ts-ignore
@@ -84,7 +96,13 @@ const InputText = ({
         }}
         style={[
           styles.npTextStyle,
-          // overrideInputStyle,
+          overrideNPInputStyle,
+        ]}
+        contentStyle={[
+          {
+            fontSize: fontSizes.paragragh
+          },
+          contentStyle
         ]}
         secureTextEntry={obsureText}
         onBlur={() => {
@@ -104,6 +122,10 @@ const InputText = ({
         error={inValid}
         inputMode={inputMode}
         keyboardType={keyboardType}
+        autoCapitalize={autoCapitalize}
+        autoCorrect={autoCorrect}
+        returnKeyType={returnKeyType}
+        autoFocus={autoFocus}
       />
       {inValid && (
         <Paragraph
@@ -119,7 +141,7 @@ const InputText = ({
 export default InputText;
 
 interface GenericPickerProps {
-  overrideStyle: ViewStyle | ViewStyle[];
+  overrideStyle?: ViewStyle | ViewStyle[];
   onChange: (name: string, text: string) => void;
   label: string;
   subLabel?: string;
@@ -209,57 +231,61 @@ export const GenericDropdown = ({
   }, [value]);
 
   useEffect(() => {
+    if (props.value !== value) {
+      setValue(props.value);
+    }
+  }, [props.value]);
+
+  useEffect(() => {
     setItems(data);
   }, [data]);
 
   return (
-    <View style={[styles.container, overrideStyle]}>
-      <View
-        style={[
-          styles.textInputStyle,
-          styles.dropDownWrapper,
-          overridePickerStyle,
-          {
-            
-          }
-        ]}>
-        {label && <Paragraph text={label} overrideStyle={[styles.label, { 
-          fontSize: 11,
-          lineHeight: 12,
-          position: 'absolute',
-          zIndex: 9999,
-          left: 10,
-          top: value ? -5 : 16,
-          paddingHorizontal: 5,
-          backgroundColor: 'white'
-        }]} />}
-        <DropDownPicker
-          open={open}
-          value={value}
-          items={items}
-          setOpen={setOpen}
-          setValue={setValue}
-          setItems={setItems}
-          theme="LIGHT"
-          mode="BADGE"
-          placeholderStyle={styles.placeholderStyle}
-          listMode={props.listMode}
-          dropDownDirection={props.dropDownDirection}
-          searchable={props.searchable}
-          containerStyle={[styles.autoComplete, { height: 55 } ]}
-          style={[styles.style, { height: 30 }]}
-          searchContainerStyle={styles.searchContainerStyle}
-          searchTextInputStyle={styles.searchTextInputStyle}
-          listItemLabelStyle={styles.listItemLabelStyle}
-          listItemContainerStyle={styles.listItemContainerStyle}
-          dropDownContainerStyle={styles.dropDownContainerStyle}
-          zIndex={props.zIndex}
-          zIndexInverse={props.zIndexInverse}
-          searchPlaceholder={`Search ${name}`}
-        />
-      </View>
+    <View
+      style={[
+        {
+          width: '100%',
+        },
+        overrideStyle
+    ]}
+    >
+      {label && <Paragraph onPress={() => setOpen(true)} text={label} overrideStyle={[styles.label, { 
+        fontSize: value ? 10: 12,
+        color: value ? colors.sMainBlue : colors.tblack,
+        lineHeight: value ? 12 : 14,
+        position: 'absolute',
+        zIndex: 9999,
+        left: 10,
+        top: value ? -5 : 20,
+        paddingHorizontal: 5,
+        backgroundColor: 'white',
+      }]} />}
+      <DropDownPicker
+        open={open}
+        value={value}
+        items={items}
+        setOpen={setOpen}
+        setValue={setValue}
+        setItems={setItems}
+        theme="LIGHT"
+        mode="BADGE"
+        placeholderStyle={styles.placeholderStyle}
+        listMode={props.listMode}
+        dropDownDirection={props.dropDownDirection}
+        searchable={props.searchable}
+        containerStyle={[styles.autoComplete, { height: 55 } ]}
+        style={[styles.style]}
+        searchContainerStyle={styles.searchContainerStyle}
+        searchTextInputStyle={styles.searchTextInputStyle}
+        listItemLabelStyle={styles.listItemLabelStyle}
+        listItemContainerStyle={styles.listItemContainerStyle}
+        dropDownContainerStyle={styles.dropDownContainerStyle}
+        zIndex={props.zIndex}
+        zIndexInverse={props.zIndexInverse}
+        searchPlaceholder={`Search ${name}`}
+      />
       {inValid && (
-        <Paragraph overrideStyle={[styles.errorTextNP, { bottom: -18}]} text={error as string} />
+        <Paragraph overrideStyle={[styles.errorTextNP, { bottom: -10}]} text={error as string} />
       )}
     </View>
   );
@@ -296,7 +322,7 @@ const styles = StyleSheet.create({
     color: 'red',
     fontWeight: 'bold',
     fontSize: fontSizes.bodyText,
-    width: '80%',
+    width: '90%',
     textAlign: 'right',
     position: 'absolute',
     bottom: -11,
@@ -322,6 +348,7 @@ const styles = StyleSheet.create({
     marginTop: -4,
     width: '100%',
     color: colors.sMainBlue,
+    fontFamily: 'Poppins-Medium',
   },
   textInputStyle: {
     borderRadius: 6,
@@ -401,7 +428,6 @@ const styles = StyleSheet.create({
   autoComplete: {
     width: '100%',
     backgroundColor: 'transparent',
-    borderColor: colors.sMainBlue,
     borderRadius: 5,
   },
   dropDownWrapper: {
@@ -412,6 +438,8 @@ const styles = StyleSheet.create({
   style: {
     borderColor: colors.sMainBlue,
     borderRadius: 5,
+    // minHeight: 55,
+    // marginBottom: 10,
   },
   searchContainerStyle: {
     borderColor: 'transparent',
@@ -446,5 +474,6 @@ const styles = StyleSheet.create({
   },
   placeholderStyle: {
     color: colors.sLighterBlue,
+    fontSize: fontSizes.bodyText
   }
 });

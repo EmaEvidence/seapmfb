@@ -1,7 +1,6 @@
 import {AxiosResponse} from 'axios';
-import React, {useEffect, useState} from 'react';
-import ReactNativeBiometrics from 'react-native-biometrics';
-import {Image, ScrollView, TouchableOpacity, View} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {Image, ScrollView, TouchableOpacity, View, FlatList, KeyboardAvoidingView, Platform, Text} from 'react-native';
 import {
   getAccounts,
   getAcctName,
@@ -18,13 +17,12 @@ import {useAppSelector} from '../../app/hooks';
 import {
   Header,
   Button,
-  ButtonSwitch,
   AccountSelector,
   RowView,
   ColumnView,
 } from '../../common';
-import InputText, {Checkbox, GenericDropdown} from '../../common/InputText';
-import {Header1, Paragraph} from '../../common/Text';
+import InputText from '../../common/InputText';
+import {Header1, Header2, Header3, Header4, Paragraph} from '../../common/Text';
 import {useTransactionAuthType} from '../../hooks';
 import toaster from '../../utils/toaster';
 import {
@@ -32,13 +30,25 @@ import {
   validateNonBeneficiaryData,
 } from '../../validator';
 import styles from './Transfer.styles';
-import FingerPrintImg from '../../assets/images/fingerprint.png';
+import NewRecipient from '../../assets/images/newReceipient.png';
+import Success from '../../assets/images/success.png';
+import { colors, fontSizes } from '../../utils/theme';
+import { height, width } from '../../utils/constants';
+import { formatAmount } from '../../utils/formatAmount';
+import RBSheet from 'react-native-raw-bottom-sheet';
+import { useFocusEffect } from '@react-navigation/native';
 
 const transferTypesArray = ['Local Transfer', 'Interbank Transfer'];
 const targetTypes = ['Saved Beneficiary', 'New Beneficiary'];
+const alpa = ["all", "0-9", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
 
-export const Transfer = ({navigation}: any) => {
+export const Transfer = ({navigation, history}: any) => {
+  const refRBSheet = useRef();
+  const [transaction, setTransaction] = useState({});
+  const [newRec, setNewRec] = useState(false);
   const transactType = useTransactionAuthType().type;
+  const [bankFilterTerm, setBankFilterType] = useState(alpa[0]);
+  const [amount, setAmount] = useState('');
   const {bankList, beneficiaries} = useAppSelector(state => state.account);
   const accountSummary = useAppSelector(state => state.account.accounts);
   const [step, setStep] = useState(0);
@@ -46,11 +56,12 @@ export const Transfer = ({navigation}: any) => {
   const [accounts, setAccounts] = useState<Array<string>>([]);
   const [ownTransfer, setOwnTransfer] = useState(false);
   const [ownAccount, setOwnAccount] = useState<Record<string, string>>({});
-  const [data, setData] = useState({
+  const initialState = {
     beneficiaryType: transferTypesArray[0],
     useBeneficiary: targetTypes[0],
     transferType: transferTypesArray[0],
     account: accounts[0],
+    accountNumber: '',
     receiver: '',
     bankCode: '',
     bank: '',
@@ -67,8 +78,27 @@ export const Transfer = ({navigation}: any) => {
     beneficiaryId: '',
     secret: '',
     authName: '',
+    rAcctName: '',
+    rAcctNumber: '',
+    rBankName: '',
+    rBankCode: '',
     debitAccountId: accMap[accounts[0]],
+  }
+
+  const [data, setData] = useState({
+    ...initialState,
+    accountBalance: '',
   });
+  useFocusEffect(
+    React.useCallback(() => {
+      setData(prev => ({
+        ...prev,
+        ...initialState
+      }));
+      setStep(0);
+      setAmount('')
+    }, [])
+  );
   const [userError, setError] = useState<Record<string, boolean>>({
     transferType: false,
     account: false,
@@ -96,11 +126,9 @@ export const Transfer = ({navigation}: any) => {
   }, [bankList]);
 
   useEffect(() => {
-    if (data.useBeneficiary === targetTypes[0]) {
-      const index = transferTypesArray.indexOf(data.transferType);
-      getBeneficiaries(index + 1);
-    }
-  }, [data.transferType, data.useBeneficiary]);
+    getBeneficiaries(1);
+    getBeneficiaries(2);
+  }, []);
 
   useEffect(() => {
     if (accountSummary) {
@@ -113,7 +141,7 @@ export const Transfer = ({navigation}: any) => {
       setAccMap(mappedAcc);
       setData(d => ({
         ...d,
-        account: acct[0],
+        account: accountSummary[0].accountNumber,
         debitAccountId: mappedAcc[acct[0]].toString(),
       }));
     }
@@ -127,10 +155,15 @@ export const Transfer = ({navigation}: any) => {
   };
 
   const handleTextChange = (label: string, value: string) => {
-    setData(prevState => ({
-      ...prevState,
-      [label]: value,
-    }));
+    if (label === 'amount') {
+      const formated = formatAmount(parseInt((value.replace(/,/g, '')) || '0'));
+      setAmount(formated)
+    } else {
+      setData(prevState => ({
+        ...prevState,
+        [label]: value,
+      }));
+    }
     handleErrorChange(label, !value);
   };
 
@@ -158,7 +191,6 @@ export const Transfer = ({navigation}: any) => {
       setData({
         ...data,
         accountName: isOwnAccount.accountName,
-        // nameEnquiryReference: resp.data.referenceId,
       });
       return;
     }
@@ -231,24 +263,31 @@ export const Transfer = ({navigation}: any) => {
     return !valid ? undefined : result;
   };
 
+  const transferSuccessCB = (data) => {
+    setTransaction(data);
+    refRBSheet.current.open();
+    getSummary(false);
+    getAccounts(false);
+    getHistory(data.account, '', '', false);
+    resetData();
+  }
+
   const transferBeneficiary = async () => {
+    refRBSheet.current.open();
     const credential = handleGetCredential();
     if (!credential) {
       return;
     }
     const resp = (await makeBeneficiaryTransfer({
-      amount: data.amount,
+      amount,
       debitAccountId: data.debitAccountId,
       narration: data.narration,
       beneficiaryId: data.beneficiaryId,
-      transaferType: transferTypeNum,
+      transaferType: data.rBankName.search(/seap/gi) > -1 ? 1 : 2,
       credential,
     })) as AxiosResponse<Record<string, any>>;
     if (resp.status === 200) {
-      getSummary();
-      getAccounts();
-      getHistory(1);
-      navigation.navigate('Transaction', {transaction: resp.data});
+      transferSuccessCB(resp.data);
     }
   };
 
@@ -257,39 +296,41 @@ export const Transfer = ({navigation}: any) => {
     if (!credential) {
       return;
     }
-    const saveBeneficiary = data.saveBeneficiary === 'yes';
     const resp = (await makeNonBeneficiaryTransfer({
-      amount: data.amount,
+      amount,
       debitAccountId: data.debitAccountId,
-      transaferType: transferTypeNum,
+      transaferType: data.rBankName.search(/seap/gi) > -1 ? 1 : 2,
       narration: data.narration,
       nameEnquiryReference: data.nameEnquiryReference,
-      saveBeneficiary,
+      saveBeneficiary: !!data.saveBeneficiaryAs,
       saveBeneficiaryAs: data.saveBeneficiaryAs,
       credential,
     })) as AxiosResponse<Record<string, any>>;
     if (resp.status === 200) {
-      if (saveBeneficiary) {
-        getBeneficiaries(transferTypesArray.indexOf(data.transferType) + 1);
+      if (!!data.saveBeneficiaryAs) {
+        getBeneficiaries(1);
+        getBeneficiaries(2);
       }
-      getSummary();
-      getAccounts();
-      getHistory(1);
-      navigation.navigate('Transaction', {transaction: resp.data});
+      transferSuccessCB(resp.data);
     }
   };
 
+  const resetData = () => {
+    setData(initialState);
+    setAmount('');
+    setStep(0);
+  }
+
   const handleOwnTransfer = async () => {
     const resp = await makeOwnTransfer({
-      amount: data.amount,
+      amount,
       debitAccountId: data.debitAccountId,
       narration: data.narration,
       destinationAccountId: ownAccount.id,
     });
     // @ts-ignore
     if (resp.status === 200) {
-      // @ts-ignore
-      navigation.navigate('Transaction', {transaction: resp.data});
+      transferSuccessCB(resp.data);
     }
   };
 
@@ -328,236 +369,375 @@ export const Transfer = ({navigation}: any) => {
     }
   }, [transactType]);
 
-  const handleSelectBank = (name: string, text: string) => {
-    const selectedBank = bankList?.find(bank => bank.bankCode === text);
-    handleTextChange('bankCode', text);
-    if (data.receiver.length === 10 && selectedBank) {
-      handleTextChange('bank', selectedBank?.name);
-      getAccountName(data.receiver, text);
-    } else if (selectedBank && data.receiver.length !== 10) {
-      toaster(
-        'Error',
-        'Ensure your supplied account number is 10 digits',
-        'custom',
+  const handleSelectBank = async (itm) => {
+    if (itm.bankCode !== 'seap') {
+      const resp = await getAcctName({
+        accountNumber: data.rAcctNumber,
+        bankCode: itm.bankCode,
+        fundTransferType: 2,
+      })  as unknown as AxiosResponse<Record<string, any>>;
+      if (resp.status === 200) {
+        setData({
+          ...data,
+          rBankCode: itm.bankCode,
+          rBankName: itm.name,
+          rAcctName: resp.data.accountName,
+          nameEnquiryReference: resp.data.referenceId,
+          beneficiaryId: '',
+        });
+        setStep((prev) => prev + 1);
+      } else {
+        toaster('Error', "Error getting recipient's details", 'custom');
+      }
+    } else if (itm.bankCode === 'seap') {
+      const isOwnAccount = accountSummary?.find(
+        acctt => acctt.accountNumber === data.rAcctNumber,
       );
+      setOwnTransfer(!!isOwnAccount);
+      if (isOwnAccount) {
+        setOwnAccount(isOwnAccount);
+        setData({
+          ...data,
+          rBankName: 'SEAP MFB',
+          rAcctName: isOwnAccount.accountName,
+          beneficiaryId: '',
+        });
+      } else {
+        setData({
+          ...data,
+          rBankName: 'SEAP MFB',
+          rAcctName: '',
+          beneficiaryId: '',
+        });
+      }
+      setStep((prev) => prev + 1);
     }
   };
 
+  const getAllBeneficiaries = () => {
+    const oneBen = beneficiaries[1] || [];
+    const twoBen = beneficiaries[2] || [];
+    return [...oneBen, ...twoBen];
+  }
+
+  const onBenPress = (itm) => {
+    setData((prev) => ({
+      ...prev,
+      beneficiaryId: itm.id,
+      rAcctName: itm.name,
+      rAcctNumber: itm.accountNumber,
+      rBankName: itm.bankName,
+      rBankCode: itm.bankCode
+    }));
+    setStep((prev) => prev + 1);
+  }
+
+  const handleAmtNext = () => {
+    handleNext()
+  }
+
+  const filterHandler = (itm) => {
+    const regex = new RegExp(data.receiver, 'gi')
+    return itm.displayFormat.search(regex) >= 0 || itm.nickName.search(regex) >= 0
+  }
+
+  const handleGoBack = () => {
+    if (step === 0) {
+      navigation.navigate('Home');
+      resetData();
+    } else {
+      handlePrev();
+    }
+  }
+
+  const getFilterBanks = () => {
+    if (bankFilterTerm === 'all') {
+      return bankList;
+    } else if (bankFilterTerm === '0-9') {
+      return bankList?.filter(item => parseInt(item.name.charAt(0)) >= 0);
+    } else {
+      return bankList?.filter(item => item.name.charAt(0).toLowerCase() === bankFilterTerm.toLowerCase());
+    }
+  }
+
+  function processBankLogo(name: string) {
+    const words = name.split(' ');
+    if (words.length >= 2) {
+      return words[0].charAt(0).toUpperCase() + words[1].charAt(0).toUpperCase();
+    } else {
+      return words[0].charAt(0).toUpperCase() + 'B';
+    }
+  }
+
+  const transactOutOfRange = parseFloat(data.accountBalance) < parseFloat(amount.replace(/,/g, ''));
   return (
-    <View style={styles.wrapper}>
-      <Header
-        overrideGoBack={() => navigation.goBack()}
-        showBackBtn
-        title={'Transfer'}
-        navigation={navigation}
-      />
-      {step === 0 && (
-        <ButtonSwitch
-          options={targetTypes}
-          setSelected={(arg: string): void => {
-            handleTextChange('useBeneficiary', arg);
-            handleTextChange('accountName', '');
-          }}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={50}
+    >
+      <View style={styles.wrapper}>
+        <Header
+          overrideGoBack={handleGoBack}
+          showBackBtn
+          title={''}
+          navigation={navigation}
         />
-      )}
-      <ScrollView>
+        <Header1 text='Fund transfer' overrideStyle={{
+          fontSize: fontSizes.bigHeader,
+          fontWeight: '600',
+          color: colors.sMainBlue
+        }} />
         <View style={styles.paymentWrapper}>
           {step === 0 && (
-            <>
+            <ColumnView justify='isStart' overrideStyle={{
+              width: '100%',
+            }}>
               <AccountSelector
-                value={data.account}
                 handleTextChange={handleTextChange}
                 inValid={userError.account}
                 error="Please select an account"
+                overrideContainerStyle={{
+                  maxHeight: 55
+                }}
+                history={navigation.getState()}
               />
-              <GenericDropdown
-                data={
-                  transferTypesArray?.map(item => ({
-                    value: item,
-                    label: item,
-                  })) || []
-                }
-                onChange={handleTextChange}
-                label={'Select Transfer Type.'}
-                name={'transferType'}
-                value={data.transferType}
-                inValid={false}
-                error={''}
-                overrideStyle={styles.pickerWrapper}
-                overridePickerStyle={styles.pickerStyle}
-                pickerItemStyle={styles.pickerItem}
-                placeholder="Click to select Transfer Type"
-                // dropDownDirection="TOP"
-                listMode="MODAL"
-                searchable
-              />
-              {data.useBeneficiary === targetTypes[0] ? (
-                <>
-                  {selectedBeneficiaries?.length > 0 ? (
-                    <>
-                      {selectedBeneficiaries && (
-                        <GenericDropdown
-                          label={'Select Beneficiary.'}
-                          data={
-                            selectedBeneficiaries?.map(
-                              (beneficiary: {
-                                displayFormat: string;
-                                id: string;
-                              }) => ({
-                                label: beneficiary.displayFormat,
-                                value: beneficiary.id,
-                              }),
-                            ) || []
-                          }
-                          overrideStyle={{}}
-                          onChange={(name: string, val: string) => {
-                            const bene = selectedBeneficiaries.find(
-                              itm => itm.id === val,
-                            );
-                            handleTextChange(name, bene?.id);
-                            handleTextChange(
-                              'accountName',
-                              bene?.displayFormat,
-                            );
-                            setError(prev => ({
-                              ...prev,
-                              beneficiaryId: false,
-                            }));
-                          }}
-                          name={'beneficiaryId'}
-                          value={data.beneficiaryId}
-                          inValid={userError.beneficiaryId}
-                          error="Select beneficiary"
-                          listMode="MODAL"
-                          placeholder='Enter Name to Search Beneficiary'
-                          searchable
-                        />
-                      )}
-                    </>
-                  ) : (
-                    <Paragraph text="No Beneficiary Found" />
-                  )}
-                </>
-              ) : (
-                <>
-                  <InputText
-                    value={data.receiver}
-                    onChange={(name: string, text: string) => {
-                      handleTextChange(name, text);
-                      if (
-                        data.transferType === transferTypesArray[0] &&
-                        text.length === 10
-                      ) {
-                        getAccountName(text);
-                      }
-                    }}
-                    name={'receiver'}
-                    label="Enter Account Number"
-                    inputType="number"
-                    keyboardType="number-pad"
-                    placeholder="e.g 1010101010"
-                  />
-                  {data.transferType !== transferTypesArray[0] && (
-                    <GenericDropdown
-                      // @ts-ignore
-                      data={
-                        bankList?.map(bank => ({
-                          label: bank.name,
-                          value: bank.bankCode,
-                        })) || []
-                      }
-                      onChange={handleSelectBank}
-                      label={'Select Bank Name'}
-                      placeholder='Enter first letters of bank to Search'
-                      name={'bank'}
-                      value={data.bankCode}
-                      inValid={false}
-                      error={''}
-                      overrideStyle={styles.pickerWrapper}
-                      overridePickerStyle={styles.pickerStyle}
-                      pickerItemStyle={styles.pickerItem}
-                      searchable
-                      listMode="MODAL"
-                    />
-                  )}
-                  <InputText
-                    value={data.accountName}
-                    onChange={(_name: string, _text: string) => {}}
-                    name={''}
-                    readonly
-                    label="Account Name"
-                    editable={false}
-                  />
-                </>
-              )}
-              <InputText
-                value={data.amount}
-                onChange={handleTextChange}
-                name="amount"
-                label="Enter Amount"
-                keyboardType="numeric"
-                inValid={userError.amount}
-                errorText="Enter amount"
-                inputType="number"
-                placeholder="e.g 1000"
-              />
-              <InputText
-                value={data.narration}
-                onChange={handleTextChange}
-                name="narration"
-                label="Narration"
-                errorText="Enter Narration to continue!"
-                inValid={userError.narration}
-                overrideStyle={styles.textInputStyle}
-                placeholder="e.g A Gift from me"
-              />
-              <View style={[styles.buttonWrapper]}>
-                <Button
-                  overrideStyle={[styles.button, styles.halfBtn]}
-                  label={'Next'}
-                  onPress={
-                    data.useBeneficiary === targetTypes[0]
-                      ? handleNextBeneficiary
-                      : handleNextNonBeneficiary
-                  }
+              <RowView justify='isBtw' align='isCenter' overrideStyle={{
+                width: '100%'
+              }}>
+                <InputText
+                  value={data.receiver}
+                  onChange={(name: string, text: string) => {
+                    handleTextChange(name, text);
+                  }}
+                  name={'receiver'}
+                  label="Search beneficiaries"
+                  placeholder="e.g 1010101010, Adedapo Hassan"
+                  overrideNPInputWrapper={{
+                    width: '50%'
+                  }}
+                  onFocus={() => setNewRec(false)}
                 />
-              </View>
-            </>
+                <TouchableOpacity
+                  onPress={() => setNewRec(true)}
+                  style={[
+                    styles.secCard,
+                    {
+                      width: '45%',
+                      marginTop: 15,
+                      height: 55,
+                      borderWidth: 1,
+                      borderColor: newRec ? colors.sYellow : 'transparent'
+                    }
+                  ]}>
+                  <View style={[styles.icon, {
+                    width: 30, height: 30
+                  }]}>
+                    <Image source={NewRecipient} style={[{ width: 15, height: 15}]} />
+                  </View>
+                  <View style={{
+                    width: '90%'
+                  }}>
+                    <Paragraph overrideStyle={styles.acctName} text="New recipient" />
+                  </View>
+                </TouchableOpacity>
+              </RowView>
+              {
+                !newRec ? (
+                  <ColumnView justify='isStart'>
+                    <Paragraph text="Beneficiaries" />
+                    <View style={{height: height * 0.55}}>
+                      {
+                        getAllBeneficiaries().filter(filterHandler).length > 0 ? (
+                          <FlatList
+                            data={getAllBeneficiaries().filter(filterHandler) || []}
+                            renderItem={({item}) => (
+                              <TouchableOpacity
+                                key={item.bankCode}
+                                onPress={() => onBenPress(item)}
+                                style={[
+                                  styles.secCard,
+                                ]}>
+                                <Header4 overrideStyle={styles.icon} text={(item.name || item.displayFormat).split(' ')[0][0]} />
+                                <View style={{
+                                  width: '90%'
+                                }}>
+                                  <Paragraph overrideStyle={styles.acctName} text={item.name || item.nickName} />
+                                  <Paragraph overrideStyle={styles.acct} text={`${item.accountNumber} - ${item.bankName}`} />
+                                </View>
+                              </TouchableOpacity>
+                            )}
+                            showsHorizontalScrollIndicator={false}
+                            style={styles.beneficiariesWrapper}
+                          />
+                          
+                        ) : <Paragraph text="No beneficariy found." />
+                      }
+                    </View>
+                  </ColumnView>
+                ) : (
+                  <View style={{height: height * 0.60}}>
+                    <InputText
+                      label='Enter account number'
+                      value={data.rAcctNumber}
+                      onChange={handleTextChange}
+                      name={'rAcctNumber'}
+                      keyboardType='numeric'
+                      inputMode='numeric'
+                    />
+                    {
+                      data.rAcctNumber.length === 10 && bankList ? (
+                        <>
+                          <Paragraph text="Select recipient's bank" />
+                          <View style={{height: height * 0.05, marginVertical: 5}}>
+                            <ScrollView
+                              showsHorizontalScrollIndicator={false}
+                              horizontal
+                            >
+                              {
+                                alpa.map((itm) => (
+                                  <TouchableOpacity
+                                    key={itm}
+                                    onPress={() => setBankFilterType(itm)}
+                                    style={[
+                                    {
+                                      width: 'auto',
+                                      height: 30,
+                                      marginHorizontal: 5,
+                                      paddingHorizontal: 20,
+                                      paddingTop: 5,
+                                      justifyContent: 'center',
+                                      alignContent:'center',
+                                      alignItems: 'center',
+                                      backgroundColor: itm === bankFilterTerm.toLowerCase() ? colors.sLightBlue : 'transparent',
+                                      borderColor: itm === bankFilterTerm.toLowerCase() ? colors.sYellow : 'transparent',
+                                      borderWidth: itm === bankFilterTerm.toLowerCase() ? 1 : 0,
+                                      borderRadius: 50
+                                    }
+                                    ]}>
+                                    <Paragraph overrideStyle={{fontSize: fontSizes.paragragh, textAlign: 'center', verticalAlign: 'middle'}} text={itm.toUpperCase()} />
+                                  </TouchableOpacity>
+                                ))
+                              }
+                            </ScrollView>
+                          </View>
+                          <FlatList
+                            data={[{"bankCode": "seap", "name": "SEAP MFB"}, ...(getFilterBanks() || [])]}
+                            renderItem={({item}) => (
+                              <TouchableOpacity onPress={() => handleSelectBank(item)} key={item.name} style={styles.secCard}>
+                                <Header4 text={processBankLogo(item.name)} overrideStyle={styles.icon} />
+                                <Paragraph text={item.name} />
+                              </TouchableOpacity>
+                            )}
+                            showsHorizontalScrollIndicator={false}
+                          />
+                        </>
+                      ) : null
+                    }
+                  </View>
+                )
+              }
+            </ColumnView>
           )}
           {step === 1 && (
-            <>
-              <View style={styles.confirm}>
-                <Header1
-                  overrideStyle={styles.confirmText}
-                  text={`You want to transfer NGN ${data.amount} to ${data.accountName} enter your authentication details to continue.`}
-                />
-              </View>
-              {!ownTransfer && (
-                <AuthTypeComponent handleAuthChange={handleTextChange} />
-              )}
-              {data.useBeneficiary === targetTypes[1] && !ownTransfer && (
-                <>
-                  <Checkbox
-                    label="Save as Beneficiary"
-                    value={data.saveBeneficiary}
-                    onChange={handleTextChange}
-                    name={'saveBeneficiary'}
+            <ColumnView justify='isBtw'>
+              <View style={styles.fullWidth}>
+                <ColumnView justify='isCenter' overrideStyle={styles.receipientWrapper}>
+                  <Paragraph text="Recipient" overrideStyle={styles.blueText} />
+                  <View>
+                    {data.rAcctName && <Header2 text={data.rAcctName} overrideStyle={styles.blueText} />}
+                    <Paragraph text={`${data.rAcctNumber} - ${data.rBankName}`} overrideStyle={[styles.blueText, { marginTop: -5}]} />
+                  </View>
+                </ColumnView>
+                <ColumnView justify='isCenter' align='isCenter' overrideStyle={styles.amountWrapper}>
+                  <RowView overrideStyle={[styles.fullWidth, { paddingTop: 0}]} justify='isCenter' align='isCenter'>
+                    <Paragraph text='₦' overrideStyle={[{ fontSize: fontSizes.bigHeader, width: 'auto', marginLeft: 0, marginTop: 5,}, styles.blueText]} />
+                    <InputText
+                      value={amount}
+                      onChange={handleTextChange}
+                      name={'amount'}
+                      placeholder='0'
+                      overrideNPInputWrapper={styles.amtInputWrapper}
+                      overrideNPInputStyle={styles.amtInput}
+                      outlineColor='transparent'
+                      activeOutlineColor='transparent'
+                      inputMode='numeric'
+                      keyboardType='numeric'
+                      contentStyle={styles.amtText}
+                      autoFocus
+                    />
+                  </RowView>
+                  <Paragraph
+                    text={`Bal: ₦ ${formatAmount(parseFloat(data.accountBalance))}`}
+                    overrideStyle={[
+                      styles.balanceText,
+                      {
+                        color: transactOutOfRange ? 'red' : colors.sMainBlue,
+                        borderColor: transactOutOfRange ? 'red' : colors.sMainBlue,
+                        backgroundColor: transactOutOfRange ? '#ffefef' : colors.sLightBlue,
+                      }
+                    ]}
                   />
-                  {data.saveBeneficiary === 'yes' && (
+                  <InputText
+                    value={data.narration}
+                    onChange={handleTextChange}
+                    label='Remark'
+                    name={'narration'}
+                    placeholder='From Izuchi'
+                    multiline
+                    numberOfLines={4}
+                    overrideNPInputWrapper={styles.remarkInput}
+                    overrideNPInputStyle={styles.remarkInput}
+                  />
+                  {(!data.beneficiaryId && !ownTransfer) ? (
                     <InputText
                       value={data.saveBeneficiaryAs}
                       onChange={handleTextChange}
                       name={'saveBeneficiaryAs'}
-                      label="Beneficiary Alias"
+                      label="Save recipient as"
                       placeholder="e.g Ade ade"
                     />
-                  )}
-                </>
-              )}
-              <View style={[styles.buttonWrapper, styles.row]}>
+                  ) : <View />}
+                </ColumnView>
+              </View>
+              <View style={[styles.buttonWrapper, styles.row, {
+                marginTop: 0,
+                marginBottom: 10,
+                flexGrow: 1
+              }]}>
+                <Button
+                  overrideStyle={[styles.button, styles.halfBtn, styles.transparentBtn]}
+                  label={'Prev'}
+                  overrideLabelStyle={styles.transparentBtnLabel}
+                  onPress={handlePrev}
+                />
                 <Button
                   overrideStyle={[styles.button, styles.halfBtn]}
+                  label={'Continue'}
+                  onPress={handleAmtNext}
+                  disabled={transactOutOfRange || amount === '' || parseFloat(amount) <= 0}
+                />
+              </View>
+            </ColumnView>
+          )}
+          {step === 2 && (
+            <>
+              <View style={styles.confirm}>
+                <Header1
+                  overrideStyle={styles.confirmText}
+                  text={`You want to transfer ₦ ${amount} to ${data.rAcctName}, ${data.rAcctNumber}-${data.rBankName}. Enter your authentication details to continue.`}
+                />
+              </View>
+              {!ownTransfer && (
+                <View style={[{flex: 0.4}, styles.fullWidth]}>
+                  <AuthTypeComponent handleAuthChange={handleTextChange} />
+                </View>
+              )}
+            
+              <View style={[styles.buttonWrapper, styles.row]}>
+                <Button
+                  overrideStyle={[styles.button, styles.halfBtn, styles.transparentBtn]}
                   label={'Prev'}
+                  overrideLabelStyle={styles.transparentBtnLabel}
                   onPress={handlePrev}
                 />
                 <Button
@@ -566,7 +746,7 @@ export const Transfer = ({navigation}: any) => {
                   onPress={
                     ownTransfer
                       ? handleOwnTransfer
-                      : data.useBeneficiary === targetTypes[0]
+                      : data.beneficiaryId
                       ? transferBeneficiary
                       : transferNonBeneficiary
                   }
@@ -575,8 +755,60 @@ export const Transfer = ({navigation}: any) => {
             </>
           )}
         </View>
-      </ScrollView>
-    </View>
+        <RBSheet
+          height={height * 0.4}
+          // @ts-ignore
+          ref={refRBSheet}
+          customStyles={{
+            wrapper: {
+              backgroundColor: colors.sTransparentBlue,
+            },
+            draggableIcon: {
+              backgroundColor: '#000',
+            },
+          }}
+          closeOnPressBack
+          customModalProps={{
+            animationType: 'slide',
+            statusBarTranslucent: true,
+          }}
+          customAvoidingViewProps={{
+            enabled: false,
+          }}>
+            <ColumnView justify='isBtw' align='isCenter' overrideStyle={{
+              padding: 30,
+            }}>
+              <Image source={Success} style={{
+                width: 60,
+                height: 60,
+                marginBottom: 20
+              }} />
+              <Header3 overrideStyle={styles.blueText} text={`Your fund transfer of ₦ ${amount} to ${data.rAcctName}, ${data.rAcctNumber}-${data.rBankName} is successful.`} />
+              <RowView justify='isBtw' align='isCenter' overrideStyle={{
+                marginTop: 20,
+              }}>
+                <Button
+                  label={'Close'}
+                  onPress={() => refRBSheet.current.close()}
+                  overrideStyle={styles.transparentBtn}
+                  overrideLabelStyle={styles.transparentBtnLabel}
+                />
+                <Button
+                  label={'Receipt'}
+                  onPress={function (): void {
+                    refRBSheet.current.close();
+                    navigation.navigate('Transaction', {transaction});
+                  }}
+                  overrideStyle={{
+                    width: 'auto',
+                    paddingHorizontal: 30,
+                  }}
+                />
+              </RowView>
+            </ColumnView>
+        </RBSheet>
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -589,16 +821,12 @@ export const AuthTypeComponent = ({
 }) => {
   let epochTimeSeconds = Math.round(new Date().getTime() / 1000).toString();
   let payload = epochTimeSeconds + 'mfbseapmfb';
-  const rnBiometrics = new ReactNativeBiometrics({
-    allowDeviceCredentials: true,
-  });
   const [data, setData] = useState({
     authName: '',
     otp: '',
     transactionPin: '',
     password: '',
     secret: '',
-    biometricData: '',
   });
 
   const [_, setError] = useState({
@@ -634,7 +862,9 @@ export const AuthTypeComponent = ({
 
   const renderOTPComponent = () => {
     return (
-      <RowView justify="isBtw" align="isEnd">
+      <ColumnView justify="isCenter" align="isCenter" overrideStyle={{
+        width: '100%',
+      }}>
         <>
           <InputText
             value={data.otp}
@@ -642,73 +872,15 @@ export const AuthTypeComponent = ({
             name={'otp'}
             label="Enter OTP"
             placeholder="e.g 101010"
-            overrideStyle={styles.otpInputStyle}
+            overrideNPInputWrapper={styles.otpInputStyle}
+            inputMode='numeric'
+            keyboardType='numeric'
           />
           <Button
             label="Get OTP"
             onPress={handleGetOTP}
             overrideLabelStyle={styles.getOTPlabelStyle}
             overrideStyle={styles.getOTPBtn}
-          />
-        </>
-      </RowView>
-    );
-  };
-
-  const handleBiometric = async () => {
-    rnBiometrics.biometricKeysExist().then(async resultObject => {
-      const result = resultObject;
-
-      if (result.keysExist) {
-        handleGenerateSignature();
-      } else {
-        const resp = await handleCreateKeys();
-        if (resp) {
-          handleGenerateSignature();
-        }
-      }
-    });
-  };
-
-  const handleCreateKeys = () => {
-    return rnBiometrics.createKeys().then(resultObject => {
-      const {publicKey} = resultObject;
-      return publicKey;
-    });
-  };
-
-  const handleGenerateSignature = () => {
-    rnBiometrics
-      .createSignature({
-        promptMessage: 'Biometric Authentication',
-        payload,
-      })
-      .then(async resultObject => {
-        const {success, signature} = resultObject;
-        if (success && signature) {
-          // biometricData: signature,
-          handleTextChange('biometricData', signature);
-        } else {
-          toaster('Error', 'Error getting Biometric Authentication', 'custom');
-        }
-      })
-      .catch(error => {
-        toaster('Error', 'Error getting Biometric Authentication', 'custom');
-      });
-  };
-
-  const renderBiometricComponent = () => {
-    return (
-      <ColumnView align="isCenter" justify={'isCenter'}>
-        <>
-          <TouchableOpacity
-            style={styles.fingerWrapper}
-            onPress={handleBiometric}>
-            <Image source={FingerPrintImg} style={styles.fingerImg} />
-          </TouchableOpacity>
-          <Paragraph
-            overrideStyle={styles.fingerPrintText}
-            text="Press the finger print icon to begin."
           />
         </>
       </ColumnView>
@@ -778,8 +950,6 @@ export const AuthTypeComponent = ({
         return renderPINComponent();
       case '2':
         return renderOTPComponent();
-      case '3':
-        return renderBiometricComponent();
       case '4':
         return (
           <>

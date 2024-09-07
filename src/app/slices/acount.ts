@@ -57,7 +57,15 @@ export const accountSlice = createSlice({
       state.history[action.payload.acc] = action.payload.data;
     },
     addBank: (state, action) => {
-      state.bankList = action.payload;
+      state.bankList = action.payload.sort((a, b) => {
+        if (a.name > b.name) {
+          return 1;
+        } else if (a.name < b.name) {
+          return -1;
+        } else {
+          return 0
+        }
+      });
     },
     addBeneficiaries: (state, action) => {
       // @ts-ignore

@@ -11,15 +11,15 @@ import {
 } from '../slices/acount';
 import {appDispatch} from '../store';
 
-export const getSummary = async () => {
-  const resp = await getCalls('Banking/accountsummary', '');
+export const getSummary = async (showLoader = true) => {
+  const resp = await getCalls('Banking/accountsummary', '', showLoader);
   if (resp) {
     appDispatch(setSummary(resp.data.accountSummary));
     return resp;
   }
 };
 
-export const getAccounts = async () => {
+export const getAccounts = async (showLoader = true) => {
   const resp = await getCalls('Banking/customerAccounts', '');
   if (resp) {
     appDispatch(setAccounts(resp.data.data));
@@ -43,12 +43,12 @@ export const getBeneficiaries = async (type: number) => {
   }
 };
 
-export const getHistory = async (acc: number, from?: string, to?: string) => {
+export const getHistory = async (acc: number, from?: string, to?: string, showLoader = true) => {
   const url =
     to && from
-      ? `Banking/account/history?accountNumber=${acc}&FromDate=${from}&ToDate=${to}&Page=&PageSize=`
+      ? `Banking/account/history?accountNumber=${acc}&FromDate=${from}&ToDate=${to}&Page=1&PageSize=1000`
       : `Banking/account/history?accountNumber=${acc}&FromDate=&ToDate=&Page=&PageSize=`;
-  const resp = await getCalls(url, '');
+  const resp = await getCalls(url, '', showLoader);
   if (resp) {
     appDispatch(setHistory({data: resp.data?.transactions, acc}));
     return resp;

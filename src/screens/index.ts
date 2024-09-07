@@ -18,3 +18,4 @@ export * from './Requests';
 export * from './Beneficiaries';
 export * from './Feedback';
 export * from './Welcome';
+export * from './LoginWithBiometric';

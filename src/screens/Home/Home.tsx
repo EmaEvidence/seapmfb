@@ -11,7 +11,7 @@ import {
 import {ScrollView} from 'react-native';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import {Button, TransactionCard, Header} from '../../common';
+import {Button, TransactionCard, Header, Loader} from '../../common';
 import {Paragraph} from '../../common/Text';
 import {categories} from '../../store';
 import styles from './Home.styles';
@@ -32,6 +32,8 @@ import {
 // import {getDate} from '../../utils/constants';
 import {INavigation} from '../../types';
 import {advertContents} from '../../utils/constants';
+import { formatAmount } from '../../utils/formatAmount';
+import { useFocusEffect } from '@react-navigation/native';
 
 dayjs.extend(relativeTime);
 
@@ -85,6 +87,20 @@ export const Home = ({navigation}: {navigation: any}) => {
     }
   }, [summary, accounts, debits]);
 
+  useFocusEffect(
+    React.useCallback(() => {
+      const interval = setInterval(() => {
+        getSummary(false);
+        // getHistory(history[contentIndex].);
+      }, 50000)
+
+      // Return a cleanup function (optional)
+      return () => {
+        clearInterval(interval);
+      };
+    }, [])
+  );
+
   useEffect(() => {
     if (
       contentIndex &&
@@ -97,6 +113,10 @@ export const Home = ({navigation}: {navigation: any}) => {
   const accountSummary = summary || [];
   const selectedHistory = history[contentIndex];
 
+  if (!summary && !accounts) {
+    return <Loader showLoader />
+  }
+
   return (
     <View style={styles.wrapper}>
       <Header
@@ -106,7 +126,7 @@ export const Home = ({navigation}: {navigation: any}) => {
           return (
             <TouchableOpacity
               style={styles.menu}
-              onPress={() => navigation.openDrawer()}>
+              onPress={() => navigation.navigate('Settings')}>
               <Image style={styles.menuIcon} source={MenuIcon} />
             </TouchableOpacity>
           );
@@ -315,7 +335,7 @@ const DetailsCard = ({
       <View style={styles.cardMiddle}>
         <Text style={styles.balanceLabel}>{lang.yourBalance}</Text>
         <Text style={styles.balance}>
-          {showDetail ? `NGA ${summary.withdrawableAmount}` : '*** **** ****'}
+          {showDetail ? `₦ ${formatAmount(summary.withdrawableAmount)}` : '*** **** ****'}
         </Text>
       </View>
       <View style={styles.cardBottom}>

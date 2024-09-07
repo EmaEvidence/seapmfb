@@ -1,18 +1,20 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import RBSheet from 'react-native-raw-bottom-sheet';
 import {
   Image,
   ImageSourcePropType,
+  KeyboardAvoidingView,
+  Platform,
   ScrollView,
   TouchableOpacity,
   View,
   ViewStyle,
 } from 'react-native';
-import {Button, Header} from '../../common';
-import {Header4, Header5, Paragraph} from '../../common/Text';
+import {Button, Header, onShare} from '../../common';
+import {Header1, Header4, Header5, Paragraph} from '../../common/Text';
 import {removeItem} from '../../utils/localStorage';
 import styles from './Profile.styles';
-// import Edit from '../../assets/images/editY.png';
-// import Notify from '../../assets/images/notifY.png';
+import MenuIcon from '../../assets/images/accountIcon.png';
 import Security from '../../assets/images/securityB.png';
 import Privacy from '../../assets/images/privacyY.png';
 import Contact from '../../assets/images/contactY.png';
@@ -24,8 +26,12 @@ import {logout} from '../../app/slices/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import toaster from '../../utils/toaster';
 import axios from 'axios';
+import { height } from '../../utils/constants';
+import { colors } from '../../utils/theme';
+import { Feedback } from '../Feedback';
 
 export const Profile = ({navigation}: {navigation: any}) => {
+  const refRBSheet = useRef();
   const {user} = useAppSelector(state => state.auth);
   // @ts-ignore
   const {Name, email} = user && JSON.parse(user);
@@ -55,10 +61,17 @@ export const Profile = ({navigation}: {navigation: any}) => {
       image: Privacy,
       link: 'Privacy',
     },
+    // {
+    //   name: 'Help & Support',
+    //   image: Help,
+    //   link: 'Feedback',
+    //   onClick: () => refRBSheet.current.open()
+    // },
     {
-      name: 'Help & Support',
+      name: 'Share',
       image: Help,
       link: 'Feedback',
+      onClick: () => onShare()
     },
     {
       name: 'Contact Us',
@@ -79,8 +92,9 @@ export const Profile = ({navigation}: {navigation: any}) => {
       />
       <ScrollView contentContainerStyle={[styles.content]}>
         <View style={styles.detailsBox}>
+          <Image style={styles.menuIcon} source={MenuIcon} />
           <Header4 text={Name} overrideStyle={styles.detailText} />
-          <Header5 text={email} overrideStyle={styles.badgeHeader} />
+          {/* <Header5 text={email} overrideStyle={styles.badgeHeader} /> */}
           <View style={styles.divider} />
         </View>
         <View style={styles.badges}>
@@ -102,6 +116,31 @@ export const Profile = ({navigation}: {navigation: any}) => {
           <LogOutBtn type="normal" />
         </View>
       </ScrollView>
+      <RBSheet
+        height={height * 0.8}
+        // @ts-ignore
+        ref={refRBSheet}
+        // useNativeDriver={true}
+        customStyles={{
+          wrapper: {
+            backgroundColor: colors.sTransparentBlue,
+          },
+          draggableIcon: {
+            backgroundColor: '#000',
+          },
+        }}
+        customModalProps={{
+          animationType: 'slide',
+          statusBarTranslucent: true,
+        }}
+        customAvoidingViewProps={{
+          enabled: false,
+        }}>
+          <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={50}>
+            <Feedback close={() => refRBSheet.current.close()} />
+          </KeyboardAvoidingView>
+      </RBSheet>
     </View>
   );
 };
@@ -112,19 +151,19 @@ const ProfileListItem = ({
   item,
   navigation,
 }: {
-  item: Record<string, string>;
+  item: Record<string, string | Function>;
   navigation: any;
 }) => {
   return (
     <TouchableOpacity
       style={styles.badge}
-      onPress={() => navigation.navigate(item.link)}>
+      onPress={() => item.onClick ? (item.onClick as Function)() : navigation.navigate(item.link)}>
       <View style={styles.left}>
         <Image
           style={styles.itemImg}
           source={item.image as unknown as ImageSourcePropType}
         />
-        <Paragraph overrideStyle={styles.badgeHeader} text={item.name} />
+        <Paragraph overrideStyle={styles.badgeHeader} text={item.name as string} />
       </View>
       <Image style={styles.itemCaret} source={Caret} />
     </TouchableOpacity>

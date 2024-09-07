@@ -4,8 +4,9 @@ import {colors, fontSizes} from '../../utils/theme';
 export const styles = StyleSheet.create({
   wrapper: {
     height: '100%',
-    backgroundColor: colors.twhite,
-    paddingHorizontal: '5%',
+    backgroundColor: colors.sTextYellow,
+    paddingHorizontal: '2%',
+    borderWidth: 1,
   },
   actionBtn: {
     backgroundColor: 'transparent',
@@ -57,8 +58,21 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     minHeight: 40,
-    width: '80%',
+    width: '90%',
+    padding: 20,
     marginVertical: 5,
+    backgroundColor: colors.twhite,
+    borderRadius: 10,
+  },
+  detWrapper: {
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    minHeight: 40,
+    width: '100%',
+    padding: 20,
+    marginVertical: 5,
+    backgroundColor: colors.twhite,
+    borderRadius: 10,
   },
   receiptBtn: {
     width: 200,
@@ -71,13 +85,35 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: '5%',
     justifyContent: 'space-around',
-    width: '100%',
-    marginVertical: 10,
+    marginVertical: 5,
   },
   btnStyle: {
-    width: '80%',
+    width: '48%',
     alignSelf: 'center',
   },
+  title: {
+    fontWeight: '600',
+    fontSize: fontSizes.bodyText,
+    opacity: 0.8,
+    marginBottom: 20
+  },
+  periodChip: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    marginHorizontal: 5,
+    borderRadius: 50,
+    backgroundColor: colors.sLightBlue,
+    borderWidth: 1,
+  },
+  periodChipLabel: {
+    color: colors.sMainBlue
+  },
+  customWrapper: {
+    padding: 20,
+    paddingTop: 50,
+    flexDirection: 'column',
+    justifyContent: 'center'
+  }
 });
 
 export default styles;

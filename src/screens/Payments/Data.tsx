@@ -9,9 +9,9 @@ export const Data = ({
   customerReference,
   handleTextChange,
   onReferenceBlur,
-  networkOperator,
   errorObj,
   bundle,
+  billerId
 }: {
   amount: string;
   customerReference: string;
@@ -19,20 +19,21 @@ export const Data = ({
   handleTextChange: (val: string, name: string) => void;
   bundle?: string;
   provider?: string;
-  networkOperator: string;
+  networkOperator?: string;
   errorObj: Record<string, boolean>;
+  billerId: string;
 }) => {
   // const [selectedBundle, setSelectedBundle] = useState<Record<string, string>>(
   //   {},
   // );
   const {dataBundles} = useAppSelector(state => state.payment);
-  const selectedBundles = networkOperator ? dataBundles[networkOperator] : null;
+  const selectedBundles = billerId ? dataBundles[billerId] : null;
 
   useEffect(() => {
-    if (networkOperator && !dataBundles[networkOperator]) {
-      getBillerServiceBundles(networkOperator);
+    if (billerId && !dataBundles[billerId]) {
+      getBillerServiceBundles(billerId);
     }
-  }, [dataBundles, networkOperator]);
+  }, [dataBundles, billerId]);
 
   if (!selectedBundles) {
     return null;
@@ -83,6 +84,8 @@ export const Data = ({
         inValid={errorObj.customerReference}
         errorText={'Enter a valid Phone Number'}
         placeholder="e.g 07010101010"
+        keyboardType='numeric'
+        inputMode='tel'
       />
     </>
   );

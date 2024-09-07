@@ -50,7 +50,7 @@ export const EditProfile = ({navigation}: any) => {
   return (
     <View style={styles.wrapper}>
       <Header
-        overrideGoBack={() => navigation.navigate('Profile')}
+        overrideGoBack={() => navigation.navigate('Settings')}
         showBackBtn
         title={'Edit Profile'}
         navigation={navigation}

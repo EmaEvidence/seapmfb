@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactNativeBiometrics from 'react-native-biometrics';
 import {Image, TouchableOpacity, View} from 'react-native';
 import FingerPrintImg from '../../assets/images/fingerprint.png';
@@ -51,15 +51,15 @@ export default FingerPrint;
 let epochTimeSeconds = Math.round(new Date().getTime() / 1000).toString();
 let payload = epochTimeSeconds + 'mfbseapmfb';
 
-export const FingerPrintComponent = ({navigation, label}: any) => {
+export const FingerPrintComponent = ({navigation, label, handleSuccess, handleError}: any) => {
   const [pKey, setPublicKey] = useState('');
   const rnBiometrics = new ReactNativeBiometrics({
     allowDeviceCredentials: true,
   });
   const handleBiometric = async () => {
+    // handleSuccess()
     rnBiometrics.biometricKeysExist().then(async resultObject => {
       const result = resultObject;
-
       if (result.keysExist) {
         handleGenerateSignature();
       } else {
@@ -70,6 +70,10 @@ export const FingerPrintComponent = ({navigation, label}: any) => {
       }
     });
   };
+
+  useEffect(() => {
+    handleBiometric();
+  }, []);
 
   const handleCreateKeys = () => {
     return rnBiometrics.createKeys().then(resultObject => {
@@ -88,21 +92,9 @@ export const FingerPrintComponent = ({navigation, label}: any) => {
       .then(async resultObject => {
         const {success, signature} = resultObject;
         if (success && signature) {
-          const resp = await setTransactionBiometric({
-            biometricData: signature,
-            pkFile: pKey,
-            setAsDefault: true,
-          }) as AxiosResponse;
-          if (resp.status === 200) {
-            // appDispatch(setAuthType(data.authType as unknown as number));
-            toaster(
-              'Success',
-              'Biometric Authentication set successfully.',
-              'custom',
-            );
-            navigation.goBack();
-          }
+          handleSuccess();
         } else {
+          handleError();
           toaster(
             'Error',
             'Error Setting up Biometric Authentication',

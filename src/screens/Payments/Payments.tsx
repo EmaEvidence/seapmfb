@@ -1,14 +1,13 @@
-import React, {useEffect, useState} from 'react';
-import {TouchableOpacity, View, ScrollView, Image} from 'react-native';
+import React, {Key, useEffect, useState} from 'react';
+import {TouchableOpacity, View, Image, FlatList} from 'react-native';
 import {
   AccountSelector,
   Button,
-  GenericDropdown,
-  Header,
+  ColumnView,
   RowView,
 } from '../../common';
 import styles from './Payments.styles';
-import {Header3, Header5, Paragraph} from '../../common/Text';
+import {Header1, Header3, Header5, Paragraph} from '../../common/Text';
 import {useAppSelector} from '../../app/hooks';
 import {
   getCategories,
@@ -46,8 +45,14 @@ import {
   validatePhone,
   validatePostPaid,
   validatePrePaid,
+  validateSmartCard,
 } from '../../validator';
 import {getSummary, getAccounts, getHistory} from '../../app/actions/account';
+import { fontSizes, colors } from '../../utils/theme';
+import generalStyles from '../../index.styles';
+import { height } from '../../utils/constants';
+import Sports from './Sports';
+import { useFocusEffect } from '@react-navigation/native';
 
 const initialUserData = {
   category: '',
@@ -79,33 +84,24 @@ const initialUserData = {
   selectedAddOn: '',
   packageSelected: '',
   addOnId: '',
+  billerId: '',
+};
+
+const initialError = {
+  account: false,
+  amount: false,
+  customerReference: false,
+  name: false,
+  contactEmail: false,
+  addOns: false,
+  selectedPackage: false,
+  contactType: false,
+  customerPhoneNumber: false,
+  networkOperator: false,
+  bundle: false,
 };
 
 export const Payments = ({navigation}: {navigation: any}) => {
-  const catImageMap: Record<string, any> = {
-    Electricity: PowerIcon,
-    'Cable Tv': TVIcon,
-    Airtime: AirtimeIcon,
-    'Mobile Data': DataIcon,
-    'Eko Electric Prepaid': EkoIcon,
-    'Eko Electric Postpaid': EkoIcon,
-    'Ibdan Disco Postpaid': IbadanIcon,
-    'Ibadan Disco Prepaid': IbadanIcon,
-    'Ikeja Electric Prepaid': IkejaIcon,
-    'Ikeja Electric Postpaid': IkejaIcon,
-    StartTimes: StartimesIcon,
-    STARTTIMES: StartimesIcon,
-    MTN: MtnIcon,
-    Mtn: MtnIcon,
-    Airtel: AirtelIcon,
-    AIRTEL: AirtelIcon,
-    Glo: GloIcon,
-    GLO: GloIcon,
-    DSTV: DstvIcon,
-    GOTV: GotvIcon,
-    '9Mobile': Ninemobile,
-  };
-
   const {categories, categoryBillers, billerDetails, serviceFeeObj} =
     useAppSelector(state => state.payment);
   const [step, setStep] = useState(0);
@@ -114,18 +110,20 @@ export const Payments = ({navigation}: {navigation: any}) => {
   });
 
   const [paymentError, setPaymentError] = useState<Record<string, boolean>>({
-    account: false,
-    amount: false,
-    customerReference: false,
-    name: false,
-    contactEmail: false,
-    addOns: false,
-    selectedPackage: false,
-    contactType: false,
-    customerPhoneNumber: false,
-    networkOperator: false,
-    bundle: false,
+    ...initialError
   });
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setPaymentData({
+        ...initialUserData
+      });
+      setPaymentError({
+        ...initialError
+      });
+      setStep(0);
+    }, [])
+  );
 
   const handleSetPaymentError = (label: string, val: boolean) => {
     setPaymentError(prevState => ({
@@ -256,12 +254,55 @@ export const Payments = ({navigation}: {navigation: any}) => {
     };
   }, []);
 
+  const validateMeter = (value: string) => {
+    return paymentData.biller.split(' ')[2] === 'Prepaid'
+     ? validatePrePaid(value)
+     : validatePostPaid(value);
+  }
+
+  const customerReferenceValidator: Record<number, any> = {
+    1: validateMeter,
+    2: validateSmartCard,
+    3: validatePhone,
+    4: validateNonEmpty,
+  }
+
+  const labelWithValidatorMap: Record<string, any> = {
+    amount: validateAmount,
+    packageId: validateNonEmpty,
+    packageSelected: validateNonEmpty,
+    addOnId: validateNonEmpty,
+    selectedAddOn: validateNonEmpty,
+    customerReference: customerReferenceValidator[parseInt(paymentData.selectedCategoryId, 10)],
+    contactEmail: validateEmail,
+    customerPhoneNumber: validatePhone,
+    contactType: validateNonEmpty
+  }
+
   const handleTextChange = (label: string, value: string) => {
     setPaymentData(prevState => ({
       ...prevState,
       [label]: value,
     }));
     paymentError[label] && handleSetPaymentError(label, !!value);
+    if (label === 'category' && value) {
+      setStep(1);
+      const newIntValue: Partial<typeof initialUserData> = {...initialUserData};
+      delete newIntValue.category;
+      delete newIntValue.selectedCategoryId;
+      setPaymentData(prev => ({
+        ...prev,
+        ...newIntValue,
+      }))
+    }
+    if (labelWithValidatorMap[label]) {
+      setPaymentError(prev => (
+        {
+          ...prev,
+          [label]: !labelWithValidatorMap[label](value)
+        }
+      ))
+    }
   };
 
   const handleValidate = async () => {
@@ -288,6 +329,7 @@ export const Payments = ({navigation}: {navigation: any}) => {
         setPaymentError(prevState => ({
           ...prevState,
           name: false,
+          customerReference: false
         }));
       }
     }
@@ -296,7 +338,7 @@ export const Payments = ({navigation}: {navigation: any}) => {
   const handleContinue = () => {
     const isBillerValid = getValidator();
     if (isBillerValid) {
-      setStep(2);
+      setStep(3);
     }
   };
 
@@ -307,10 +349,11 @@ export const Payments = ({navigation}: {navigation: any}) => {
         Comp = TV;
         break;
       case 3:
-        Comp = Airtime;
+        paymentData.biller.search(/data/gi)
+        Comp = paymentData.biller.search(/data/gi) >= 0 ? Data : Airtime;
         break;
       case 4:
-        Comp = Data;
+        Comp = Sports;
         break;
       case 1:
         Comp = Electricity;
@@ -329,6 +372,8 @@ export const Payments = ({navigation}: {navigation: any}) => {
           contactType={paymentData.contactType}
           customerPhoneNumber={paymentData.customerPhoneNumber}
           networkOperator={paymentData.networkOperator}
+          billerId={paymentData.billerId}
+          biller={paymentData.biller}
           errorObj={paymentError}
           bundle={paymentData.bundle}
           packageId={paymentData.packageId}
@@ -369,21 +414,19 @@ export const Payments = ({navigation}: {navigation: any}) => {
     );
   };
 
-  const validateData = () => {
-    const isPhoneValid = validatePhone(paymentData.customerReference);
+  const validateSport = () => {
+    const isIdValid = validateNonEmpty(paymentData.customerReference);
     const isAmountValid = validateAmount(paymentData.amount);
-    const isBundleValid = validateNonEmpty(paymentData.bundle);
     setPaymentError(prevState => ({
       ...prevState,
       amount: !isAmountValid,
-      customerReference: !isPhoneValid,
-      bundle: !isBundleValid,
+      customerReference: !isIdValid,
     }));
-    return isPhoneValid && isAmountValid && isBundleValid;
+    return isAmountValid && isIdValid;
   };
 
   const validateTV = () => {
-    const isSmartNoValid = validatePhone(paymentData.customerReference);
+    const isSmartNoValid = validateSmartCard(paymentData.customerReference);
     const isAmountValid = validateAmount(paymentData.amount);
     const isPackageValid = validateNonEmpty(paymentData.packageId);
     const isNameValid = validateNonEmpty(paymentData.name);
@@ -397,7 +440,6 @@ export const Payments = ({navigation}: {navigation: any}) => {
   };
 
   const validateAirtime = () => {
-    // phone number, amount
     const isPhoneValid = validatePhone(paymentData.customerReference);
     const isAmountValid = validateAmount(paymentData.amount);
     setPaymentError(prevState => ({
@@ -415,7 +457,7 @@ export const Payments = ({navigation}: {navigation: any}) => {
       case 3:
         return validateAirtime();
       case 4:
-        return validateData();
+        return validateSport();
       case 1:
         return validateElecticity();
     }
@@ -465,15 +507,15 @@ export const Payments = ({navigation}: {navigation: any}) => {
       setPaymentData({
         ...initialUserData,
       });
-      setStep(0);
-      getSummary(true);
-      getAccounts();
-      getHistory(1);
+      getSummary(false);
+      getAccounts(false);
+      getHistory(paymentData.account, '', '', false);
       toaster(
         'Success',
         'Your Bill payment has being registered successfully',
         'custom',
       );
+      setStep(0);
     }
   };
 
@@ -494,35 +536,35 @@ export const Payments = ({navigation}: {navigation: any}) => {
     return;
   };
 
+
   return (
-    <ScrollView contentContainerStyle={styles.containerScroll}>
+    <View style={styles.containerScroll}>
       <View style={styles.wrapper}>
-        <Header title={'Bills Payments'} navigation={navigation} />
+        {/* <Header title={'Bills Payments'} navigation={navigation} /> */}
+        <Header1 text='Bills Payments' overrideStyle={{
+          fontSize: fontSizes.bigHeader,
+          fontWeight: '600',
+          color: colors.sMainBlue,
+          marginTop: 30
+        }} />
         <View style={styles.subheader} />
         {step === 0 && (
           <View style={styles.paymentWrapper}>
             {!categories ? (
               <Paragraph
                 overrideStyle={styles.notFound}
-                text="Loading Bills Categories..."
+                text="Loading bills categories..."
               />
             ) : categories.length === 0 ? (
               <Paragraph
                 overrideStyle={styles.notFound}
-                text="No Category found or Error Loading Bills Cateogories."
+                text="No category found or Error loading bills cateogories."
               />
             ) : (
               <View style={styles.pickerWrapper}>
-                <AccountSelector
-                  value={paymentData.account}
-                  handleTextChange={handleTextChange}
-                  overrideContainerStyle={styles.acctSelector}
-                  inValid={paymentError.account}
-                  error="Please select an account"
-                />
                 <View>
                   <Header5
-                    text="Select Bills Category."
+                    text="Select bills category."
                     overrideStyle={styles.chipLabel}
                   />
                   <RowView
@@ -541,53 +583,78 @@ export const Payments = ({navigation}: {navigation: any}) => {
                     </>
                   </RowView>
                 </View>
-                {billers && billers.length > 0 ? (
-                  <View>
-                    <GenericDropdown
-                      label={'Select Service Provider.'}
-                      // @ts-ignore
-                      data={billers.map(biller => {
-                        return {
-                          label: biller.name,
-                          value: biller.name,
-                          icon: () => (
-                            <Image
-                              source={catImageMap[biller.name]}
-                              style={styles.dropdownImg}
-                            />
-                          ),
-                        };
-                      })}
-                      overrideStyle={{}}
-                      onChange={(name: string, val: string) => {
-                        handleTextChange(name, val);
-                      }}
-                      name={'biller'}
-                      value={paymentData.biller}
-                      inValid={false}
-                      error="Select beneficiary"
-                      listMode="MODAL"
-                      searchable
-                    />
-                  </View>
-                ) : billers?.length === 0 ? (
-                  <Paragraph text="No Service Provider found" />
-                ) : null}
-              </View>
-            )}
-            {paymentData.biller && (
-              <View style={styles.continueWrapper}>
-                <Button
-                  overrideStyle={styles.btn}
-                  label="Next"
-                  onPress={() => handleNext()}
-                />
               </View>
             )}
           </View>
         )}
         {step === 1 && (
+          <View style={styles.paymentWrapper}>
+            {billers && billers.length > 0 ? (
+              <View>
+                <AccountSelector
+                  value={paymentData.account}
+                  handleTextChange={handleTextChange}
+                  overrideContainerStyle={styles.acctSelector}
+                  inValid={paymentError.account}
+                  error="Please select an account"
+                />
+                <View style={{
+                  height: height * 0.63
+                }}>
+                  <FlatList
+                    data={billers}
+                    renderItem={({item}) => (
+                      <TouchableOpacity onPress={() => {
+                        handleTextChange('biller', item.name);
+                        handleTextChange('billerId', item.serviceId)
+                        setStep((prev) => prev + 1);
+                      }} key={item.name} style={{
+                        marginVertical: 5,
+                        backgroundColor: colors.sTextYellow,
+                        borderRadius: 5,
+                        padding: 10
+                      }}>
+                        <RowView justify='isStart' align='isCenter'>
+                          <Image
+                            source={{uri: item.imageUrl}}
+                            style={styles.dropdownImg}
+                            resizeMethod='resize'
+                            resizeMode='contain'
+                          />
+                          <Header5 text={item.name} />
+                        </RowView>
+                      </TouchableOpacity>
+                    )}
+                    showsVerticalScrollIndicator={false}
+                  />
+                </View>
+              </View>
+            ) : billers?.length === 0 ? (
+              <Paragraph text="No Service Provider found" />
+            ) : null}
+            <RowView justify='isBtw' overrideStyle={styles.continueWrapper}>
+              <Button
+                overrideStyle={[styles.btn, generalStyles.transparentBtn]}
+                label="Prev"
+                onPress={() => setStep((prev) => prev - 1)}
+                overrideLabelStyle={generalStyles.transparentBtnLabel}
+              />
+              <Button
+                overrideStyle={styles.btn}
+                label="Next"
+                onPress={() => handleNext()}
+                disabled={!paymentData.biller}
+              />
+            </RowView>
+          </View>
+        )}
+        {step === 2 && (
           <>
+            <ColumnView justify='isBtw' align='isStart' overrideStyle={styles.paymentDetailsView}>
+              <Paragraph text='Bill details' />
+              <Header5 text={paymentData.category} />
+              <Header5 text={paymentData.biller} />
+            </ColumnView>
             {billerDetail &&
               serviceFee &&
               paymentData.biller &&
@@ -596,10 +663,10 @@ export const Payments = ({navigation}: {navigation: any}) => {
               <>
                 {
                   //@ts-ignore
-                  (paymentData.selectedCategoryId === 2 ||
+                  (paymentData.selectedCategoryId === 2 || paymentData.selectedCategoryId === 4 ||
                     // @ts-ignore
                     paymentData.selectedCategoryId === 1) && (
-                    <View style={styles.chargeWrapper}>
+                    <View style={[styles.chargeWrapper]}>
                       <View style={styles.serviceWrapper}>
                         <Header3
                           overrideStyle={styles.serviceTitle}
@@ -627,9 +694,10 @@ export const Payments = ({navigation}: {navigation: any}) => {
             )}
             <View style={styles.btnWrapper}>
               <Button
-                overrideStyle={styles.btn}
-                label="Go Back"
-                onPress={() => setStep(0)}
+                overrideStyle={[styles.btn, generalStyles.transparentBtn]}
+                label="Prev"
+                onPress={() => setStep(prev => prev - 1)}
+                overrideLabelStyle={generalStyles.transparentBtnLabel}
               />
               <Button
                 overrideStyle={styles.btn}
@@ -639,13 +707,13 @@ export const Payments = ({navigation}: {navigation: any}) => {
             </View>
           </>
         )}
-        {step === 2 && (
+        {step === 3 && (
           <View style={styles.step1Wrapper}>
             <Header3
               overrideStyle={styles.authTitle}
               text={`You are making a bill payment for ${
                 paymentData.category
-              } worth NGN ${
+              } worth ₦ ${
                 parseInt(paymentData.commission, 10) +
                 parseInt(paymentData.amount, 10)
               }. Enter your transaction authentication details to continue.`}
@@ -653,9 +721,10 @@ export const Payments = ({navigation}: {navigation: any}) => {
             <AuthTypeComponent handleAuthChange={handleTextChange} />
             <View style={styles.btnWrapper}>
               <Button
-                overrideStyle={styles.btn}
-                label="Go Back"
-                onPress={() => setStep(0)}
+                overrideStyle={[styles.btn, generalStyles.transparentBtn]}
+                label="Go back"
+                onPress={() => setStep(prev => prev - 1)}
+                overrideLabelStyle={generalStyles.transparentBtnLabel}
               />
               <Button
                 overrideStyle={styles.btn}
@@ -666,7 +735,7 @@ export const Payments = ({navigation}: {navigation: any}) => {
           </View>
         )}
       </View>
-    </ScrollView>
+    </View>
   );
 };
 

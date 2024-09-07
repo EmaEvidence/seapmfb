@@ -1,8 +1,9 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import RNRestart from 'react-native-restart';
+import jwt_decode from 'jwt-decode';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {AppState, Image, SafeAreaView, StatusBar, Text, View} from 'react-native';
+import {AppState, Image, ImageBackground, SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {
@@ -42,49 +43,75 @@ import {
   Feedback,
   Debits,
   Welcome,
+  LoginWithBio,
 } from '../screens';
 // import {Loader} from '../common';
 import {colors, fontSizes} from '../utils/theme';
 import HomeIcon from '../assets/images/home.png';
 import HomeBlur from '../assets/images/homeBlur.png';
+import LogoImage from '../assets/images/logo.png';
 import Payment from '../assets/images/payment.png';
 import TransferIcon from '../assets/images/transfer.png';
 import TransferBlurIcon from '../assets/images/TransferBlur.png';
 import PaymentBlur from '../assets/images/paymentBlur.png';
 import Chat from '../assets/images/chat.png';
 import ChatBlur from '../assets/images/chatBlur.png';
+import Settings from '../assets/images/settings.png';
 import {DrawerContent, Loader} from '../common';
 import {GetSeapAccount} from '../screens/GetSeapAccount';
-import {loadItem, removeItem} from '../utils/localStorage';
+import {loadItem, removeItem, saveItem} from '../utils/localStorage';
 import {updateLanguage} from '../app/actions/language';
 import {useAppDispatch} from '../app/hooks';
 import {langType} from '../app/slices/language';
 import {useUser} from '../hooks';
 import {login, setAuthType, logout} from '../app/slices/auth';
-import axios, {AxiosError} from 'axios';
+import axios, {AxiosError, AxiosResponse} from 'axios';
 import {appDispatch} from '../app/store';
 import {EnrollDevice} from '../screens/EnrollDevice';
 import toaster from '../utils/toaster';
 import useDeviceInfo from '../hooks/useDeviceInfo';
+import { loginWithrefreshToken } from '../app/actions/auth';
 
 
 const {Navigator, Screen} = createBottomTabNavigator();
 
 const MainStack = createNativeStackNavigator();
-const Drawer = createDrawerNavigator();
 
-const routes = ['Home', 'Transfer', 'Payments', 'Help'];
+const routes = ['Home', 'Transfer', 'Payments', 'Help', 'Settings'];
 
 axios.interceptors.response.use(
   response => {
     return response;
   },
-  (error: AxiosError) => {
-    if (error?.response?.status === 401 || error.request.status === 401) {
-      delete axios.defaults.headers.common.Authorization;
-      appDispatch(logout());
-      removeItem('authToken');
-      toaster('Error', 'Your session has expired!', 'custom');
+  async (error: AxiosError) => {
+    if (error?.response?.status === 401 || error.request?.status === 401) {
+      const refreshToken = await loadItem('refreshToken');
+      const originalRequest = error.config;
+      if (refreshToken && originalRequest) {
+          const token = await loadItem('refreshToken');
+          axios.defaults.headers.common.Authorization = token;
+          const resp = await loginWithrefreshToken() as AxiosResponse;
+          if (resp?.status === 200) {
+            saveItem('authToken', resp.data.authenticationToken);
+            saveItem('refreshToken', resp.data.refreshToken);
+            // toaster('Success', 'Login Successful', 'custom');
+            axios.defaults.headers.common.Authorization = `Bearer ${resp.data.authenticationToken}`;
+            originalRequest.headers.Authorization = `Bearer ${resp.data.authenticationToken}`;
+            return axios(originalRequest);
+          } else {
+            delete axios.defaults.headers.common.Authorization;
+            appDispatch(logout());
+            removeItem('authToken');
+            removeItem('refreshToken');
+            toaster('Error', 'Your session has expired! re-token else', 'custom');
+          }
+      } else {
+        delete axios.defaults.headers.common.Authorization;
+        appDispatch(logout());
+        removeItem('authToken');
+        removeItem('refreshToken');
+        toaster('Error', 'Your session has expired! else', 'custom');
+      }
     }
     return Promise.reject(error);
   },
@@ -99,27 +126,40 @@ const MainAuthPage = () => {
         tabBarIcon: ({focused}) => {
           let iconName;
           if (route.name === routes[0]) {
-            iconName = focused ? HomeIcon : HomeBlur;
+            iconName = HomeIcon;
           } else if (route.name === routes[1]) {
-            iconName = focused ? TransferIcon : TransferBlurIcon;
+            iconName = TransferIcon;
           } else if (route.name === routes[2]) {
-            iconName = focused ? Payment : PaymentBlur;
+            iconName = Payment;
           } else if (route.name === routes[3]) {
-            iconName = focused ? Chat : ChatBlur;
+            iconName = Chat;
+          } else if (route.name === routes[4]) {
+            iconName = Settings;
           }
-          return <Image source={iconName} />;
+          return <Image source={iconName} style={{
+            width: 15,
+            height: 15,
+            opacity: focused ? 1 : 0.5
+          }} />;
         },
         tabBarLabelStyle: {
-          fontSize: fontSizes.paragragh,
-          fontWeight: '700',
+          fontSize: fontSizes.bodyText,
+          fontWeight: '500',
           color: colors.sMainBlue,
           fontFamily: 'Trebuchet MS',
-          borderColor: 'black'
+          marginTop: -5,
+          paddingBottom: 10,
+          lineHeight: fontSizes.bodyText,
         },
+        tabBarItemStyle: {
+          justifyContent: 'center',
+          alignItems: 'center'
+        }
       })}>
       <Screen component={Home} name={routes[0]} />
       <Screen component={Transfer} name={routes[1]} />
       <Screen component={Payments} name={routes[2]} />
+      <Screen component={Profile} name={routes[4]} />
     </Navigator>
   );
 };
@@ -127,7 +167,7 @@ const MainAuthPage = () => {
 export function Route() {
   const {deviceId} = useDeviceInfo();
   const dispatch = useAppDispatch();
-  const {isAuthenticated} = useUser();
+  const {isAuthenticated, userLoading} = useUser();
   const [isAppLoading, setIsAppLoading] = useState(true);
   const isLoggedIn = isAuthenticated;
   const userRole = 'admin';
@@ -158,7 +198,7 @@ export function Route() {
 
     return () => {
       subscription.remove();
-      isAuthenticated && removeAuth();
+      // isAuthenticated && removeAuth();
     };
   }, [isAuthenticated]);
 
@@ -170,11 +210,10 @@ export function Route() {
   };
 
   useEffect(() => {
-    // removeItem('user');
     loadLang();
     axios.defaults.headers.common.DeviceId = deviceId;
     axios.defaults.headers.DeviceId = deviceId;
-  }, []);
+  }, [deviceId]);
 
   useEffect(() => {
     loginState();
@@ -219,7 +258,7 @@ export function Route() {
     }
   };
 
-  if (isAppLoading) {
+  if (isAppLoading || userLoading) {
     return <SplashScreen />;
   }
 
@@ -274,6 +313,7 @@ export function Route() {
           <MainStack.Screen component={Onboarding} name="Onboarding" />
           <MainStack.Screen component={Welcome} name="Welcome" />
           <MainStack.Screen component={Login} name="Login" />
+          <MainStack.Screen component={LoginWithBio} name="LoginWithBio" />
           <MainStack.Screen component={SignUp} name="SignUp" />
           <MainStack.Screen component={GetSeapAccount} name="GetSeapAccount" />
           <MainStack.Screen component={ForgotPassword} name="ForgotPassword" />
@@ -298,18 +338,7 @@ export function Route() {
       {isLoggedIn ? (
         <>
           <SafeAreaView />
-          <Drawer.Navigator
-            drawerContent={props => (
-              <DrawerContent {...props} userRole={userRole} />
-            )}
-            screenOptions={{
-              headerShown: false,
-            }}>
-            <Drawer.Screen name="Home" component={AuthComponent} />
-            <Drawer.Screen name="Profile" component={Profile} />
-            <Drawer.Screen name="Beneficiaries" component={Beneficiaries} />
-            <Drawer.Screen name="Feedback" component={Feedback} />
-          </Drawer.Navigator>
+          <AuthComponent />
         </>
       ) : (
         UnauthComponent()
@@ -319,12 +348,13 @@ export function Route() {
   );
 }
 
-// export const Route = () => {
-//   return (
-//     <View style={{width: '100%', height: '100%', backgroundColor: 'red'}}>
-//       <Welcome navigation={{navigate: (itm) => {}}} />
-//     </View>
-//   )
-// }
-
 export default Route;
+
+const styles = StyleSheet.create({
+  bgImgImg: {
+    opacity: 0.04
+  },
+  bgImg: {
+    backgroundColor: colors.sLightBlue,
+  },
+})

@@ -1,18 +1,22 @@
 import React from 'react';
 import InputText from '../../common/InputText';
 
-export const Airtime = ({
+export const Sports = ({
   amount,
   customerReference,
   handleTextChange,
   onReferenceBlur,
   errorObj,
+  provider,
+  biller,
 }: {
   amount: string;
   customerReference: string;
   onReferenceBlur: () => void;
   handleTextChange: (val: string, name: string) => void;
   errorObj: Record<string, boolean>;
+  provider: string;
+  biller: string;
 }) => {
   return (
     <>
@@ -20,13 +24,13 @@ export const Airtime = ({
         value={customerReference}
         onChange={handleTextChange}
         name={'customerReference'}
-        label="Enter Phone"
+        label={`${biller} Id`}
         onBlur={onReferenceBlur}
         inValid={errorObj.customerReference}
-        errorText={'Enter a valid Phone Number'}
-        placeholder="e.g 07010101010"
+        errorText={'Enter a valid Id'}
+        placeholder="e.g 70101"
         keyboardType='numeric'
-        inputMode='tel'
+        inputMode='numeric'
         autoFocus
       />
       <InputText
@@ -44,4 +48,4 @@ export const Airtime = ({
   );
 };
 
-export default Airtime;
+export default Sports;

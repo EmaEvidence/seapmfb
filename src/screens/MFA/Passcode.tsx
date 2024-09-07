@@ -24,7 +24,7 @@ export const Passcode = ({route, navigation}: Props) => {
   const [userData, setData] = useState({
     transactionPin: '',
     pinConfirmation: '',
-    setAsDefault: setAsDefault ? 'Yes' : '',
+    setAsDefault: true,
   });
 
   const [userError, setError] = useState<Record<string, boolean>>({
@@ -71,7 +71,7 @@ export const Passcode = ({route, navigation}: Props) => {
     const resp = (await setTransactionPin({
       ...userData,
       // @ts-ignore
-      setAsDefault: !!userData.setAsDefault,
+      setAsDefault: userData.setAsDefault,
     })) as AxiosResponse<any>;
     if (resp?.status === 200) {
       setAuthTypeCall({
@@ -104,14 +104,14 @@ export const Passcode = ({route, navigation}: Props) => {
           errorText="Please enter a matching Pin!"
           onChange={handleTextChange}
         />
-        {!hideDefault && (
+        {/* {!hideDefault && (
           <Checkbox
             label="Set as Default"
             name="setAsDefault"
             onChange={handleTextChange}
             value={userData.setAsDefault}
           />
-        )}
+        )} */}
         <View style={styles.buttonWrapper}>
           <Button
             overrideStyle={styles.button}

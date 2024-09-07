@@ -28,7 +28,7 @@ export const validatePin = (data: string) => {
 };
 
 export const validateSmartCard = (data: string) => {
-  return /^[0-9]{11}$/.test(data);
+  return /^[0-9]{10,11}$/.test(data);
 };
 
 export const validatePostPaid = (data: string) => {

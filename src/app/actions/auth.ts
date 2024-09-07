@@ -102,3 +102,8 @@ export const enrollDevice = async (data: Record<string, string>) => {
 export const confirmOverwrite = async (data: Record<string, string>) => {
   return postCalls('Account/confirmDevice', data, '');
 };
+
+export const loginWithrefreshToken = async () => {
+  return postCalls('app/token/refresh', {}, '');
+};
+

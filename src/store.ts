@@ -1,4 +1,4 @@
-export const currency = 'NGA';
+export const currency = '₦';
 export const isLoading = true;
 export const isAuthenticated = false;
 export const role = 'reader';

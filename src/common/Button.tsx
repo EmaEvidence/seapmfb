@@ -7,9 +7,10 @@ import {Header5} from './Text';
 interface ButtonProps {
   label: string;
   overrideStyle?: ViewStyle | ViewStyle[];
-  overrideLabelStyle?: TextStyle;
+  overrideLabelStyle?: TextStyle | TextStyle[];
   onPress: () => void;
   renderContent?: () => React.ReactElement;
+  disabled?: boolean;
 }
 
 export const Button = ({
@@ -18,15 +19,17 @@ export const Button = ({
   overrideLabelStyle,
   onPress,
   renderContent,
+  disabled = false
 }: ButtonProps) => {
   return (
     <Pressable
       // style={[styles.container, overrideStyle]}
       style={({ pressed }) => [
         styles.container, overrideStyle,
-        { opacity: pressed ? 0.5 : 1.0 },
+        { opacity: pressed || disabled ? 0.5 : 1.0 },
       ]}
       onPress={() => {
+        if (disabled) return
         onPress()
       }}>
       {renderContent ? (

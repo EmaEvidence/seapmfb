@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {View} from 'react-native';
-import {Button, Header} from '../../common';
+import {Button, Header, RowView} from '../../common';
 import styles from './Profile.styles';
 import InputText, {ç, GenericDropdown} from '../../common/InputText';
 import ResetComponent from './ResetComponent';
@@ -8,6 +8,9 @@ import {secretQuestions} from '../../utils/constants';
 import {validateNonEmpty, validatePin} from '../../validator';
 import {requestOTPCallAuth, resetSecret} from '../../app/actions/auth';
 import toaster from '../../utils/toaster';
+import { Header3 } from '../../common/Text';
+import { fontSizes } from '../../utils/theme';
+import generalStyles from '../../index.styles';
 
 export const ChangeSecret = ({navigation}: any) => {
   const [userData, setData] = useState({
@@ -28,6 +31,10 @@ export const ChangeSecret = ({navigation}: any) => {
     setData(prevState => ({
       ...prevState,
       [label]: value,
+    }));
+    setError((prevState) => ({
+      ...prevState,
+      [label]: !value,
     }));
   };
 
@@ -64,13 +71,10 @@ export const ChangeSecret = ({navigation}: any) => {
   return (
     <View style={styles.wrapper}>
       <Header
-        overrideGoBack={() => navigation.navigate('Security')}
-        showBackBtn
         title={'Reset secret question'}
         navigation={navigation}
       />
-      <View style={styles.content}>
-        <View style={styles.securityFormWrapper}>
+      <View style={styles.securityFormWrapper}>
           <GenericDropdown
             data={secretQuestions.map(que => ({
               label: que,
@@ -92,26 +96,33 @@ export const ChangeSecret = ({navigation}: any) => {
             placeholder="Secret question"
             overrideStyle={{}}
           />
-          <InputText
-            label="New Secret Answer"
-            overrideStyle={styles.textInput}
-            obsureText={true}
-            name="newAnswer"
-            onChange={handleTextChange}
-            value={userData.newAnswer}
-            errorText="Please enter your new Answer!"
-            inValid={userError.newAnswer}
-          />
-          <InputText
-            label="Confirm Secret Answer"
-            overrideStyle={styles.textInput}
-            obsureText={true}
-            name="confirmationAnswer"
-            onChange={handleTextChange}
-            value={userData.confirmationAnswer}
-            errorText="Please enter matching answer!"
-            inValid={userError.confirmationAnswer}
-          />
+          <RowView justify='isBtw'>
+            <InputText
+              label="Secret answer"
+              overrideNPInputWrapper={styles.halfBtn}
+              overrideStyle={styles.textInput}
+              obsureText={true}
+              name="newAnswer"
+              onChange={handleTextChange}
+              value={userData.newAnswer}
+              errorText="Please enter your new Answer!"
+              inValid={userError.newAnswer}
+              autoFocus
+              returnKeyType="next"
+            />
+            <InputText
+              overrideNPInputWrapper={styles.halfBtn}
+              label="Confirm answer"
+              overrideStyle={styles.textInput}
+              obsureText={true}
+              name="confirmationAnswer"
+              onChange={handleTextChange}
+              value={userData.confirmationAnswer}
+              errorText="Please enter matching answer!"
+              inValid={userError.confirmationAnswer}
+              returnKeyType="next"
+            />
+          </RowView>
           <InputText
             name="otp"
             onChange={handleTextChange}
@@ -121,21 +132,30 @@ export const ChangeSecret = ({navigation}: any) => {
             value={userData.otp}
             errorText="Please enter OTP sent to you!"
             inValid={userError.otp}
+            keyboardType='numeric'
+            returnKeyType="done"
           />
-          <View style={styles.buttonWrapper}>
+          <RowView justify='isBtw' overrideStyle={{
+            marginTop: 20,
+          }}>
             <Button
-              overrideStyle={styles.button}
+              overrideStyle={[styles.button, styles.halfBtn, generalStyles.transparentBtn]}
+              label={'Get OTP'}
+              overrideLabelStyle={[{
+                fontSize: fontSizes.paragragh
+              }, generalStyles.transparentBtnLabel]}
+              onPress={handleResendOTP}
+            />
+            <Button
+              overrideStyle={[styles.button, styles.halfBtn]}
               label={'Save'}
+              overrideLabelStyle={{
+                fontSize: fontSizes.paragragh
+              }}
               onPress={handleSubmit}
             />
-          </View>
+          </RowView>
         </View>
-        <ResetComponent
-          question="Didn't get an OTP?"
-          answer="Resend OTP"
-          onPress={handleResendOTP}
-        />
-      </View>
     </View>
   );
 };

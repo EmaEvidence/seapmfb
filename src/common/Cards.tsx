@@ -98,9 +98,9 @@ export const TransactionCard = ({
   transaction,
 }: TransactionCardsProps): JSX.Element => {
   const data = {
-    icon: `${formatAmount(parseInt(transaction?.amount.toString(), 10))}`,
+    icon: `₦ ${formatAmount(parseInt(transaction?.amount.toString(), 10))}`,
     title: transaction?.title,
-    subTitle: dayjs(transaction.date).fromNow(),
+    subTitle: (new Date(transaction.date)).toDateString(),
   };
   return (
     <Card
@@ -173,6 +173,7 @@ const styles = StyleSheet.create({
     color: colors.twhite,
     fontWeight: '600',
     fontFamily: 'Trebuchet MS',
+    paddingHorizontal: 10,
   },
   type: {
     width: 20,

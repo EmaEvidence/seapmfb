@@ -60,7 +60,7 @@ export const styles = StyleSheet.create({
   },
   divider: {
     height: 1,
-    marginVertical: 50,
+    marginVertical: 30,
     width: '80%',
     backgroundColor: colors.sLighterBlue,
   },
@@ -97,10 +97,9 @@ export const styles = StyleSheet.create({
     width: '80%',
     alignItems: 'center',
     justifyContent: 'center',
-    // marginVertical: 20,
   },
   button: {
-    borderRadius: 5,
+    borderRadius: 50,
     width: '100%',
   },
   notifications: {
@@ -159,8 +158,9 @@ export const styles = StyleSheet.create({
   },
   securityFormWrapper: {
     width: '100%',
-    justifyContent: 'space-evenly',
+    justifyContent: 'flex-start',
     alignItems: 'center',
+    paddingHorizontal: '4%',
   },
   biometricWrapper: {
     width: '80%',
@@ -220,6 +220,42 @@ export const styles = StyleSheet.create({
     width: '90%',
     marginTop: 70,
   },
+  menuIcon: {
+    width: 50,
+    height: 50
+  },
+  // security card
+  secCard: {
+    width: '100%',
+    height: 60,
+    borderRadius: 5,
+    borderWidth: 1,
+    marginBottom: 20,
+    borderColor: colors.sLighterBlue,
+    paddingHorizontal: 16,
+    paddingVertical: 5,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: colors.sTextYellow
+  },
+  secTitle: {
+    color: colors.sMainBlue
+  },
+  secDetail: {
+    // color: colors.sLightBlue
+  },
+  authTypeWrapper: {
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+  },
+  halfBtn: {
+    width: '48%',
+  },
+  tabHeader: {
+    paddingVertical: '3%',
+    paddingHorizontal: '4%',
+  }
 });
 
 export default styles;

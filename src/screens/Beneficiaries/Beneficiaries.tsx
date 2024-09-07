@@ -144,24 +144,17 @@ export const Beneficiaries = ({navigation}: any) => {
                   <Header3 text={item.name} overrideStyle={styles.beneName} />
                   <Paragraph
                     text={item.accountNumber}
-                    // overrideStyle={styles.beneAcct}
                   />
-                  {/* <Paragraph
-                    text={dayjs(item.dateAdded).fromNow()}
-                    overrideStyle={styles.beneDate}
-                  /> */}
                 </View>
               </View>
-              <View>
-                <Button
-                  label="x"
-                  onPress={() => {
-                    setToDelete(item);
-                  }}
-                  overrideStyle={styles.beneBtn}
-                  overrideLabelStyle={styles.beneBtnLabel}
-                />
-              </View>
+              <Button
+                label="x"
+                onPress={() => {
+                  setToDelete(item);
+                }}
+                overrideStyle={styles.beneBtn}
+                overrideLabelStyle={styles.beneBtnLabel}
+              />
             </View>
           )}
         />

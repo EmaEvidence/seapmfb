@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, ImageBackground, Pressable, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
+import {Image, ImageBackground, KeyboardAvoidingView, Platform, Pressable, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 import {Button} from '.';
 import {colors, fontSizes} from '../utils/theme';
 import {Header1, Paragraph} from './Text';
@@ -36,9 +36,10 @@ export const UnAuthWrapper = ({
         style={styles.bgImg}
         resizeMethod='auto'
         resizeMode='contain'>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={[styles.wrapper]}
-    >
-        <View style={styles.content}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={[styles.wrapper]}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={50} style={styles.content}>
           <Pressable style={styles.goBack} onPress={goBack}>
             <Image source={BackIcon} />
           </Pressable>
@@ -56,7 +57,7 @@ export const UnAuthWrapper = ({
             onPress={onLinkPress}
             overrideLabelStyle={styles.buttonLabel}
           />
-        </View>
+        </KeyboardAvoidingView>
       </ScrollView>
       </ImageBackground>
     </SafeAreaView>

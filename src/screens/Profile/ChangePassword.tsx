@@ -19,7 +19,7 @@ export const ChangePassword = ({navigation}: any) => {
     password: '',
     oldPassword: '',
     confirmPassword: '',
-    setAsDefault: '',
+    setAsDefault: true,
   });
 
   const [userError, setError] = useState<Record<string, boolean>>({
@@ -73,7 +73,7 @@ export const ChangePassword = ({navigation}: any) => {
       const resp = await resetTransactionPassword({
         ...payload,
         // @ts-ignore
-        setAsDefault: !!userData.setAsDefault,
+        setAsDefault: true,
       });
       if (resp?.status === 200) {
         toaster(
@@ -81,7 +81,7 @@ export const ChangePassword = ({navigation}: any) => {
           'Transaction Password updated Successfully.',
           'custom',
         );
-        userData.setAsDefault && saveItem('isMFASet', '5');
+        saveItem('isMFASet', '5');
       }
     }
     if (isUpdate) {
@@ -90,7 +90,7 @@ export const ChangePassword = ({navigation}: any) => {
       const resp = await updateTransactionPassword({
         ...payload,
         // @ts-ignore
-        setAsDefault: !!userData.setAsDefault,
+        setAsDefault: userData.setAsDefault,
       });
       if (resp?.status === 200) {
         toaster('Success', 'Transaction Password Reset Successful.', 'custom');
@@ -154,14 +154,14 @@ export const ChangePassword = ({navigation}: any) => {
             errorText="Please enter your password!"
             inValid={userError.confirmPassword}
           />
-          <View style={styles.buttonWrapper}>
+          {/* <View style={styles.buttonWrapper}>
             <Checkbox
               label="Set as Default"
               name="setAsDefault"
               onChange={handleTextChange}
               value={userData.setAsDefault}
             />
-          </View>
+          </View> */}
           <View style={styles.buttonWrapper}>
             <Button
               overrideStyle={styles.button}

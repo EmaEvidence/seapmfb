@@ -35,7 +35,9 @@ export const CodeFieldComponent = ({
   }, [hasError]);
 
   return (
-    <View>
+    <View style={{
+      width: '100%'
+    }}>
       <Paragraph text={label} overrideStyle={styles.label} />
       <CodeField
         ref={ref}
@@ -88,16 +90,16 @@ const styles = StyleSheet.create({
     height: 45,
     lineHeight: 50,
     fontSize: fontSizes.header1,
-    borderWidth: 0.5,
+    borderBottomWidth: 0.5,
     borderRadius: 5,
     textAlign: 'center',
     borderColor: colors.sLighterBlue,
     marginHorizontal: 2,
-    backgroundColor: colors.sTextYellow,
+    backgroundColor: 'transparent',
   },
   focusCell: {
-    borderColor: colors.tblue,
-    borderWidth: 2.5,
+    // borderColor: colors.tblue,
+    // borderWidth: 2.5,
     lineHeight: 37,
   },
   label: {

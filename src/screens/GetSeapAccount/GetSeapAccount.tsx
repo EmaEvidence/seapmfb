@@ -411,7 +411,7 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
                   value: item,
                 }))}
                 label=""
-                overrideStyle={styles.textInput}
+                overrideStyle={[styles.textInput, styles.balDrpdwnMt]}
                 name="branchCode"
                 onChange={handleTextChange}
                 value={userData.branchCode}
@@ -433,6 +433,10 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
                   errorText="Please enter your Firstname!"
                   inValid={userError.firstName}
                   placeholder="e.g Ayoade"
+                  autoCapitalize='words'
+                  autoCorrect={false}
+                  autoFocus={true}
+                  returnKeyType="next"
                 />
                 <InputText
                   overrideNPInputWrapper={styles.halfBtn}
@@ -444,6 +448,10 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
                   errorText="Please enter your Lastname!"
                   inValid={userError.lastName}
                   placeholder="e.g Sanusi"
+                  autoCapitalize='words'
+                  autoCorrect={false}
+                  autoFocus={false}
+                  returnKeyType="next"
                 />
               </RowView>
               <RowView justify='isBtw'>
@@ -457,6 +465,10 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
                   errorText="Please enter a valid Name!"
                   inValid={userError.otherNames}
                   placeholder="e.g Emeka"
+                  autoCapitalize='words'
+                  autoCorrect={false}
+                  autoFocus={false}
+                  returnKeyType="next"
                 />
                 <InputText
                   overrideNPInputWrapper={styles.halfBtn}
@@ -470,6 +482,10 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
                   placeholder="e.g 07012120011"
                   inputMode='tel'
                   keyboardType='phone-pad'
+                  autoCapitalize='none'
+                  autoCorrect={false}
+                  autoFocus={false}
+                  returnKeyType="next"
                 />
               </RowView>
               <InputText
@@ -483,6 +499,10 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
                 placeholder="e.g email@mail.com"
                 inputMode='email'
                 keyboardType='email-address'
+                autoCapitalize='none'
+                autoCorrect={false}
+                autoFocus={false}
+                returnKeyType="next"
               />
               <RowView justify='isBtw'>
                 <InputText
@@ -496,6 +516,10 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
                   inValid={userError.dateOfBirth}
                   onPress={() => setOpenDate(true)}
                   readonly
+                  autoCapitalize='none'
+                  autoCorrect={false}
+                  autoFocus={false}
+                  returnKeyType="next"
                 />
                 <DatePicker
                   date={new Date()}
@@ -514,13 +538,12 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
                   mode="date"
                   maximumDate={new Date()}
                   minimumDate={new Date('1920-01-01')}
-                  androidVariant="iosClone"
                 />
                 <GenericDropdown
                   data={acctTypes}
                   key={'accountType'}
                   label="Account Type"
-                  overrideStyle={[styles.textInput, styles.halfInput]}
+                  overrideStyle={[styles.textInput, styles.halfInput, styles.balDrpdwnMt]}
                   name="accountType"
                   onChange={handleTextChange}
                   value={userData.accountType || ''}
@@ -534,7 +557,7 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
                 <GenericDropdown
                   data={genderData}
                   label="Gender"
-                  overrideStyle={[styles.textInput, styles.halfInput]}
+                  overrideStyle={[styles.textInput, styles.halfInput, styles.balDrpdwnMt]}
                   name="gender"
                   onChange={handleTextChange}
                   value={userData.gender || ''}
@@ -553,6 +576,10 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
                   errorText="Enter a valid place of birth!"
                   inValid={userError.placeOfBirth}
                   placeholder="e.g Ibadan"
+                  autoCapitalize='none'
+                  autoCorrect={false}
+                  autoFocus={false}
+                  returnKeyType="next"
                 />
               </RowView>
               <InputText
@@ -564,6 +591,10 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
                   errorText="Please enter a valid Address!"
                   inValid={userError.address}
                   placeholder="e.g 2 Alaka Street, Oke Iho"
+                  autoCapitalize='words'
+                  autoCorrect={false}
+                  autoFocus={false}
+                  returnKeyType="done"
                 />
               <View style={styles.buttonWrapper}>
                 <Button
@@ -587,11 +618,15 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
                   errorText="Please enter a valid City!"
                   inValid={userError.city}
                   placeholder="e.g Ibadan"
+                  autoCapitalize='words'
+                  autoCorrect={false}
+                  autoFocus={false}
+                  returnKeyType="next"
                 />
                 <GenericDropdown
                   data={idMeans}
                   label="Means of Identification"
-                  overrideStyle={[styles.textInput, styles.halfInput]}
+                  overrideStyle={[styles.textInput, styles.halfInput, styles.balDrpdwnMt]}
                   name="identificationImageType"
                   onChange={handleTextChange}
                   value={userData.identificationImageType || ''}
@@ -616,6 +651,10 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
                   readonly
                   onPress={() => handleGetImage('identificationImage')}
                   placeholder="e.g Image of NIMC Card"
+                  autoCapitalize='none'
+                  autoCorrect={false}
+                  autoFocus={false}
+                  returnKeyType="next"
                 />
                 <InputText
                   overrideNPInputWrapper={styles.halfBtn}
@@ -627,6 +666,10 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
                   errorText="Please enter a valid Number!"
                   inValid={userError.identificationNumber}
                   placeholder="e.g A1203456B"
+                  autoCapitalize='none'
+                  autoCorrect={false}
+                  autoFocus={false}
+                  returnKeyType="next"
                 />
               </RowView>
               <InputText
@@ -640,6 +683,10 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
                 placeholder="e.g 10101010101"
                 inputMode='numeric'
                 keyboardType='numeric'
+                autoCapitalize='none'
+                autoCorrect={false}
+                autoFocus={false}
+                returnKeyType="next"
               />
               <InputText
                 name="bankVerificationNumber"
@@ -652,6 +699,10 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
                 placeholder="e.g 10101010101"
                 inputMode='numeric'
                 keyboardType='numeric'
+                autoCapitalize='none'
+                autoCorrect={false}
+                autoFocus={false}
+                returnKeyType="next"
               />
               <RowView justify={'isBtw'}>
                 <InputText
@@ -665,6 +716,10 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
                   inValid={userError.image}
                   readonly
                   onPress={() => handleGetImage('image')}
+                  autoCapitalize='none'
+                  autoCorrect={false}
+                  autoFocus={false}
+                  returnKeyType="next"
                 />
                 <InputText
                   overrideNPInputWrapper={styles.halfBtn}
@@ -677,6 +732,10 @@ export const GetSeapAccount = ({navigation}: GetSeapAccountProps) => {
                   inValid={userError.signature}
                   readonly
                   onPress={() => handleGetImage('signature')}
+                  autoCapitalize='none'
+                  autoCorrect={false}
+                  autoFocus={false}
+                  returnKeyType="done"
                 />
               </RowView>
               <View style={[styles.buttonWrapper, styles.row]}>

@@ -107,7 +107,7 @@ export const TV = ({
               selectAddOn(val);
             }
           }}
-          label={'Select an Addon.'}
+          label={'Select an Addon'}
           data={[
             ...selectedAddOns.map((item: any) => ({
               label: item.displayText,
@@ -126,7 +126,7 @@ export const TV = ({
         value={customerReference}
         onChange={(label: string, val: string) => {
           handleTextChange(label, val);
-          if (val.length === 11) {
+          if (val.length === 11 || val.length === 10) {
             onReferenceBlur();
           }
         }}
@@ -136,6 +136,8 @@ export const TV = ({
         errorText={'Enter smart card number'}
         placeholder="e.g 10101010101"
         overrideStyle={styles.tvInput}
+        keyboardType='numeric'
+        inputMode='numeric'
       />
       {name && <Paragraph text={name} />}
       {errorObj.name && (

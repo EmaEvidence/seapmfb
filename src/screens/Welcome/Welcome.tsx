@@ -6,6 +6,9 @@ import Hall from '../../assets/images/hall.jpeg';
 import SeapVideo from '../../assets/seap.mp4';
 import styles from './welcome.style';
 import {Header2} from '../../common/Text';
+import useHasBiometric from '../../hooks/useHasBiometric';
+import useRefreshToken from '../../hooks/useRefreshToken';
+import { loadItem } from '../../utils/localStorage';
 
 interface WelcomeProps {
   navigation: {
@@ -16,9 +19,20 @@ interface WelcomeProps {
 
 export const Welcome = ({navigation}: WelcomeProps) => {
   const [hideVideo, setHideVideo] = useState(false);
+  const {hasBiometric} = useHasBiometric();
   const moveToAuth = (route: string) => {
     return navigation.navigate(route);
   };
+
+  const {refreshToken} = useRefreshToken();
+
+  const handleLoginCheck = async () => {
+    if (refreshToken && hasBiometric) {
+      moveToAuth('LoginWithBio');
+    } else {
+      moveToAuth('Login');
+    }
+  }
 
   return (
     <ImageBackground source={Hall}>
@@ -43,7 +57,7 @@ export const Welcome = ({navigation}: WelcomeProps) => {
             <Button
               overrideStyle={styles.halfBtn}
               label="Login"
-              onPress={() => moveToAuth('Login')}
+              onPress={() => handleLoginCheck()}
             />
             <Button
               overrideStyle={styles.halfBtn}
@@ -53,7 +67,7 @@ export const Welcome = ({navigation}: WelcomeProps) => {
           </RowView>
           <RowView justify="isBtw" align="isCenter">
             <Button
-              label="Get an Account"
+              label="Get a SEAP Account"
               onPress={() => moveToAuth('GetSeapAccount')}
               overrideStyle={styles.fullBtn}
             />

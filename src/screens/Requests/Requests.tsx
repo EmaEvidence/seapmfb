@@ -21,18 +21,18 @@ export const AccountRequests = ({navigation}: any) => {
       />
       <View style={styles.content}>
         <View style={styles.notifications}>
-          <Button
+          {/* <Button
             label="Request for a Debit Card"
             overrideStyle={styles.securityBtn}
             overrideLabelStyle={styles.actionText}
             onPress={() => handleNavigation('Request for a Debit Card')}
-          />
-          <Button
+          /> */}
+          {/* <Button
             label="Request for a Cheque Book"
             overrideStyle={styles.securityBtn}
             overrideLabelStyle={styles.actionText}
             onPress={() => handleNavigation('Request for a Cheque Book')}
-          />
+          /> */}
           <Button
             label="Request for Account Statement"
             overrideStyle={styles.securityBtn}

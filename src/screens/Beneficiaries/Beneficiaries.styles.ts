@@ -105,12 +105,15 @@ export const styles = StyleSheet.create({
     color: colors.twhite,
   },
   beneBtn: {
-    width: 35,
-    height: 35,
+    width: 20,
+    // height: 20,
     backgroundColor: 'transparent',
-    borderWidth: 2,
-    borderColor: colors.sMainBlue,
-    borderRadius: 5,
+    // borderWidth: 2,
+    // borderColor: colors.sMainBlue,
+    borderRadius: 100,
+    position: 'absolute',
+    top: -10,
+    right: 0,
   },
   beneBtnLabel: {
     color: colors.sMainBlue,
@@ -140,13 +143,15 @@ export const styles = StyleSheet.create({
   },
   buttonWrapper: {
     width: '100%',
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 20,
   },
   button: {
-    borderRadius: 5,
+    borderRadius: 200,
     width: '100%',
+    marginTop: 0
   },
   textColor: {
     color: colors.sMainBlue,

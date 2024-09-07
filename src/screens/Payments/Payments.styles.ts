@@ -45,6 +45,7 @@ export const styles = StyleSheet.create({
     padding: 0,
     backgroundColor: Platform.OS === 'ios' ? 'transparent' : '#F4F4F5',
     borderColor: 'transparent',
+    marginVertical: 10,
   },
   pickerWrapper: {
     width: '100%',
@@ -63,29 +64,38 @@ export const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    backgroundColor: colors.sTextYellow,
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
   },
   chargeInput: {
     width: '45%',
   },
   continueWrapper: {
     width: '100%',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 30,
   },
   step1Wrapper: {
     width: '100%',
-    paddingHorizontal: '10%',
+    // paddingHorizontal: '10%',
+    flex: 1,
   },
   authTitle: {
     marginBottom: 50,
     color: colors.sMainBlue,
+    backgroundColor: colors.sTextYellow,
+    borderRadius: 5,
+    padding: 20,
   },
   btnWrapper: {
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 40,
+    alignItems: 'flex-end',
+    flexGrow: 1,
   },
   btn: {
     width: '40%',
@@ -94,7 +104,6 @@ export const styles = StyleSheet.create({
     width: '40%',
     flexDirection: 'column',
     justifyContent: 'flex-start',
-    marginTop: 20,
   },
   serviceTitle: {
     fontSize: fontSizes.paragragh2,
@@ -121,13 +130,13 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   electricityInput: {
-    width: '45%',
+    width: '48%',
   },
   tvInput: {
     width: '100%',
   },
   inputStyle: {
-    marginVertical: 25,
+    marginVertical: 10,
   },
   validate: {
     width: '100%',
@@ -199,11 +208,11 @@ export const styles = StyleSheet.create({
     fontWeight: '700',
   },
   textLogoWrapper: {
-    width: 20,
-    height: 20,
+    width: 30,
+    height: 30,
     marginHorizontal: 10,
     backgroundColor: colors.sMainBlue,
-    borderRadius: 10,
+    borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -221,6 +230,12 @@ export const styles = StyleSheet.create({
     width: '100%',
     flexWrap: 'wrap',
   },
+  paymentDetailsView: {
+    backgroundColor: colors.sTextYellow,
+    borderRadius: 5,
+    padding: 20,
+    marginBottom: 20,
+  }
 });
 
 export default styles;

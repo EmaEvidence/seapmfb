@@ -112,7 +112,7 @@ export const Personalize = ({navigation}: any) => {
   return (
     <View style={styles.wrapper}>
       <Header
-        overrideGoBack={() => navigation.navigate('Profile')}
+        overrideGoBack={() => navigation.navigate('Settings')}
         showBackBtn
         title={'Personalise App'}
         navigation={navigation}

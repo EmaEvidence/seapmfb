@@ -1,16 +1,17 @@
 import React, {useState} from 'react';
-import {View} from 'react-native';
+import {View, TouchableOpacity} from 'react-native';
 import {
   resetTransactionPin,
   updateTransactionPin,
 } from '../../app/actions/auth';
-import {Button, CodeFieldComponent, Header} from '../../common';
+import {Button, CodeFieldComponent, Header, RowView} from '../../common';
 import InputText, {Checkbox} from '../../common/InputText';
 import {saveItem} from '../../utils/localStorage';
 import toaster from '../../utils/toaster';
 import {validateNonEmpty, validatePin} from '../../validator';
 import styles from './Profile.styles';
-import ResetComponent from './ResetComponent';
+import { Header1, Header3, Paragraph } from '../../common/Text';
+import { colors } from '../../utils/theme';
 
 export const ChangePin = ({navigation}: any) => {
   const [mode, setMode] = useState('update');
@@ -20,12 +21,18 @@ export const ChangePin = ({navigation}: any) => {
   };
   return (
     <View style={styles.wrapper}>
-      <Header
-        overrideGoBack={() => navigation.navigate('Security')}
-        showBackBtn
-        title={isUpdate ? 'Change PIN' : 'Reset PIN'}
-        navigation={navigation}
-      />
+      <RowView justify='isBtw' overrideStyle={styles.tabHeader}>
+        <TouchableOpacity onPress={handleModeChange}>
+          <Header3 text='Change PIN' overrideStyle={{
+            color: isUpdate ? colors.sMainBlue : colors.tblack
+          }} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleModeChange}>
+          <Header3 text='Reset PIN' overrideStyle={{
+            color: !isUpdate ? colors.sMainBlue : colors.tblack
+          }} />
+        </TouchableOpacity>
+      </RowView>
       {mode === 'update' ? (
         <UpdatePin handleModeChange={handleModeChange} />
       ) : (
@@ -40,7 +47,7 @@ export default ChangePin;
 const ResetPin = ({handleModeChange}: {handleModeChange: () => void}) => {
   const [userData, setData] = useState<Record<string, string>>({
     secretAnswer: '',
-    setAsDefault: '',
+    setAsDefault: true,
     pinConfirmation: '',
     transactionPin: '',
   });
@@ -83,7 +90,7 @@ const ResetPin = ({handleModeChange}: {handleModeChange: () => void}) => {
     const resp = await resetTransactionPin({
       ...userData,
       // @ts-ignore
-      setAsDefault: !!userData.setAsDefault,
+      setAsDefault: userData.setAsDefault,
     });
     if (resp?.status === 200) {
       toaster('Success', 'PIN Reset Successful.', 'custom');
@@ -94,39 +101,37 @@ const ResetPin = ({handleModeChange}: {handleModeChange: () => void}) => {
   return (
     <View style={styles.content}>
       <View style={styles.securityFormWrapper}>
-        <View style={styles.secretAnswerInputWrapper}>
-          <InputText
-            name="secretAnswer"
-            onChange={handleTextChange}
-            label="Secret Answer"
-            overrideStyle={styles.textInput}
-            value={userData.secretAnswer}
-            errorText="Please enter your Secret Answer!"
-            inValid={userError.secretAnswer}
-          />
-        </View>
+        <InputText
+          name="secretAnswer"
+          onChange={handleTextChange}
+          label="Secret Answer"
+          overrideStyle={styles.textInput}
+          value={userData.secretAnswer}
+          errorText="Please enter your Secret Answer!"
+          inValid={userError.secretAnswer}
+        />
         <CodeFieldComponent
-          label="New 6 Digit PIN"
+          label="New 6 digit pin"
           name={'transactionPin'}
           onChange={handleTextChange}
           hasError={userError.transactionPin}
-          errorText={'Please enter a new PIN'}
+          errorText={'Please enter a new pin'}
         />
         <CodeFieldComponent
           label="Confirm Passcode."
           name={'pinConfirmation'}
           onChange={handleTextChange}
           hasError={userError.pinConfirmation}
-          errorText={'Please a match PIN!'}
+          errorText={'Please a match pin!'}
         />
-        <View style={styles.buttonWrapper}>
+        {/* <View style={styles.buttonWrapper}>
           <Checkbox
             label="Set as Default"
             name="setAsDefault"
             onChange={handleTextChange}
             value={userData.setAsDefault}
           />
-        </View>
+        </View> */}
         <View style={styles.buttonWrapper}>
           <Button
             overrideStyle={styles.button}
@@ -135,11 +140,6 @@ const ResetPin = ({handleModeChange}: {handleModeChange: () => void}) => {
           />
         </View>
       </View>
-      <ResetComponent
-        question=""
-        answer="Change PIN"
-        onPress={handleModeChange}
-      />
     </View>
   );
 };
@@ -147,7 +147,7 @@ const ResetPin = ({handleModeChange}: {handleModeChange: () => void}) => {
 const UpdatePin = ({handleModeChange}: {handleModeChange: () => void}) => {
   const [userData, setData] = useState<Record<string, string>>({
     oldPin: '',
-    setAsDefault: '',
+    setAsDefault: true,
     pinConfirmation: '',
     transactionPin: '',
   });
@@ -190,7 +190,7 @@ const UpdatePin = ({handleModeChange}: {handleModeChange: () => void}) => {
     const resp = await updateTransactionPin({
       ...userData,
       // @ts-ignore
-      setAsDefault: !!userData.setAsDefault,
+      setAsDefault: userData.setAsDefault,
     });
     if (resp?.status === 200) {
       toaster('Success', 'PIN Updated Successfully.', 'custom');
@@ -222,14 +222,14 @@ const UpdatePin = ({handleModeChange}: {handleModeChange: () => void}) => {
           hasError={userError.pinConfirmation}
           errorText={''}
         />
-        <View style={styles.buttonWrapper}>
+        {/* <View style={styles.buttonWrapper}>
           <Checkbox
             label="Set as Default"
             name="setAsDefault"
             onChange={handleTextChange}
             value={userData.setAsDefault}
           />
-        </View>
+        </View> */}
 
         <View style={styles.buttonWrapper}>
           <Button
@@ -239,11 +239,6 @@ const UpdatePin = ({handleModeChange}: {handleModeChange: () => void}) => {
           />
         </View>
       </View>
-      <ResetComponent
-        question="Can't Remember your OLD PIN?"
-        answer="Reset PIN"
-        onPress={handleModeChange}
-      />
     </View>
   );
 };

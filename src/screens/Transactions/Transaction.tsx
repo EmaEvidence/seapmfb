@@ -3,14 +3,15 @@ import React from 'react';
 import ViewShot from 'react-native-view-shot';
 import Share from 'react-native-share';
 import {View, Image, Platform, ImageBackground, PermissionsAndroid} from 'react-native';
-import {Button, Header, Logo, RowView} from '../../common';
-import {Header4, Paragraph} from '../../common/Text';
+import {Button, ColumnView, Header, Logo, RowView} from '../../common';
+import {Header1, Header2, Header4, Paragraph} from '../../common/Text';
 import LogoImage from '../../assets/images/logo.png';
 import styles from './Transactions.styles';
 import RNFS from 'react-native-fs';
 
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import toaster from '../../utils/toaster';
+import generalStyles from '../../index.styles';
 
 export const Transaction = ({navigation}: any) => {
   const ref = React.useRef(null);
@@ -108,7 +109,7 @@ export const Transaction = ({navigation}: any) => {
             </tr>
             <tr>
               <td>Amount</td>
-              <td>NGA ${transaction.amount}</td>
+              <td>₦ ${transaction.amount}</td>
             </tr>
           </table>
         </div>
@@ -203,7 +204,7 @@ export const Transaction = ({navigation}: any) => {
             </View>
             <View style={styles.detailWrapper}>
               <Header4 text="Amount" />
-              <Paragraph text={`NGA ${transaction.amount}`} />
+              <Paragraph text={`₦ ${transaction.amount}`} />
             </View>
             <View style={styles.divider} />
           </View>
@@ -222,12 +223,13 @@ export const Transaction = ({navigation}: any) => {
   return (
     <View style={styles.wrapper}>
       <Header
-        title={'Transaction'}
+        title={''}
         navigation={navigation}
         showBackBtn
         overrideGoBack={() => navigation.goBack()}
       />
       <View ref={androidRef} style={styles.receipt}>
+        <Header1 overrideStyle={[generalStyles.blueText, generalStyles.leftText, { width: '100%'}]} text={'Transaction details'} />
         <Image
           source={LogoImage}
           resizeMethod='resize'
@@ -241,55 +243,31 @@ export const Transaction = ({navigation}: any) => {
             height: 50,
           }}
         />
-        <Header4 text="Transaction Receipt" />
-        <View style={styles.divider} />
-        <View style={styles.detailWrapper}>
-          <Header4 text="Reference" />
+        <ColumnView justify='isCenter' overrideStyle={styles.detWrapper}>
+          <Paragraph text='Recipient' overrideStyle={styles.title} />
+          <Paragraph text={transaction.receiptData?.creditAccountName} />
+          {transaction.receiptData?.beneficiaryBank && (<Paragraph text={transaction?.receiptData?.beneficiaryBank} />)}
+        </ColumnView>
+        <ColumnView justify='isCenter' overrideStyle={styles.detWrapper}>
+          <Paragraph text='Transactions' overrideStyle={styles.title} />
+          <Paragraph text={`₦ ${transaction?.amount}`} />
           <Paragraph text={transaction.referenceID} />
-        </View>
-        <View style={styles.detailWrapper}>
-          <Header4 text="Paid On" />
-          <Paragraph
-            text={new Date(transaction.transactionDate).toDateString()}
-          />
-        </View>
-        {
-          transaction.receiptData?.creditAccountName && (
-            <View style={styles.detailWrapper}>
-              <Header4 text="Beneficiary" />
-              <Paragraph text={transaction.receiptData?.creditAccountName} />
-            </View>
-          )
-        }
-        {
-          transaction.receiptData?.beneficiaryBank && (
-            <View style={styles.detailWrapper}>
-              <Header4 text="Beneficiary Bank" />
-              <Paragraph text={transaction?.receiptData?.beneficiaryBank} />
-            </View>
-          )
-        }
-        <View style={styles.detailWrapper}>
-          <Header4 text="Beneficiary Account" />
-          <Paragraph text={transaction?.beneficiaryAccount || transaction?.accountNumber || transaction?.receiptData?.creditAccount || '-'} />
-        </View>
-        <View style={styles.detailWrapper}>
-          <Header4 text="Remarks" />
+          <Paragraph text={new Date(transaction.transactionDate).toDateString()} />
+        </ColumnView>
+        <ColumnView justify='isCenter' overrideStyle={styles.detWrapper}>
+          <Paragraph text='Remarks' overrideStyle={styles.title} />
           <Paragraph
             overrideStyle={{
-              width: '50%',
-              textAlign: 'right'
+              width: '100%',
+              textAlign: 'left'
             }}
             text={transaction?.paymentNarration || transaction?.narration}
           />
-        </View>
-        <View style={styles.detailWrapper}>
-          <Header4 text="Amount" />
-          <Paragraph text={`NGA ${transaction?.amount}`} />
-        </View>
-        <View style={styles.divider} />
+        </ColumnView>
       </View>
-      <RowView justify={'isCenter'}>
+      <RowView justify={'isCenter'} overrideStyle={{
+        marginTop: 40
+      }}>
         <Button
           label={'Share'}
           onPress={captureScreen}

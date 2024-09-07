@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {View} from 'react-native';
+import {ScrollView, TouchableOpacity, View} from 'react-native';
 import {setAuthTypeCall} from '../../app/actions/auth';
 import {useAppDispatch} from '../../app/hooks';
 import {login} from '../../app/slices/auth';
-import {Button, GenericDropdown} from '../../common';
+import {Header} from '../../common';
+import { Paragraph } from '../../common/Text';
 import UnAuthWrapper from '../../common/UnAuthWrapper';
-import useHasBiometric from '../../hooks/useHasBiometric';
 import {INavigation, IRoute} from '../../types';
 import {
+  height,
   transactionAuthTypes,
   transactionAuthTypesObj,
 } from '../../utils/constants';
@@ -16,6 +17,7 @@ import styles from './mfa.styles';
 import {useTransactionAuthType} from '../../hooks';
 import {AxiosResponse} from 'axios';
 import toaster from '../../utils/toaster';
+import { colors } from '../../utils/theme';
 
 interface Props {
   navigation: INavigation;
@@ -25,7 +27,6 @@ interface Props {
 export const mfaMap = {
   [transactionAuthTypes[0]]: 'Passcode',
   [transactionAuthTypes[1]]: '',
-  [transactionAuthTypes[2]]: 'FingerPrint',
   [transactionAuthTypes[3]]: 'Passcode',
   [transactionAuthTypes[4]]: 'TransactionPassword',
 };
@@ -59,15 +60,16 @@ export const MFAChoice = ({navigation, route}: Props) => {
 export const MFAChoiceComponent = ({
   navigation,
   fromRoute,
+  handleSuccess,
 }: {
   navigation: INavigation;
   fromRoute?: string;
+  handleSuccess?: Function
 }) => {
   const storeAuthType = useTransactionAuthType();
   const setType = storeAuthType.type;
   const [authType, setAuthType] = useState(transactionAuthTypes[0]);
   const dispatch = useAppDispatch();
-  const {hasBiometric} = useHasBiometric();
 
   useEffect(() => {
     if (setType) {
@@ -89,6 +91,7 @@ export const MFAChoiceComponent = ({
       authType: index.toString(),
     })) as AxiosResponse;
     if (resp.status === 200) {
+      handleSuccess && handleSuccess();
       if (skip) {
         handleSkip();
       }
@@ -135,6 +138,16 @@ export const MFAChoiceComponent = ({
     if (isMFASet && parseInt(isMFASet, 10) === 1) {
       handleSetAuthType(index);
     } else {
+      handleSetAuthTypeCall(index, route, false);
+    }
+  };
+
+  const handleAuthBtnPress = (itm: string) => {
+    const route: string = mfaMap[itm];
+    const index = transactionAuthTypesObj[itm];
+    if (itm === transactionAuthTypes[3]) {
+      handlePinAndOTP(index, route);
+    } else if (route) {
       // navigation.navigate(route, {
       //   authType: index,
       //   hideDefault: true,
@@ -143,62 +156,46 @@ export const MFAChoiceComponent = ({
       //   authType: (index).toString(),
       // });
       handleSetAuthTypeCall(index, route, false);
+    } else {
+      handleSetAuthTypeCall(index, route, true);
     }
-  };
+  }
 
   return (
-    <View style={styles.mfabuttonWrapper}>
-      <GenericDropdown
-        label={''}
-        subLabel={''}
-        data={transactionAuthTypes
-          .filter(authTyp => {
-            if (authTyp === transactionAuthTypes[2] && !hasBiometric) {
-              return false;
-            }
-            return true;
-          })
-          .map(item => ({
-            label: item,
-            value: item,
-          }))}
-        value={authType}
-        onChange={(_name: string, text: string) => {
-          setAuthType(text);
-        }}
-        name={''}
-        inValid={false}
-        error={''}
-        // overrideStyle={styles.pickerWrapper}
-        // overridePickerStyle={styles.pickerStyle}
-        // pickerItemStyle={styles.pickerItem}
-        listMode="MODAL"
-        searchable
+    <ScrollView style={styles.authTypeWrapper}>
+      <Header
+        title={'Select your authorization mode'}
+        navigation={navigation}
       />
-      <Button
-        overrideStyle={styles.mfabutton}
-        label={'Save selection'}
-        onPress={() => {
-          const route: string = mfaMap[authType];
-          const index = transactionAuthTypesObj[authType];
-          if (authType === transactionAuthTypes[3]) {
-            handlePinAndOTP(index, route);
-          } else if (route) {
-            // navigation.navigate(route, {
-            //   authType: index,
-            //   hideDefault: true,
-            // });
-            // setAuthTypeCall({
-            //   authType: (index).toString(),
-            // });
-            handleSetAuthTypeCall(index, route, false);
-          } else {
-            handleSetAuthTypeCall(index, route, true);
-          }
-        }}
-      />
-    </View>
+      {
+        transactionAuthTypes.map((itm) => (
+          <AuthTypeCard
+            key={itm}
+            title={itm}
+            onPress={(itm) => handleAuthBtnPress(itm)}
+            selected={storeAuthType.authName}
+          />
+        ))
+      }
+    </ScrollView>
   );
 };
 
 export default MFAChoice;
+
+const AuthTypeCard = ({title, selected, onPress}: { title: string, selected?: string, onPress: (val: string) => void}) => {
+  return (
+    <TouchableOpacity
+      key={title}
+      onPress={() => onPress(title)}
+      style={[
+        styles.secCard,
+        {
+          borderColor: selected?.toLowerCase() === title.toLowerCase() ? colors.sYellow : colors.sLightBlue
+        }
+      ]}>
+      <Paragraph text={title} />
+    </TouchableOpacity>
+  )
+}
+

@@ -3,6 +3,7 @@ import Toast from 'react-native-toast-message';
 import {updateLoader} from '../app/actions/loader';
 import {config} from '../config';
 import toaster from '../utils/toaster';
+import { err } from 'react-native-svg/lib/typescript/xml';
 
 const genericError = 'An Error Occurred';
 const {url} = config.dev;
@@ -20,9 +21,9 @@ const handleError = (error: any, errorMsg: string) => {
     );
     return;
   }
-  if (error?.response?.status === 401 || error.request.status === 401) {
-    delete axios.defaults.headers.common.Authorization;
-    toaster('Error', 'Your session has expired!', 'custom');
+  if (error?.response?.status === 401 || error.request?.status === 401) {
+    // delete axios.defaults.headers.common.Authorization;
+    // toaster('Error', 'Your session has expired error handler!', 'custom');
     return;
   }
   if (error.response) {
@@ -37,10 +38,10 @@ const handleError = (error: any, errorMsg: string) => {
   }
 };
 
-export const getCalls = async (path: string, errorMsg: string) => {
+export const getCalls = async (path: string, errorMsg: string, showLoader = true) => {
   Toast.hide();
   try {
-    updateLoader(true);
+    showLoader && updateLoader(true);
     const resp = await axios.get(`${url}${path}`);
     if (resp) {
       updateLoader(false);

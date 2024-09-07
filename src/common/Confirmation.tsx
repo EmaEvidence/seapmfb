@@ -6,7 +6,7 @@ import {
   ViewStyle,
   View,
 } from 'react-native';
-import {width} from '../utils/constants';
+import {height, width} from '../utils/constants';
 import {colors, fontSizes} from '../utils/theme';
 import {Header2, Paragraph} from './Text';
 
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   wrapper: {
-    height: 200,
+    height: height * 0.3,
     width: '80%',
     shadowColor: 'rgba(0, 0, 0, 0.25)',
     shadowOffset: {width: 0, height: 0},

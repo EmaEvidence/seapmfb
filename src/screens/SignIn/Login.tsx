@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, ScrollView} from 'react-native';
+import {View, ScrollView, Text} from 'react-native';
 import axios, { AxiosResponse } from 'axios';
 import jwt_decode from 'jwt-decode';
 import {Button} from '../../common';
@@ -17,6 +17,7 @@ import {login} from '../../app/slices/auth';
 import useLanguage from '../../hooks/useLanguage';
 import { FingerPrintComponent } from '../MFA';
 import useRefreshToken from '../../hooks/useRefreshToken';
+import useHasBiometric from '../../hooks/useHasBiometric';
 
 interface LoginProps {
   navigation: INavigation;
@@ -26,6 +27,7 @@ const reenrollError =
   'This device is not authorized to access your account. Please use the device enrollment feature to register this device for access on your account';
 
 export const Login = ({navigation}: LoginProps) => {
+  const {hasBiometric} = useHasBiometric();
   const {lang} = useLanguage();
   const dispatch = useAppDispatch();
   const {deviceId} = useDeviceInfo();
@@ -87,13 +89,13 @@ export const Login = ({navigation}: LoginProps) => {
         email: false,
         password: false,
       }));
+      delete axios.defaults.headers.common.Authorization
       const resp = await loginCall({
         ...userData,
         deviceId,
         sessionId: '090qwqere',
       }) as AxiosResponse;
       if (resp?.status === 200) {
-        console.log(resp?.data)
         saveItem('authToken', resp.data.authenticationToken);
         saveItem('refreshToken', resp.data.refreshToken);
         saveItem('acctNo', userId);
@@ -127,54 +129,61 @@ export const Login = ({navigation}: LoginProps) => {
     }
   };
 
-  const {refreshToken} = useRefreshToken();
-
   return (
     <UnAuthWrapper
       header={lang.signIn}
       goBack={navigation.goBack}
       description={lang.signInText}
-      linkText={'Signup'}
+      linkText={'Join online banking'}
       onLinkPress={() => navigation.navigate('SignUp')}
       linkText1={lang.getSeap}
       onLinkPress1={() => navigation.navigate('GetSeapAccount')}>
       <ScrollView>
-        <InputText
-          name="userId"
-          onChange={handleTextChange}
-          label={lang.accNum}
-          overrideStyle={styles.textInput}
-          value={userData.userId}
-          errorText="Please enter your Account Number!"
-          inValid={userError.userId}
-          placeholder="e.g 1010101010"
-        />
-        <InputText
-          label={lang.password}
-          overrideStyle={styles.textInput}
-          obsureText={true}
-          name="password"
-          onChange={handleTextChange}
-          value={userData.password}
-          errorText="Please enter your password!"
-          inValid={userError.password}
-        />
-        <View style={styles.buttonWrapper}>
-          <Button
-            overrideStyle={styles.button}
-            label="Login"
-            onPress={handleSubmit}
+        <>
+          <InputText
+            name="userId"
+            onChange={handleTextChange}
+            label={lang.accNum}
+            overrideStyle={styles.textInput}
+            value={userData.userId}
+            errorText="Please enter your Account Number!"
+            inValid={userError.userId}
+            placeholder="e.g 1010101010"
+            autoCapitalize='none'
+            autoCorrect={false}
+            autoFocus={true}
+            returnKeyType="next"
+            inputMode='numeric'
+            keyboardType='numeric'
           />
-          <Button
-            overrideStyle={styles.fgtPswordbutton}
-            overrideLabelStyle={styles.fgtPswordbuttonLabel}
-            label={lang.forgotPass}
-            onPress={() => navigation.navigate('ForgotPassword')}
+          <InputText
+            label={lang.password}
+            overrideStyle={styles.textInput}
+            obsureText={true}
+            name="password"
+            onChange={handleTextChange}
+            value={userData.password}
+            errorText="Please enter your password!"
+            inValid={userError.password}
+            autoCapitalize='none'
+            autoCorrect={false}
+            autoFocus={false}
+            returnKeyType='done'
           />
-        </View>
-        {
-          refreshToken && <FingerPrintComponent label="Use Biometric to unlock the app" />
-        }
+          <View style={styles.buttonWrapper}>
+            <Button
+              overrideStyle={styles.button}
+              label="Login"
+              onPress={handleSubmit}
+            />
+            <Button
+              overrideStyle={styles.fgtPswordbutton}
+              overrideLabelStyle={styles.fgtPswordbuttonLabel}
+              label={lang.forgotPass}
+              onPress={() => navigation.navigate('ForgotPassword')}
+            />
+          </View>
+        </>
       </ScrollView>
     </UnAuthWrapper>
   );
