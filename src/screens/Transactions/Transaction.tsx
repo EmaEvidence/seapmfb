@@ -12,6 +12,7 @@ import RNFS from 'react-native-fs';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import toaster from '../../utils/toaster';
 import generalStyles from '../../index.styles';
+import { fontSizes } from '../../utils/theme';
 
 export const Transaction = ({navigation}: any) => {
   const ref = React.useRef(null);
@@ -220,8 +221,19 @@ export const Transaction = ({navigation}: any) => {
     )
   }
 
+  const receiptData = transaction?.receiptData || {};
+  const isSEAP = () => {
+    console.log(transaction, receiptData)
+    const isBill = receiptData?.billPaymentDto?.billerPaymentReference;
+    const isTransfer = receiptData?.creditAccountNumber;
+    const isCard = receiptData.isCardTransation;
+    return (isBill || isTransfer || isCard) ? '' : 'SEAP MFB charges'
+  }
+
   return (
-    <View style={styles.wrapper}>
+    <View style={[styles.wrapper, {
+      paddingHorizontal: '5%'
+    }]}>
       <Header
         title={''}
         navigation={navigation}
@@ -229,30 +241,38 @@ export const Transaction = ({navigation}: any) => {
         overrideGoBack={() => navigation.goBack()}
       />
       <View ref={androidRef} style={styles.receipt}>
-        <Header1 overrideStyle={[generalStyles.blueText, generalStyles.leftText, { width: '100%'}]} text={'Transaction details'} />
         <Image
           source={LogoImage}
           resizeMethod='resize'
           resizeMode='contain'
           style={{opacity: 0.1, position: 'absolute', width: '100%', height: '100%'}}
         />
-        <Logo
-          overrideStyle={{
-            width: 50,
-            marginBottom: 20,
-            height: 50,
-          }}
-        />
+        
+        <RowView justify="isBtw" overrideStyle={[styles.detWrapper, {width: '100%'}]}>
+          <Header1 overrideStyle={[generalStyles.blueText, generalStyles.leftText, { width: '80%'}]} text={'Transaction details'} />
+          <Logo
+            overrideStyle={{
+              width: 35,
+              height: 35,
+            }}
+          />
+        </RowView>
+        
         <ColumnView justify='isCenter' overrideStyle={styles.detWrapper}>
           <Paragraph text='Recipient' overrideStyle={styles.title} />
-          <Paragraph text={transaction.receiptData?.creditAccountName} />
-          {transaction.receiptData?.beneficiaryBank && (<Paragraph text={transaction?.receiptData?.beneficiaryBank} />)}
+          <TransactionItem name="Bank" value={isSEAP()} />
+          <TransactionItem name="Credit account" value={receiptData?.creditAccountName} />
+          <TransactionItem name="Bill ref." value={receiptData?.billPaymentDto?.customerReference} />
+          <TransactionItem name="Bill name" value={receiptData?.billPaymentDto?.serviceName} />
+          <TransactionItem name="Payment ref." value={receiptData?.billPaymentDto?.billerPaymentReference} />
+          <TransactionItem name="Bank" value={receiptData?.beneficiaryBank} />
         </ColumnView>
         <ColumnView justify='isCenter' overrideStyle={styles.detWrapper}>
-          <Paragraph text='Transactions' overrideStyle={styles.title} />
-          <Paragraph text={`₦ ${transaction?.amount}`} />
-          <Paragraph text={transaction.referenceID} />
-          <Paragraph text={new Date(transaction.transactionDate).toDateString()} />
+          <Paragraph text='Transaction' overrideStyle={styles.title} />
+          <TransactionItem name="Amount" value={`₦ ${transaction?.amount}`} />
+          <TransactionItem name="ReferenceID" value={transaction.referenceID} />
+          <TransactionItem name="Date" value={new Date(transaction.transactionDate).toDateString()} />
+          <TransactionItem name="Status" value={transaction.receiptData?.billPaymentDto?.status} />
         </ColumnView>
         <ColumnView justify='isCenter' overrideStyle={styles.detWrapper}>
           <Paragraph text='Remarks' overrideStyle={styles.title} />
@@ -279,3 +299,19 @@ export const Transaction = ({navigation}: any) => {
 };
 
 export default Transaction;
+
+const TransactionItem = ({name, value}: {name: string, value: string}) => {
+  if (!value) return null;
+  return (
+    <RowView justify='isBtw' align='isCenter'>
+      <Paragraph overrideStyle={{
+        fontWeight: '300',
+        fontSize: fontSizes.bodyText
+      }} text={name} />
+      <Paragraph overrideStyle={{
+        fontWeight: '600',
+        fontSize: fontSizes.bodyText1
+      }}  text={value} />
+    </RowView>
+  )
+}

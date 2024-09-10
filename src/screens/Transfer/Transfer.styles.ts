@@ -118,7 +118,7 @@ export const styles = StyleSheet.create({
     marginVertical: 35,
   },
   otpInputStyle: {
-    width: '70%',
+    width: '100%',
   },
   fingerWrapper: {
     width: 70,

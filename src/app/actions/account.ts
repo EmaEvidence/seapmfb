@@ -101,9 +101,10 @@ export const sendFeedback = (data: any) => {
 };
 
 export const getStatement = (data: any) => {
-  return getCalls(
-    `Banking/account/statement?AccountNumber=${data.account}&FromDate=${data.start}&ToDate=${data.end}&fileType=PDF`,
-    '',
+  return postCalls(
+    `Banking/account/statement`,
+    data,
+    ''
   );
 };
 

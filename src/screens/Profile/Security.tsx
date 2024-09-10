@@ -260,7 +260,7 @@ export const Security = ({navigation}: any) => {
 
 export default Security;
 
-const SecurityCard = ({title, details, onPress}: { title: string, details?: string, onPress: () => void}) => {
+export const SecurityCard = ({title, details, onPress}: { title: string, details?: string, onPress: () => void}) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.secCard}>
       <View>

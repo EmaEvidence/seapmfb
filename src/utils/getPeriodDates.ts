@@ -41,8 +41,8 @@ function getPeriodDates(period: 'Current week' | 'Current month' | 'Last month' 
     }
 
     return {
-        startDate: startDate.toISOString(), // Format to YYYY-MM-DD
-        endDate: endDate.toISOString()      // Format to YYYY-MM-DD
+        startDate: startDate.toISOString().split('T')[0], // Format to YYYY-MM-DD
+        endDate: endDate.toISOString().split('T')[0]      // Format to YYYY-MM-DD
     };
 }
 

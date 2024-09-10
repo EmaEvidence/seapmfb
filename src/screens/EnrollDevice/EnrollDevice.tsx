@@ -22,6 +22,7 @@ import axios from 'axios';
 import { loadItem, saveItem } from '../../utils/localStorage';
 import { login } from '../../app/slices/auth';
 import { useAppDispatch } from '../../app/hooks';
+import generalStyles from '../../index.styles';
 
 interface EnrollDeviceProps {
   navigation: INavigation;
@@ -232,9 +233,10 @@ export const EnrollDevice = ({navigation}: EnrollDeviceProps) => {
             />
             <View style={[styles.buttonWrapper, styles.row]}>
               <Button
-                overrideStyle={[styles.button, styles.halfBtn]}
+                overrideStyle={[styles.button, styles.halfBtn, generalStyles.transparentBtn]}
                 label={'Resend OTP'}
                 onPress={handleGetOTP}
+                overrideLabelStyle={generalStyles.transparentBtnLabel}
               />
               <Button
                 overrideStyle={[styles.button, styles.halfBtn]}
@@ -269,9 +271,10 @@ export const EnrollDevice = ({navigation}: EnrollDeviceProps) => {
             </View>
             <View style={[styles.buttonWrapper, styles.row]}>
               <Button
-                overrideStyle={[styles.button, styles.halfBtn]}
+                overrideStyle={[styles.button, styles.halfBtn, generalStyles.transparentBtn]}
                 label={'No, Take me out'}
                 onPress={() => navigation.navigate('Login')}
+                overrideLabelStyle={generalStyles.transparentBtnLabel}
               />
               <Button
                 overrideStyle={[styles.button, styles.halfBtn]}

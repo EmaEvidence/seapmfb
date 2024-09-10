@@ -2,6 +2,7 @@ import React from 'react';
 import {View} from 'react-native';
 import {Button, Header} from '../../common';
 import styles from './Requests.styles';
+import { SecurityCard } from '../Profile';
 
 export const AccountRequests = ({navigation}: any) => {
   const handleNavigation = (subject: string) => {
@@ -33,10 +34,8 @@ export const AccountRequests = ({navigation}: any) => {
             overrideLabelStyle={styles.actionText}
             onPress={() => handleNavigation('Request for a Cheque Book')}
           /> */}
-          <Button
-            label="Request for Account Statement"
-            overrideStyle={styles.securityBtn}
-            overrideLabelStyle={styles.actionText}
+          <SecurityCard
+            title='Request for Account Statement'
             onPress={() => navigation.navigate('Statement')}
           />
         </View>

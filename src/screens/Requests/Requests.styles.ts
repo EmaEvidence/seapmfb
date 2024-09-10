@@ -42,7 +42,7 @@ export const styles = StyleSheet.create({
     color: colors.sMainBlue,
   },
   securityBtn: {
-    width: '80%',
+    width: '100%',
     backgroundColor: colors.sMainBlue,
     marginVertical: 15,
   },

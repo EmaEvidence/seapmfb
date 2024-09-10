@@ -49,7 +49,7 @@ export const Transactions = ({navigation}: any) => {
   const handleSetDate = (date: Date) => {
     setDate(prevState => ({
       ...prevState,
-      [whichDate]: date.toDateString(),
+      [whichDate]: date.toDateString().split('T')[0],
     }));
     setModalOpen(false);
   };

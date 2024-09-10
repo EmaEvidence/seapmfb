@@ -1,11 +1,9 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import RNRestart from 'react-native-restart';
-import jwt_decode from 'jwt-decode';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {AppState, Image, ImageBackground, SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
+import {AppState, Image, ImageBackground, SafeAreaView, StatusBar, StyleSheet} from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {createDrawerNavigator} from '@react-navigation/drawer';
 import {
   Onboarding,
   SplashScreen,
@@ -35,29 +33,20 @@ import {
   SetupBiometric,
   AccountOthers,
   AccountRequests,
-  // Personalize,
   Statement,
   TransactionPassword,
   ChangeSecret,
-  Beneficiaries,
-  Feedback,
   Debits,
   Welcome,
   LoginWithBio,
 } from '../screens';
-// import {Loader} from '../common';
 import {colors, fontSizes} from '../utils/theme';
 import HomeIcon from '../assets/images/home.png';
-import HomeBlur from '../assets/images/homeBlur.png';
-import LogoImage from '../assets/images/logo.png';
 import Payment from '../assets/images/payment.png';
 import TransferIcon from '../assets/images/transfer.png';
-import TransferBlurIcon from '../assets/images/TransferBlur.png';
-import PaymentBlur from '../assets/images/paymentBlur.png';
 import Chat from '../assets/images/chat.png';
-import ChatBlur from '../assets/images/chatBlur.png';
 import Settings from '../assets/images/settings.png';
-import {DrawerContent, Loader} from '../common';
+import {Loader} from '../common';
 import {GetSeapAccount} from '../screens/GetSeapAccount';
 import {loadItem, removeItem, saveItem} from '../utils/localStorage';
 import {updateLanguage} from '../app/actions/language';
@@ -94,7 +83,6 @@ axios.interceptors.response.use(
           if (resp?.status === 200) {
             saveItem('authToken', resp.data.authenticationToken);
             saveItem('refreshToken', resp.data.refreshToken);
-            // toaster('Success', 'Login Successful', 'custom');
             axios.defaults.headers.common.Authorization = `Bearer ${resp.data.authenticationToken}`;
             originalRequest.headers.Authorization = `Bearer ${resp.data.authenticationToken}`;
             return axios(originalRequest);
@@ -103,14 +91,14 @@ axios.interceptors.response.use(
             appDispatch(logout());
             removeItem('authToken');
             removeItem('refreshToken');
-            toaster('Error', 'Your session has expired! re-token else', 'custom');
+            toaster('Error', 'Your session has expired!', 'custom');
           }
       } else {
         delete axios.defaults.headers.common.Authorization;
         appDispatch(logout());
         removeItem('authToken');
         removeItem('refreshToken');
-        toaster('Error', 'Your session has expired! else', 'custom');
+        toaster('Error', 'Your session has expired!', 'custom');
       }
     }
     return Promise.reject(error);
@@ -120,6 +108,7 @@ axios.interceptors.response.use(
 const MainAuthPage = () => {
   return (
     <Navigator
+      detachInactiveScreens={false}
       screenOptions={({route}) => ({
         headerShown: false,
         tabBarActiveTintColor: colors.tblack,
@@ -170,9 +159,7 @@ export function Route() {
   const {isAuthenticated, userLoading} = useUser();
   const [isAppLoading, setIsAppLoading] = useState(true);
   const isLoggedIn = isAuthenticated;
-  const userRole = 'admin';
   const [autoLogOut, setAutoLogOut] = useState<null | number>();
-  const [onboardingIsDone, setOnboardingIsDone] = useState<string | null>(null);
   const {isSignedIn} = {isSignedIn: false};
 
   const removeAuth = () => {
@@ -198,7 +185,6 @@ export function Route() {
 
     return () => {
       subscription.remove();
-      // isAuthenticated && removeAuth();
     };
   }, [isAuthenticated]);
 
@@ -219,20 +205,19 @@ export function Route() {
     loginState();
   }, [isSignedIn]);
 
-  const isOnboardingDone = async () => {
-    setIsAppLoading(true);
-    const resp = await AsyncStorage.getItem('onboardingDone');
-    if (resp) {
-      setOnboardingIsDone(resp);
-      setIsAppLoading(false);
-    } else {
-      setIsAppLoading(false);
-    }
-  };
+  // const isOnboardingDone = async () => {
+  //   setIsAppLoading(true);
+  //   const resp = await AsyncStorage.getItem('onboardingDone');
+  //   if (resp) {
+  //     setIsAppLoading(false);
+  //   } else {
+  //     setIsAppLoading(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    isOnboardingDone();
-  }, []);
+  // useEffect(() => {
+  //   isOnboardingDone();
+  // }, []);
 
   const getAuthType = useCallback(async () => {
     const resp = await AsyncStorage.getItem('authType');
@@ -332,14 +317,13 @@ export function Route() {
     );
   };
 
+  console.log(isLoggedIn, '=-=-=-=-=-=-')
   return (
     <>
       <StatusBar barStyle="dark-content" hidden />
+      <SafeAreaView />
       {isLoggedIn ? (
-        <>
-          <SafeAreaView />
-          <AuthComponent />
-        </>
+        <AuthComponent />
       ) : (
         UnauthComponent()
       )}

@@ -91,8 +91,8 @@ export const Home = ({navigation}: {navigation: any}) => {
     React.useCallback(() => {
       const interval = setInterval(() => {
         getSummary(false);
-        // getHistory(history[contentIndex].);
-      }, 50000)
+        getHistory(contentIndex, '', '', false);
+      }, 180000)
 
       // Return a cleanup function (optional)
       return () => {
