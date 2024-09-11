@@ -113,8 +113,8 @@ export const Statement = ({navigation}: any) => {
     }
     const resp = await getStatement({
       "accountNumber": dateObj.account.split(' - ')[0],
-      "fromDate": dateObj.start,
-      "toDate": dateObj.end,
+      "fromDate": new Date(dateObj.start).toISOString().split('T')[0],
+      "toDate": new Date(dateObj.end).toISOString().split('T')[0],
       "fileType": "PDF",
       "sendToEmail": dateObj.sendToEmail === 'yes',
       "password": dateObj.password,

@@ -79,40 +79,73 @@ export const Transaction = ({navigation}: any) => {
     const logoImg = 'https://ibank.seapmfb.ng/assets/img/seapmfb.png';
     return `
       <div width="400px" style="position: relative; passing: 50px; margin: auto; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 50px;">
-        <img src="${logoImg}" style="width: 80px; height: 80px" />
-        <h1>SEAP MFB</h1>
-        <h2 >Transaction Receipt</h2>
-        <div style="border-top: 1px solid black; border-bottom: 1px solid black; padding: 50px; width: 400px;">
-          <table border="0" style="width: 100%; margin: auto; font-size: 20px; font-weight: 600;">
-            <tr>
-              <td>Reference</td>
-              <td>${transaction.referenceID}</td>
-            </tr>
-            <tr>
-              <td>Date</td>
-              <td>${(transaction?.transactionDate && new Date(transaction?.transactionDate)?.toDateString()) || '-'}</td>
-            </tr>
-            <tr>
-              <td>Beneficiary</td>
-              <td>${transaction?.receiptData?.creditAccountName || '-'}</td>
-            </tr>
-            <tr>
-              <td>Beneficiary Bank</td>
-              <td>${transaction?.receiptData?.beneficiaryBank || '-'}</td>
-            </tr>
-            <tr>
-              <td>Beneficiary Account</td>
-              <td>${transaction?.beneficiaryAccount || transaction?.accountNumber || transaction?.receiptData?.creditAccount || '-'}</td>
-            </tr>
-            <tr>
-              <td>Remark</td>
-              <td>${transaction?.paymentNarration || transaction?.narration}</td>
-            </tr>
-            <tr>
-              <td>Amount</td>
-              <td>₦ ${transaction.amount}</td>
-            </tr>
-          </table>
+        <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; ">
+          <h2>Transaction Receipt</h2>
+          <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <img src="${logoImg}" style="width: 80px; height: 80px" />
+            <h1>SEAP MFB</h1>
+          </div>
+        </div>
+        <div style="padding: 50px; width: 400px;">
+          <div display: flex; justify-content: space-between; align-items: flex-start; min-height: 40px; width: 100%; padding: 20px; margin: 5px 0; background-color: white; border-radius: 10px;">
+            <p style="font-weight: 600; font-size: 12px; opacity: 0.8; margin-bottom: 20px;">Recipient</p>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <p style="font-weight: 300; font-size: 10px;">Bank</p>
+              <p style="font-weight: 600; font-size: 12px;">${isSEAP()}</p>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <p style="font-weight: 300; font-size: 10px;">Credit account</p>
+              <p style="font-weight: 600; font-size: 12px;">${receiptData?.creditAccountName}</p>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <p style="font-weight: 300; font-size: 10px;">Bill ref.</p>
+              <p style="font-weight: 600; font-size: 12px;">${receiptData?.billPaymentDto?.customerReference}</p>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <p style="font-weight: 300; font-size: 10px;">Bill name</p>
+              <p style="font-weight: 600; font-size: 12px;">${receiptData?.billPaymentDto?.serviceName}</p>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <p style="font-weight: 300; font-size: 10px;">Payment ref.</p>
+              <p style="font-weight: 600; font-size: 12px;">${receiptData?.billPaymentDto?.billerPaymentReference}</p>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <p style="font-weight: 300; font-size: 10px;">Bank</p>
+              <p style="font-weight: 600; font-size: 12px;">${receiptData?.beneficiaryBank}</p>
+            </div>
+          </div>
+          <div display: flex; justify-content: space-between; align-items: flex-start; min-height: 40px; width: 100%; padding: 20px; margin: 5px 0; background-color: white; border-radius: 10px;">
+            <p style="font-weight: 600; font-size: 12px; opacity: 0.8; margin-bottom: 20px;">Transaction</p>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <p style="font-weight: 300; font-size: 10px;"Amount</p>
+              <p style="font-weight: 600; font-size: 12px;">${transaction?.amount}</p>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <p style="font-weight: 300; font-size: 10px;">ReferenceID</p>
+              <p style="font-weight: 600; font-size: 12px;">${transaction.referenceID}</p>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <p style="font-weight: 300; font-size: 10px;">Date</p>
+              <p style="font-weight: 600; font-size: 12px;">${new Date(transaction.transactionDate).toDateString()}</p>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <p style="font-weight: 300; font-size: 10px;">Status</p>
+              <p style="font-weight: 600; font-size: 12px;">${transaction.receiptData?.billPaymentDto?.status}</p>
+            </div>
+          </div>
+          <div display: flex; justify-content: space-between; align-items: flex-start; min-height: 40px; width: 100%; padding: 20px; margin: 5px 0; background-color: white; border-radius: 10px;">
+            <p style="font-weight: 600; font-size: 12px; opacity: 0.8; margin-bottom: 20px;">Remarks</p>
+            <p style="width: 100%; text-align: left;">${transaction?.paymentNarration || transaction?.narration}</p>
+          </div>
         </div>
         <div style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0.2; background: url(${logoImg}); background-repeat: no-repeat; background-position: center; background-size: contain;"></div>
       </div> 
@@ -130,11 +163,20 @@ export const Transaction = ({navigation}: any) => {
     return file;
   }
 
+  const receiptData = transaction?.receiptData || {};
+  const isSEAP = () => {
+    console.log(transaction, receiptData)
+    const isBill = receiptData?.billPaymentDto?.billerPaymentReference;
+    const isTransfer = receiptData?.creditAccountNumber;
+    const isCard = receiptData.isCardTransation;
+    return (isBill || isTransfer || isCard) ? '' : 'SEAP MFB charges'
+  }
+
   if (Platform.OS === 'ios') {
     return (
       <View style={styles.wrapper}>
         <Header
-          title={'Transaction'}
+          title={''}
           navigation={navigation}
           showBackBtn
           overrideGoBack={() => navigation.goBack()}
@@ -148,69 +190,54 @@ export const Transaction = ({navigation}: any) => {
           }}
         >
           <View style={styles.receipt}>
-            <Image
-              source={LogoImage}
-              resizeMethod='resize'
-              resizeMode='contain'
-              style={{opacity: 0.1, position: 'absolute', width: '100%', height: '100%'}}
-            />
-            <Logo
-              overrideStyle={{
-                width: 50,
-                marginBottom: 20,
-                height: 50,
-              }}
-            />
-            <Header4 text="Transaction Receipt" />
-            <View style={styles.divider} />
-            <View style={styles.detailWrapper}>
-              <Header4 text="Reference" />
-              <Paragraph text={transaction.referenceID} />
-            </View>
-            <View style={styles.detailWrapper}>
-              <Header4 text="Date" />
-              <Paragraph
-                text={new Date(transaction.transactionDate).toDateString()}
-              />
-            </View>
-            {
-              transaction?.receiptData?.creditAccountName && (
-                <View style={styles.detailWrapper}>
-                  <Header4 text="Beneficiary" />
-                  <Paragraph text={transaction.receiptData?.creditAccountName} />
-                </View>
-              )
-            }
-            {
-              transaction.receiptData?.beneficiaryBank && (
-                <View style={styles.detailWrapper}>
-                  <Header4 text="Beneficiary Bank" />
-                  <Paragraph text={transaction.receiptData?.beneficiaryBank} />
-                </View>
-              )
-            }
-            <View style={styles.detailWrapper}>
-              <Header4 text="Beneficiary Account" />
-              <Paragraph text={transaction.beneficiaryAccount || transaction.accountNumber || transaction.receiptData?.creditAccount || '-'} />
-            </View>
-            <View style={styles.detailWrapper}>
-              <Header4 text="Remarks" />
-              <Paragraph
-                overrideStyle={{
-                  width: '50%',
-                  textAlign: 'right'
-                }}
-                text={transaction.paymentNarration || transaction.narration}
-              />
-            </View>
-            <View style={styles.detailWrapper}>
-              <Header4 text="Amount" />
-              <Paragraph text={`₦ ${transaction.amount}`} />
-            </View>
-            <View style={styles.divider} />
+          <Image
+            source={LogoImage}
+            resizeMethod='resize'
+            resizeMode='contain'
+            style={{opacity: 0.1, position: 'absolute', width: '100%', height: '100%'}}
+          />
+        
+        <RowView justify="isBtw" overrideStyle={[styles.detWrapper, {width: '100%'}]}>
+          <Header1 overrideStyle={[generalStyles.blueText, generalStyles.leftText, { width: '80%'}]} text={'Transaction details'} />
+          <Logo
+            overrideStyle={{
+              width: 35,
+              height: 35,
+            }}
+          />
+        </RowView>
+        
+        <ColumnView justify='isCenter' overrideStyle={styles.detWrapper}>
+          <Paragraph text='Recipient' overrideStyle={styles.title} />
+          <TransactionItem name="Bank" value={isSEAP()} />
+          <TransactionItem name="Credit account" value={receiptData?.creditAccountName} />
+          <TransactionItem name="Bill ref." value={receiptData?.billPaymentDto?.customerReference} />
+          <TransactionItem name="Bill name" value={receiptData?.billPaymentDto?.serviceName} />
+          <TransactionItem name="Payment ref." value={receiptData?.billPaymentDto?.billerPaymentReference} />
+          <TransactionItem name="Bank" value={receiptData?.beneficiaryBank} />
+        </ColumnView>
+        <ColumnView justify='isCenter' overrideStyle={styles.detWrapper}>
+          <Paragraph text='Transaction' overrideStyle={styles.title} />
+          <TransactionItem name="Amount" value={`₦ ${transaction?.amount}`} />
+          <TransactionItem name="ReferenceID" value={transaction.referenceID} />
+          <TransactionItem name="Date" value={new Date(transaction.transactionDate).toDateString()} />
+          <TransactionItem name="Status" value={transaction.receiptData?.billPaymentDto?.status} />
+        </ColumnView>
+        <ColumnView justify='isCenter' overrideStyle={styles.detWrapper}>
+          <Paragraph text='Remarks' overrideStyle={styles.title} />
+          <Paragraph
+            overrideStyle={{
+              width: '100%',
+              textAlign: 'left'
+            }}
+            text={transaction?.paymentNarration || transaction?.narration}
+          />
+        </ColumnView>
           </View>
         </ViewShot>
-        <RowView justify={'isCenter'}>
+        <RowView justify={'isCenter'} overrideStyle={{
+          marginTop: 40
+        }}>
           <Button
             label={'Share'}
             onPress={captureScreen}
@@ -219,15 +246,6 @@ export const Transaction = ({navigation}: any) => {
         </RowView>
       </View>
     )
-  }
-
-  const receiptData = transaction?.receiptData || {};
-  const isSEAP = () => {
-    console.log(transaction, receiptData)
-    const isBill = receiptData?.billPaymentDto?.billerPaymentReference;
-    const isTransfer = receiptData?.creditAccountNumber;
-    const isCard = receiptData.isCardTransation;
-    return (isBill || isTransfer || isCard) ? '' : 'SEAP MFB charges'
   }
 
   return (

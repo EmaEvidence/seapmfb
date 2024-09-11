@@ -485,7 +485,8 @@ export const Transfer = ({navigation, history}: any) => {
         <Header1 text='Fund transfer' overrideStyle={{
           fontSize: fontSizes.bigHeader,
           fontWeight: '600',
-          color: colors.sMainBlue
+          color: colors.sMainBlue,
+          marginBottom: 10,
         }} />
         <View style={styles.paymentWrapper}>
           {step === 0 && (
@@ -583,6 +584,7 @@ export const Transfer = ({navigation, history}: any) => {
                       name={'rAcctNumber'}
                       keyboardType='numeric'
                       inputMode='numeric'
+                      autoFocus
                     />
                     {
                       data.rAcctNumber.length === 10 && bankList ? (

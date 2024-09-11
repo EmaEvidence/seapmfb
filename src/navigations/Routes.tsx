@@ -108,7 +108,7 @@ axios.interceptors.response.use(
 const MainAuthPage = () => {
   return (
     <Navigator
-      detachInactiveScreens={false}
+      // detachInactiveScreens={false}
       screenOptions={({route}) => ({
         headerShown: false,
         tabBarActiveTintColor: colors.tblack,
@@ -317,7 +317,6 @@ export function Route() {
     );
   };
 
-  console.log(isLoggedIn, '=-=-=-=-=-=-')
   return (
     <>
       <StatusBar barStyle="dark-content" hidden />
