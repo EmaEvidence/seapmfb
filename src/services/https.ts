@@ -9,7 +9,7 @@ const genericError = 'An Error Occurred';
 const {url} = config.dev;
 
 const handleError = (error: any, errorMsg: string) => {
-  console.log(error.response)
+  // console.log(error.response)
   if (
     error.request.status === 0 ||
     error.request._response ===

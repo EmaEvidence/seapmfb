@@ -90,13 +90,14 @@ export const styles = StyleSheet.create({
     color: colors.sMainBlue,
   },
   textInput: {
-    marginVertical: 40,
-    width: '80%',
+    // marginVertical: 40,
+    width: '100%',
   },
   buttonWrapper: {
     width: '80%',
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 20,
   },
   button: {
     borderRadius: 50,

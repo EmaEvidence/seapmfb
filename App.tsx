@@ -10,7 +10,7 @@ import CustomToaster from './src/common/CustomToaster';
 import {fontSizes} from './src/utils/theme';
 import { PaperProvider } from 'react-native-paper';
 
-const toastConfig = {
+export const toastConfig = {
   success: (props: any) => (
     <BaseToast
       {...props}

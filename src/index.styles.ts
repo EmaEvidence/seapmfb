@@ -11,6 +11,9 @@ export const generalStyles = StyleSheet.create({
     rightText: {
         textAlign: 'right'
     },
+    halfBtn: {
+        width: '48%'
+    },
     transparentBtn: {
         backgroundColor: 'transparent',
         borderWidth: 1,

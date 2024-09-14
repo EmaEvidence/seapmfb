@@ -14,6 +14,8 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import { height } from '../../utils/constants';
 import generalStyles from '../../index.styles';
 import getPeriodDates from '../../utils/getPeriodDates';
+import Toast from 'react-native-toast-message';
+import { toastConfig } from '../../../App';
 
 const periods = ['Current week', 'Current month', 'Last month', 'Current year', 'Last year', 'Custom'];
 
@@ -212,6 +214,13 @@ export const Transactions = ({navigation}: any) => {
               />
             </RowView>
           </View>
+          <Toast
+            visibilityTime={10000}
+            autoHide={false}
+            onPress={() => Toast.hide()}
+            // @ts-ignore
+            config={toastConfig}
+          />
       </RBSheet>
     </View>
   );

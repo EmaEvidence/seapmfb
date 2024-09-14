@@ -57,7 +57,10 @@ export const setAuthTypeCall = async (data: Record<string, any>) => {
     appDispatch(setAuthType(data.authType as unknown as number));
     saveItem('isMFASet', data.authType.toString());
     saveItem('authType', data.authType.toString());
+    return resp;
   }
+  // @ts-ignore
+  console.log(resp, '=-=-=-=-setAuthTypeCall==-=-=')
   return resp;
 };
 

@@ -72,6 +72,7 @@ const InputText = ({
   outlineColor = colors.sLighterBlue,
   activeOutlineColor = colors.sMainBlue,
   contentStyle,
+  maxLength,
 }: InputTextProps) => {
   const [isFocus, setIsFocus] = useState(false);
   return (
@@ -126,6 +127,7 @@ const InputText = ({
         autoCorrect={autoCorrect}
         returnKeyType={returnKeyType}
         autoFocus={autoFocus}
+        maxLength={maxLength}
       />
       {inValid && (
         <Paragraph

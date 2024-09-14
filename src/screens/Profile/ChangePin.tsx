@@ -12,6 +12,7 @@ import {validateNonEmpty, validatePin} from '../../validator';
 import styles from './Profile.styles';
 import { Header1, Header3, Paragraph } from '../../common/Text';
 import { colors } from '../../utils/theme';
+import generalStyles from '../../index.styles';
 
 export const ChangePin = ({navigation}: any) => {
   const [mode, setMode] = useState('update');
@@ -110,28 +111,30 @@ const ResetPin = ({handleModeChange}: {handleModeChange: () => void}) => {
           errorText="Please enter your Secret Answer!"
           inValid={userError.secretAnswer}
         />
-        <CodeFieldComponent
-          label="New 6 digit pin"
-          name={'transactionPin'}
-          onChange={handleTextChange}
-          hasError={userError.transactionPin}
-          errorText={'Please enter a new pin'}
-        />
-        <CodeFieldComponent
-          label="Confirm Passcode."
-          name={'pinConfirmation'}
-          onChange={handleTextChange}
-          hasError={userError.pinConfirmation}
-          errorText={'Please a match pin!'}
-        />
-        {/* <View style={styles.buttonWrapper}>
-          <Checkbox
-            label="Set as Default"
-            name="setAsDefault"
+        <RowView justify='isBtw' align='isCenter'>
+          <InputText
+            name="transactionPin"
             onChange={handleTextChange}
-            value={userData.setAsDefault}
+            label="Transaction pin"
+            overrideNPInputWrapper={[styles.textInput, generalStyles.halfBtn]}
+            value={userData.transactionPin}
+            errorText="Please enter a pin!"
+            inValid={userError.transactionPin}
+            obsureText
+            maxLength={6}
           />
-        </View> */}
+          <InputText
+            name="pinConfirmation"
+            onChange={handleTextChange}
+            label="Confirm pin"
+            overrideNPInputWrapper={[styles.textInput, generalStyles.halfBtn]}
+            value={userData.pinConfirmation}
+            errorText="Pin mismatch"
+            inValid={userError.pinConfirmation}
+            obsureText
+            maxLength={6}
+          />
+        </RowView>
         <View style={styles.buttonWrapper}>
           <Button
             overrideStyle={styles.button}
@@ -201,27 +204,48 @@ const UpdatePin = ({handleModeChange}: {handleModeChange: () => void}) => {
   return (
     <View style={styles.content}>
       <View style={styles.securityFormWrapper}>
-        <CodeFieldComponent
+        {/* <CodeFieldComponent
           label="Old 6 Digit Pin"
           name={'oldPin'}
           onChange={handleTextChange}
           hasError={userError.oldPin}
           errorText={'Please enter your current pin!'}
-        />
-        <CodeFieldComponent
-          label="New 6 Digit Pin"
-          name={'transactionPin'}
-          onChange={handleTextChange}
-          hasError={userError.transactionPin}
-          errorText={''}
-        />
-        <CodeFieldComponent
-          label="Confirm Passcode."
-          name={'pinConfirmation'}
-          onChange={handleTextChange}
-          hasError={userError.pinConfirmation}
-          errorText={''}
-        />
+        /> */}
+        <InputText
+            name="oldPin"
+            onChange={handleTextChange}
+            label="Old 6 digit Pin"
+            overrideNPInputWrapper={[styles.textInput]}
+            value={userData.oldPin}
+            errorText="Please enter a pin!"
+            inValid={userError.oldPin}
+            obsureText
+            maxLength={6}
+          />
+        <RowView justify='isBtw' align='isCenter'>
+          <InputText
+            name="transactionPin"
+            onChange={handleTextChange}
+            label="Transaction pin"
+            overrideNPInputWrapper={[styles.textInput, generalStyles.halfBtn]}
+            value={userData.transactionPin}
+            errorText="Please enter a pin!"
+            inValid={userError.transactionPin}
+            obsureText
+            maxLength={6}
+          />
+          <InputText
+            name="pinConfirmation"
+            onChange={handleTextChange}
+            label="Confirm pin"
+            overrideNPInputWrapper={[styles.textInput, generalStyles.halfBtn]}
+            value={userData.pinConfirmation}
+            errorText="Pin mismatch"
+            inValid={userError.pinConfirmation}
+            obsureText
+            maxLength={6}
+          />
+        </RowView>
         {/* <View style={styles.buttonWrapper}>
           <Checkbox
             label="Set as Default"

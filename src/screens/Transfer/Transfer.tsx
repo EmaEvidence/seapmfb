@@ -37,6 +37,8 @@ import { height, width } from '../../utils/constants';
 import { formatAmount } from '../../utils/formatAmount';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import { useFocusEffect } from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
+import { toastConfig } from '../../../App';
 
 const transferTypesArray = ['Local Transfer', 'Interbank Transfer'];
 const targetTypes = ['Saved Beneficiary', 'New Beneficiary'];
@@ -808,6 +810,13 @@ export const Transfer = ({navigation, history}: any) => {
                 />
               </RowView>
             </ColumnView>
+            <Toast
+              visibilityTime={10000}
+              autoHide={false}
+              onPress={() => Toast.hide()}
+              // @ts-ignore
+              config={toastConfig}
+            />
         </RBSheet>
       </View>
     </KeyboardAvoidingView>

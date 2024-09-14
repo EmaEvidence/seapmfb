@@ -82,8 +82,8 @@ export const Transaction = ({navigation}: any) => {
         <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; ">
           <h2>Transaction Receipt</h2>
           <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
-            <img src="${logoImg}" style="width: 80px; height: 80px" />
-            <h1>SEAP MFB</h1>
+            <img src="${logoImg}" style="width: 20px; height: 20px" />
+            <h6>SEAP MFB</h6>
           </div>
         </div>
         <div style="padding: 50px; width: 400px;">

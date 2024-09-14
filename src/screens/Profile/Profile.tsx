@@ -29,6 +29,8 @@ import axios from 'axios';
 import { height } from '../../utils/constants';
 import { colors } from '../../utils/theme';
 import { Feedback } from '../Feedback';
+import Toast from 'react-native-toast-message';
+import { toastConfig } from '../../../App';
 
 export const Profile = ({navigation}: {navigation: any}) => {
   const refRBSheet = useRef();
@@ -138,6 +140,13 @@ export const Profile = ({navigation}: {navigation: any}) => {
         }}>
           <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}
           keyboardVerticalOffset={50}>
+             <Toast
+              visibilityTime={10000}
+              autoHide={false}
+              onPress={() => Toast.hide()}
+              // @ts-ignore
+              config={toastConfig}
+            />
             <Feedback close={() => refRBSheet.current.close()} />
           </KeyboardAvoidingView>
       </RBSheet>

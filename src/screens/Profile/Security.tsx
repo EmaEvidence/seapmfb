@@ -13,13 +13,14 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import ChangeSecret from './ChangeSecret';
 import ChangePin from './ChangePin';
 import ChangePassword from './ChangePassword';
+import Toast from 'react-native-toast-message';
+import { toastConfig } from '../../../App';
 
 export const mfaChangeMap = {
   [transactionAuthTypes[0]]: 'ChangePin',
   [transactionAuthTypes[1]]: '',
-  [transactionAuthTypes[2]]: 'FingerPrint',
-  [transactionAuthTypes[3]]: 'ChangePin',
-  [transactionAuthTypes[4]]: 'ChangePassword',
+  [transactionAuthTypes[2]]: 'ChangePin',
+  [transactionAuthTypes[3]]: 'ChangePassword',
 };
 
 export const Security = ({navigation}: any) => {
@@ -186,6 +187,13 @@ export const Security = ({navigation}: any) => {
             navigation={navigation}
             handleSuccess={() => refRBSheet.current.close()}
           />
+          <Toast
+            visibilityTime={10000}
+            autoHide={false}
+            onPress={() => Toast.hide()}
+            // @ts-ignore
+            config={toastConfig}
+          />
       </RBSheet>
       {/* Reset secret question */}
       <RBSheet
@@ -209,6 +217,13 @@ export const Security = ({navigation}: any) => {
           enabled: false,
         }}>
           <ChangeSecret />
+          <Toast
+            visibilityTime={10000}
+            autoHide={false}
+            onPress={() => Toast.hide()}
+            // @ts-ignore
+            config={toastConfig}
+          />
       </RBSheet>
       {/* Manage PIN */}
       <RBSheet
@@ -231,6 +246,13 @@ export const Security = ({navigation}: any) => {
           enabled: false,
         }}>
           <ChangePin />
+          <Toast
+            visibilityTime={10000}
+            autoHide={false}
+            onPress={() => Toast.hide()}
+            // @ts-ignore
+            config={toastConfig}
+          />
       </RBSheet>
       {/* Manage Passcode */}
       <RBSheet
@@ -253,6 +275,13 @@ export const Security = ({navigation}: any) => {
           enabled: false,
         }}>
           <ChangePassword />
+          <Toast
+            visibilityTime={10000}
+            autoHide={false}
+            onPress={() => Toast.hide()}
+            // @ts-ignore
+            config={toastConfig}
+          />
       </RBSheet>
     </View>
   );

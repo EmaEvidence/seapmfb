@@ -6,17 +6,15 @@ export const {width, height} = Dimensions.get('screen');
 export const transactionAuthTypes = [
   'PIN',
   'OTP', // does not need work
-  // 'Biometric',
   'Pin and OTP', // no otp work needed
   'Transaction Password',
 ];
 
 export const transactionAuthTypesObj: Record<string, number> = {
   PIN: 1,
-  OTP: 2, // does not need work
-  // Biometric: 3,
-  'Pin and OTP': 4, // no otp work needed
-  'Transaction Password': 5,
+  OTP: 2, // does not need work 
+  'Pin and OTP': 3, // no otp work needed
+  'Transaction Password': 4,
 };
 
 export const secretQuestions = [
