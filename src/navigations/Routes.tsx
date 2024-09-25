@@ -320,9 +320,11 @@ export function Route() {
   return (
     <>
       <StatusBar barStyle="dark-content" hidden />
-      <SafeAreaView />
       {isLoggedIn ? (
-        <AuthComponent />
+        <>
+          <SafeAreaView />
+          <AuthComponent />
+        </>
       ) : (
         UnauthComponent()
       )}
