@@ -60,7 +60,6 @@ export const setAuthTypeCall = async (data: Record<string, any>) => {
     return resp;
   }
   // @ts-ignore
-  console.log(resp, '=-=-=-=-setAuthTypeCall==-=-=')
   return resp;
 };
 

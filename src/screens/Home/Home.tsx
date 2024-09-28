@@ -85,13 +85,17 @@ export const Home = ({navigation}: {navigation: any}) => {
         endDate: end.toISOString(),
       });
     }
+    if (summary) {
+      // @ts-ignore
+      setIndex(summary[0].accountNumber);
+    }
   }, [summary, accounts, debits]);
 
   useFocusEffect(
     React.useCallback(() => {
       const interval = setInterval(() => {
         getSummary(false);
-        getHistory(contentIndex, '', '', false);
+        contentIndex && getHistory(contentIndex, '', '', false);
       }, 180000)
 
       // Return a cleanup function (optional)

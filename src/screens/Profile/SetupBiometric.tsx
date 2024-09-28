@@ -11,7 +11,7 @@ export const SetupBiometric = ({navigation}: any) => {
       <Header
         overrideGoBack={() => navigation.navigate('Security')}
         showBackBtn
-        title={'Setup Biometric'}
+        title={'Continue with Biometric'}
         navigation={navigation}
       />
       <View style={styles.biometricWrapper}>

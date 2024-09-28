@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ReactNativeBiometrics from 'react-native-biometrics';
-import {Image, TouchableOpacity, View} from 'react-native';
+import {Image, Platform, TouchableOpacity, View} from 'react-native';
 import FingerPrintImg from '../../assets/images/fingerprint.png';
 import UnAuthWrapper from '../../common/UnAuthWrapper';
 import {INavigation} from '../../types';
@@ -10,11 +10,8 @@ import {useAppDispatch} from '../../app/hooks';
 import {login} from '../../app/slices/auth';
 import {loadItem} from '../../utils/localStorage';
 import {useUser} from '../../hooks';
-import {setTransactionBiometric} from '../../app/actions/auth';
 import toaster from '../../utils/toaster';
-import {appDispatch} from '../../app/store';
-import {setAuthType} from '../../app/slices/auth';
-import { AxiosResponse } from 'axios';
+import FaceIDIcon from '../../assets/images/faceid.png';
 // https://www.npmjs.com/package/react-native-biometrics
 
 interface Props {
@@ -86,7 +83,7 @@ export const FingerPrintComponent = ({navigation, label, handleSuccess, handleEr
   const handleGenerateSignature = () => {
     rnBiometrics
       .createSignature({
-        promptMessage: 'Set Biometric Authentication',
+        promptMessage: 'Login with biometric',
         payload,
       })
       .then(async resultObject => {
@@ -107,14 +104,17 @@ export const FingerPrintComponent = ({navigation, label, handleSuccess, handleEr
       });
   };
 
+  const icon = Platform.OS === 'ios' ? FaceIDIcon : FingerPrintImg;
+  const iconName = Platform.OS === 'ios' ? 'FaceID' : 'FingerPrint';
+
   return (
     <View style={styles.fingerPrintWrapper}>
       <TouchableOpacity style={styles.fingerWrapper} onPress={handleBiometric}>
-        <Image source={FingerPrintImg} style={styles.fingerImg} />
+        <Image source={icon} style={styles.fingerImg} />
       </TouchableOpacity>
       <Paragraph
         overrideStyle={styles.fingerMessage}
-        text={label || "Please put your finger on the fingerprint icon to get started."}
+        text={label || `Please press the ${iconName} icon to get started.`}
       />
     </View>
   );

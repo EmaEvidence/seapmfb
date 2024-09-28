@@ -1,15 +1,12 @@
 import React, {useState} from 'react';
-import {View, ScrollView, Text, Image} from 'react-native';
+import {ScrollView, Image, Platform} from 'react-native';
 import axios, { AxiosResponse } from 'axios';
 import jwt_decode from 'jwt-decode';
-import {Button} from '../../common';
-import InputText from '../../common/InputText';
 import MenuIcon from '../../assets/images/accountIcon.png';
 import UnAuthWrapper from '../../common/UnAuthWrapper';
 import styles from './Login.styles';
 import {INavigation} from '../../types';
-import {validateNonEmpty} from '../../validator';
-import {loginCall, loginWithrefreshToken} from '../../app/actions/auth';
+import {loginWithrefreshToken} from '../../app/actions/auth';
 import {loadItem, saveItem} from '../../utils/localStorage';
 import toaster from '../../utils/toaster';
 import useDeviceInfo from '../../hooks/useDeviceInfo';

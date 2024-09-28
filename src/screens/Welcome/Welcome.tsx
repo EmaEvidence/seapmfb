@@ -27,7 +27,8 @@ export const Welcome = ({navigation}: WelcomeProps) => {
   const {refreshToken} = useRefreshToken();
 
   const handleLoginCheck = async () => {
-    if (refreshToken && hasBiometric) {
+    const token = await loadItem('refreshToken');
+    if (token && hasBiometric) {
       moveToAuth('LoginWithBio');
     } else {
       moveToAuth('Login');

@@ -170,7 +170,7 @@ export const Login = ({navigation}: LoginProps) => {
             autoCorrect={false}
             autoFocus={false}
             returnKeyType='done'
-            right={<TextInput.Icon icon={visible ? InVisible : Visible} onPress={() => setVisible(!visible)} />}
+            right={<TextInput.Icon icon={visible ? InVisible : Visible} onPress={() => setVisible(!visible)} forceTextInputFocus={false} />}
           />
           <View style={styles.buttonWrapper}>
             <Button

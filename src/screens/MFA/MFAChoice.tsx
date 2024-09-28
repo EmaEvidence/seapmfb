@@ -90,7 +90,6 @@ export const MFAChoiceComponent = ({
     const resp = await setAuthTypeCall({
       authType: index.toString(),
     });
-    console.log(resp, '=-=-=resp=-=-=-')
     if (resp.status === 200) {
       handleSuccess && handleSuccess();
       if (skip) {
@@ -129,7 +128,6 @@ export const MFAChoiceComponent = ({
 
   const handleSetAuthType = async (index: number) => {
     handleSkip();
-    console.log('=-=-here13')
     setAuthTypeCall({
       authType: index,
     });
@@ -137,7 +135,6 @@ export const MFAChoiceComponent = ({
 
   const handlePinAndOTP = async (index: number, route: string) => {
     const isMFASet = await loadItem('isMFASet');
-    console.log('0--0-here--=-another')
     if (isMFASet && parseInt(isMFASet, 10) === 1) {
       handleSetAuthType(index);
     } else {
@@ -148,7 +145,6 @@ export const MFAChoiceComponent = ({
   const handleAuthBtnPress = (itm: string) => {
     const route: string = mfaMap[itm];
     const index = transactionAuthTypesObj[itm];
-    console.log(itm, '=-=-item=-')
     if (itm === transactionAuthTypes[2]) {
       handlePinAndOTP(index, route);
     } else if (route) {

@@ -637,87 +637,89 @@ export const Transfer = ({navigation, history}: any) => {
             </ColumnView>
           )}
           {step === 1 && (
-            <ColumnView justify='isBtw' overrideStyle={{
-              width: '100%'
-            }}>
-              <View style={styles.fullWidth}>
-                <ColumnView justify='isCenter' overrideStyle={styles.receipientWrapper}>
-                  <Paragraph text="Recipient" overrideStyle={styles.blueText} />
-                  <View>
-                    {data.rAcctName && <Header2 text={data.rAcctName} overrideStyle={styles.blueText} />}
-                    <Paragraph text={`${data.rAcctNumber} - ${data.rBankName}`} overrideStyle={[styles.blueText, { marginTop: -5}]} />
-                  </View>
-                </ColumnView>
-                <ColumnView justify='isCenter' align='isCenter' overrideStyle={styles.amountWrapper}>
-                  <RowView overrideStyle={[styles.fullWidth, { paddingTop: 0}]} justify='isCenter' align='isCenter'>
-                    <Paragraph text='₦' overrideStyle={[{ fontSize: fontSizes.bigHeader, width: 'auto', marginLeft: 0,}, styles.blueText]} />
-                    <InputText
-                      value={amount}
-                      onChange={handleTextChange}
-                      name={'amount'}
-                      placeholder='0'
-                      overrideNPInputWrapper={styles.amtInputWrapper}
-                      overrideNPInputStyle={styles.amtInput}
-                      outlineColor='transparent'
-                      activeOutlineColor='transparent'
-                      inputMode='numeric'
-                      keyboardType='numeric'
-                      contentStyle={styles.amtText}
-                      autoFocus
+            <ScrollView style={{ width: '100%'}}>
+              <ColumnView justify='isBtw' overrideStyle={{
+                width: '100%'
+              }}>
+                <View style={styles.fullWidth}>
+                  <ColumnView justify='isCenter' overrideStyle={styles.receipientWrapper}>
+                    <Paragraph text="Recipient" overrideStyle={styles.blueText} />
+                    <View>
+                      {data.rAcctName && <Header2 text={data.rAcctName} overrideStyle={styles.blueText} />}
+                      <Paragraph text={`${data.rAcctNumber} - ${data.rBankName}`} overrideStyle={[styles.blueText, { marginTop: -5}]} />
+                    </View>
+                  </ColumnView>
+                  <ColumnView justify='isCenter' align='isCenter' overrideStyle={styles.amountWrapper}>
+                    <RowView overrideStyle={[styles.fullWidth, { paddingTop: 0}]} justify='isCenter' align='isCenter'>
+                      <Paragraph text='₦' overrideStyle={[{ fontSize: fontSizes.bigHeader, width: 'auto', marginLeft: 0, marginTop: Platform.OS === 'ios' ? 0 : '1.5%'}, styles.blueText]} />
+                      <InputText
+                        value={amount}
+                        onChange={handleTextChange}
+                        name={'amount'}
+                        placeholder='0'
+                        overrideNPInputWrapper={styles.amtInputWrapper}
+                        overrideNPInputStyle={styles.amtInput}
+                        outlineColor='transparent'
+                        activeOutlineColor='transparent'
+                        inputMode='numeric'
+                        keyboardType='numeric'
+                        contentStyle={styles.amtText}
+                        autoFocus
+                      />
+                    </RowView>
+                    <Paragraph
+                      text={`Bal: ₦ ${formatAmount(parseFloat(data.accountBalance))}`}
+                      overrideStyle={[
+                        styles.balanceText,
+                        {
+                          color: transactOutOfRange ? 'red' : colors.sMainBlue,
+                          borderColor: transactOutOfRange ? 'red' : colors.sMainBlue,
+                          backgroundColor: transactOutOfRange ? '#ffefef' : colors.sLightBlue,
+                        }
+                      ]}
                     />
-                  </RowView>
-                  <Paragraph
-                    text={`Bal: ₦ ${formatAmount(parseFloat(data.accountBalance))}`}
-                    overrideStyle={[
-                      styles.balanceText,
-                      {
-                        color: transactOutOfRange ? 'red' : colors.sMainBlue,
-                        borderColor: transactOutOfRange ? 'red' : colors.sMainBlue,
-                        backgroundColor: transactOutOfRange ? '#ffefef' : colors.sLightBlue,
-                      }
-                    ]}
-                  />
-                  <InputText
-                    value={data.narration}
-                    onChange={handleTextChange}
-                    label='Remark'
-                    name={'narration'}
-                    placeholder='From Izuchi'
-                    multiline
-                    numberOfLines={4}
-                    overrideNPInputWrapper={styles.remarkInput}
-                    overrideNPInputStyle={styles.remarkInput}
-                  />
-                  {(!data.beneficiaryId && !ownTransfer) ? (
                     <InputText
-                      value={data.saveBeneficiaryAs}
+                      value={data.narration}
                       onChange={handleTextChange}
-                      name={'saveBeneficiaryAs'}
-                      label="Save recipient as"
-                      placeholder="e.g Ade ade"
+                      label='Remark'
+                      name={'narration'}
+                      placeholder='From Izuchi'
+                      multiline
+                      numberOfLines={4}
+                      overrideNPInputWrapper={styles.remarkInput}
+                      overrideNPInputStyle={styles.remarkInput}
                     />
-                  ) : <View />}
-                </ColumnView>
-              </View>
-              <View style={[styles.buttonWrapper, styles.row, {
-                // marginTop: 0,
-                // marginBottom: 10,
-                flexGrow: 1
-              }]}>
-                <Button
-                  overrideStyle={[styles.button, styles.halfBtn, styles.transparentBtn]}
-                  label={'Prev'}
-                  overrideLabelStyle={styles.transparentBtnLabel}
-                  onPress={handlePrev}
-                />
-                <Button
-                  overrideStyle={[styles.button, styles.halfBtn]}
-                  label={'Continue'}
-                  onPress={handleAmtNext}
-                  disabled={transactOutOfRange || amount === '' || parseFloat(amount) <= 0}
-                />
-              </View>
-            </ColumnView>
+                    {(!data.beneficiaryId && !ownTransfer) ? (
+                      <InputText
+                        value={data.saveBeneficiaryAs}
+                        onChange={handleTextChange}
+                        name={'saveBeneficiaryAs'}
+                        label="Save recipient as"
+                        placeholder="e.g Ade ade"
+                      />
+                    ) : <View />}
+                  </ColumnView>
+                </View>
+                <View style={[styles.buttonWrapper, styles.row, {
+                  // marginTop: 0,
+                  // marginBottom: 10,
+                  flexGrow: 1
+                }]}>
+                  <Button
+                    overrideStyle={[styles.button, styles.halfBtn, styles.transparentBtn]}
+                    label={'Prev'}
+                    overrideLabelStyle={styles.transparentBtnLabel}
+                    onPress={handlePrev}
+                  />
+                  <Button
+                    overrideStyle={[styles.button, styles.halfBtn]}
+                    label={'Continue'}
+                    onPress={handleAmtNext}
+                    disabled={transactOutOfRange || amount === '' || parseFloat(amount) <= 0}
+                  />
+                </View>
+              </ColumnView>
+            </ScrollView>
           )}
           {step === 2 && (
             <>

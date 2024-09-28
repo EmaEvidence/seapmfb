@@ -24,16 +24,6 @@ import Electricity from './Electricity';
 import PowerIcon from '../../assets/images/power.png';
 import DataIcon from '../../assets/images/data.png';
 import AirtimeIcon from '../../assets/images/airtime.png';
-import Ninemobile from '../../assets/images/9mobile.png';
-import MtnIcon from '../../assets/images/mtn.png';
-import GloIcon from '../../assets/images/glo.png';
-import AirtelIcon from '../../assets/images/airtel.png';
-import DstvIcon from '../../assets/images/dstvv.png';
-import GotvIcon from '../../assets/images/gotv.png';
-import StartimesIcon from '../../assets/images/startimes.png';
-import EkoIcon from '../../assets/images/eko.png';
-import IbadanIcon from '../../assets/images/ibadan.png';
-import IkejaIcon from '../../assets/images/ike.png';
 import TVIcon from '../../assets/images/tv.png';
 import {AxiosResponse} from 'axios';
 import {AuthTypeComponent} from '../Transfer';
@@ -750,20 +740,7 @@ const CategoryChip = ({item, handleTextChange, selectedCategory}: any) => {
     'Cable Tv': TVIcon,
     Airtime: AirtimeIcon,
     'Mobile Data': DataIcon,
-    'Eko Electric Prepaid': EkoIcon,
-    'Eko Electric Postpaid': EkoIcon,
-    'Ibdan Disco Postpaid': IbadanIcon,
-    'Ibadan Disco Prepaid': IbadanIcon,
-    'Ikeja Electric Prepaid': IkejaIcon,
-    'Ikeja Electric Postpaid': IkejaIcon,
-    StartTimes: StartimesIcon,
-    MTN: MtnIcon,
-    Airtel: AirtelIcon,
-    Glo: GloIcon,
-    GLO: GloIcon,
-    DSTV: DstvIcon,
-    GOTV: GotvIcon,
-    '9Mobile': Ninemobile,
+    'Airtime/Data': DataIcon,
   };
 
   return (

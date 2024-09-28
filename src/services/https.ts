@@ -3,13 +3,11 @@ import Toast from 'react-native-toast-message';
 import {updateLoader} from '../app/actions/loader';
 import {config} from '../config';
 import toaster from '../utils/toaster';
-import { err } from 'react-native-svg/lib/typescript/xml';
 
 const genericError = 'An Error Occurred';
 const {url} = config.dev;
 
 const handleError = (error: any, errorMsg: string) => {
-  // console.log(error.response)
   if (
     error.request.status === 0 ||
     error.request._response ===
