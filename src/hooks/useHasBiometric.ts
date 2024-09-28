@@ -7,8 +7,8 @@ const useHasBiometric = () => {
   const [hasBiometric, setHasBiometric] = useState(false);
   const checkForBiometric = async () => {
     updateLoader(true);
-    const {biometryType} = await rnBiometrics.isSensorAvailable();
-    if (biometryType === BiometryTypes.Biometrics) {
+    const {available, biometryType} = await rnBiometrics.isSensorAvailable();
+    if (available && (biometryType === BiometryTypes.Biometrics || biometryType === 'FaceID' || biometryType === 'TouchID')) {
       updateLoader(false);
       setHasBiometric(true);
     } else {

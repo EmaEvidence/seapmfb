@@ -227,7 +227,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     alignContent: 'center',
-    paddingTop: 4,
+    // paddingTop: 4,
     textAlign:'center',
     color: colors.sMainBlue
   },

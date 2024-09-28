@@ -67,6 +67,7 @@ export const Transaction = ({navigation}: any) => {
       }
       await Share.open(shareOptions);
     } catch (error) {
+      if (error === '[Error: User did not share]') return
         toaster(
           'Error',
           'Receipt download failed',
@@ -75,46 +76,52 @@ export const Transaction = ({navigation}: any) => {
     }
   }
 
+  const isSEAP = () => {
+    const isBill = receiptData?.billPaymentDto?.billerPaymentReference;
+    const isTransfer = receiptData?.creditAccountNumber;
+    const isCard = receiptData.isCardTransation;
+    return (isBill || isTransfer || isCard) ? '' : 'SEAP MFB charges'
+  }
+
   const genReceipt = () => {
     const logoImg = 'https://ibank.seapmfb.ng/assets/img/seapmfb.png';
     return `
-      <div width="400px" style="position: relative; passing: 50px; margin: auto; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 50px;">
-        <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; ">
+      <div width="400px" style="position: relative; passing: 50px; margin: auto; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 50px; font-family: Poppins-Medium;">
+        <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; width: 100%">
           <h2>Transaction Receipt</h2>
           <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
             <img src="${logoImg}" style="width: 20px; height: 20px" />
-            <h6>SEAP MFB</h6>
           </div>
         </div>
-        <div style="padding: 50px; width: 400px;">
+        <div style="padding: 50px; width: 400px; background: #fff;">
           <div display: flex; justify-content: space-between; align-items: flex-start; min-height: 40px; width: 100%; padding: 20px; margin: 5px 0; background-color: white; border-radius: 10px;">
             <p style="font-weight: 600; font-size: 12px; opacity: 0.8; margin-bottom: 20px;">Recipient</p>
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; justify-content: space-between; align-items: center; height: 50px;">
               <p style="font-weight: 300; font-size: 10px;">Bank</p>
               <p style="font-weight: 600; font-size: 12px;">${isSEAP()}</p>
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; justify-content: space-between; align-items: center; height: 50px;">
               <p style="font-weight: 300; font-size: 10px;">Credit account</p>
               <p style="font-weight: 600; font-size: 12px;">${receiptData?.creditAccountName}</p>
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; justify-content: space-between; align-items: center; height: 50px;">
               <p style="font-weight: 300; font-size: 10px;">Bill ref.</p>
               <p style="font-weight: 600; font-size: 12px;">${receiptData?.billPaymentDto?.customerReference}</p>
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; justify-content: space-between; align-items: center; height: 50px;">
               <p style="font-weight: 300; font-size: 10px;">Bill name</p>
               <p style="font-weight: 600; font-size: 12px;">${receiptData?.billPaymentDto?.serviceName}</p>
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; justify-content: space-between; align-items: center; height: 50px;">
               <p style="font-weight: 300; font-size: 10px;">Payment ref.</p>
               <p style="font-weight: 600; font-size: 12px;">${receiptData?.billPaymentDto?.billerPaymentReference}</p>
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; justify-content: space-between; align-items: center; height: 50px;">
               <p style="font-weight: 300; font-size: 10px;">Bank</p>
               <p style="font-weight: 600; font-size: 12px;">${receiptData?.beneficiaryBank}</p>
             </div>
@@ -122,32 +129,32 @@ export const Transaction = ({navigation}: any) => {
           <div display: flex; justify-content: space-between; align-items: flex-start; min-height: 40px; width: 100%; padding: 20px; margin: 5px 0; background-color: white; border-radius: 10px;">
             <p style="font-weight: 600; font-size: 12px; opacity: 0.8; margin-bottom: 20px;">Transaction</p>
             
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; justify-content: space-between; align-items: center; height: 50px;">
               <p style="font-weight: 300; font-size: 10px;"Amount</p>
               <p style="font-weight: 600; font-size: 12px;">${transaction?.amount}</p>
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; justify-content: space-between; align-items: center; height: 50px;">
               <p style="font-weight: 300; font-size: 10px;">ReferenceID</p>
               <p style="font-weight: 600; font-size: 12px;">${transaction.referenceID}</p>
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; justify-content: space-between; align-items: center; height: 50px;">
               <p style="font-weight: 300; font-size: 10px;">Date</p>
               <p style="font-weight: 600; font-size: 12px;">${new Date(transaction.transactionDate).toDateString()}</p>
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; justify-content: space-between; align-items: center; height: 50px;">
               <p style="font-weight: 300; font-size: 10px;">Status</p>
               <p style="font-weight: 600; font-size: 12px;">${transaction.receiptData?.billPaymentDto?.status}</p>
             </div>
           </div>
-          <div display: flex; justify-content: space-between; align-items: flex-start; min-height: 40px; width: 100%; padding: 20px; margin: 5px 0; background-color: white; border-radius: 10px;">
+          <div display: flex; justify-content: space-between; align-items: flex-start; min-height: 40px; width: 100%; padding: 20px; margin: 5px 0; background-color: white; border-radius: 10px;  height: 50px;">
             <p style="font-weight: 600; font-size: 12px; opacity: 0.8; margin-bottom: 20px;">Remarks</p>
             <p style="width: 100%; text-align: left;">${transaction?.paymentNarration || transaction?.narration}</p>
           </div>
         </div>
-        <div style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0.2; background: url(${logoImg}); background-repeat: no-repeat; background-position: center; background-size: contain;"></div>
+        <div style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0.1; background: url(${logoImg}); background-repeat: no-repeat; background-position: center; background-size: contain;"></div>
       </div> 
     `;
   }
@@ -164,13 +171,6 @@ export const Transaction = ({navigation}: any) => {
   }
 
   const receiptData = transaction?.receiptData || {};
-  const isSEAP = () => {
-    console.log(transaction, receiptData)
-    const isBill = receiptData?.billPaymentDto?.billerPaymentReference;
-    const isTransfer = receiptData?.creditAccountNumber;
-    const isCard = receiptData.isCardTransation;
-    return (isBill || isTransfer || isCard) ? '' : 'SEAP MFB charges'
-  }
 
   if (Platform.OS === 'ios') {
     return (

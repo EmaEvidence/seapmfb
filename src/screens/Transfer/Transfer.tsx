@@ -275,7 +275,6 @@ export const Transfer = ({navigation, history}: any) => {
   }
 
   const transferBeneficiary = async () => {
-    refRBSheet.current.open();
     const credential = handleGetCredential();
     if (!credential) {
       return;
@@ -288,7 +287,7 @@ export const Transfer = ({navigation, history}: any) => {
       transaferType: data.rBankName.search(/seap/gi) > -1 ? 1 : 2,
       credential,
     })) as AxiosResponse<Record<string, any>>;
-    if (resp.status === 200) {
+    if (resp.response.status === 200) {
       transferSuccessCB(resp.data);
     }
   };
@@ -308,7 +307,7 @@ export const Transfer = ({navigation, history}: any) => {
       saveBeneficiaryAs: data.saveBeneficiaryAs,
       credential,
     })) as AxiosResponse<Record<string, any>>;
-    if (resp.status === 200) {
+    if (resp.response.status === 200) {
       if (!!data.saveBeneficiaryAs) {
         getBeneficiaries(1);
         getBeneficiaries(2);
@@ -331,7 +330,7 @@ export const Transfer = ({navigation, history}: any) => {
       destinationAccountId: ownAccount.id,
     });
     // @ts-ignore
-    if (resp.status === 200) {
+    if (resp.response.status === 200) {
       transferSuccessCB(resp.data);
     }
   };
@@ -351,14 +350,9 @@ export const Transfer = ({navigation, history}: any) => {
       case '3':
         return setData(d => ({
           ...d,
-          authName: 'biometricData',
-        }));
-      case '4':
-        return setData(d => ({
-          ...d,
           authName: 'transactionPin & otp',
         }));
-      case '5':
+      case '4':
         return setData(d => ({
           ...d,
           authName: 'password',
@@ -643,7 +637,9 @@ export const Transfer = ({navigation, history}: any) => {
             </ColumnView>
           )}
           {step === 1 && (
-            <ColumnView justify='isBtw'>
+            <ColumnView justify='isBtw' overrideStyle={{
+              width: '100%'
+            }}>
               <View style={styles.fullWidth}>
                 <ColumnView justify='isCenter' overrideStyle={styles.receipientWrapper}>
                   <Paragraph text="Recipient" overrideStyle={styles.blueText} />
@@ -654,7 +650,7 @@ export const Transfer = ({navigation, history}: any) => {
                 </ColumnView>
                 <ColumnView justify='isCenter' align='isCenter' overrideStyle={styles.amountWrapper}>
                   <RowView overrideStyle={[styles.fullWidth, { paddingTop: 0}]} justify='isCenter' align='isCenter'>
-                    <Paragraph text='₦' overrideStyle={[{ fontSize: fontSizes.bigHeader, width: 'auto', marginLeft: 0, marginTop: 5,}, styles.blueText]} />
+                    <Paragraph text='₦' overrideStyle={[{ fontSize: fontSizes.bigHeader, width: 'auto', marginLeft: 0,}, styles.blueText]} />
                     <InputText
                       value={amount}
                       onChange={handleTextChange}
@@ -704,8 +700,8 @@ export const Transfer = ({navigation, history}: any) => {
                 </ColumnView>
               </View>
               <View style={[styles.buttonWrapper, styles.row, {
-                marginTop: 0,
-                marginBottom: 10,
+                // marginTop: 0,
+                // marginBottom: 10,
                 flexGrow: 1
               }]}>
                 <Button
@@ -934,14 +930,9 @@ export const AuthTypeComponent = ({
       case '3':
         return setData(d => ({
           ...d,
-          authName: 'biometricData',
-        }));
-      case '4':
-        return setData(d => ({
-          ...d,
           authName: 'transactionPin & otp',
         }));
-      case '5':
+      case '4':
         return setData(d => ({
           ...d,
           authName: 'password',
@@ -961,14 +952,14 @@ export const AuthTypeComponent = ({
         return renderPINComponent();
       case '2':
         return renderOTPComponent();
-      case '4':
+      case '3':
         return (
           <>
             {renderOTPComponent()}
             {renderPINComponent()}
           </>
         );
-      case '5':
+      case '4':
         return (
           <InputText
             value={data.password}

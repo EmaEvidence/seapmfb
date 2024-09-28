@@ -4,9 +4,8 @@ import {
   View,
   ViewStyle,
   TextStyle,
-  TextInputProps,
 } from 'react-native';
-import { TextInput as TextInputNP } from 'react-native-paper';
+import { TextInput as TextInputNP, type TextInputProps } from 'react-native-paper';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import {height} from '../utils/constants';
 import {colors, fontSizes} from '../utils/theme';
@@ -73,6 +72,7 @@ const InputText = ({
   activeOutlineColor = colors.sMainBlue,
   contentStyle,
   maxLength,
+  right,
 }: InputTextProps) => {
   const [isFocus, setIsFocus] = useState(false);
   return (
@@ -128,6 +128,7 @@ const InputText = ({
         returnKeyType={returnKeyType}
         autoFocus={autoFocus}
         maxLength={maxLength}
+        right={right}
       />
       {inValid && (
         <Paragraph

@@ -1,5 +1,5 @@
 import React, {Key, useEffect, useState} from 'react';
-import {TouchableOpacity, View, Image, FlatList} from 'react-native';
+import {TouchableOpacity, View, Image, FlatList, KeyboardAvoidingView, Platform} from 'react-native';
 import {
   AccountSelector,
   Button,
@@ -538,204 +538,207 @@ export const Payments = ({navigation}: {navigation: any}) => {
 
 
   return (
-    <View style={styles.containerScroll}>
-      <View style={styles.wrapper}>
-        {/* <Header title={'Bills Payments'} navigation={navigation} /> */}
-        <Header1 text='Bills Payments' overrideStyle={{
-          fontSize: fontSizes.bigHeader,
-          fontWeight: '600',
-          color: colors.sMainBlue,
-          marginTop: 30
-        }} />
-        <View style={styles.subheader} />
-        {step === 0 && (
-          <View style={styles.paymentWrapper}>
-            {!categories ? (
-              <Paragraph
-                overrideStyle={styles.notFound}
-                text="Loading bills categories..."
-              />
-            ) : categories.length === 0 ? (
-              <Paragraph
-                overrideStyle={styles.notFound}
-                text="No category found or Error loading bills cateogories."
-              />
-            ) : (
-              <View style={styles.pickerWrapper}>
-                <View>
-                  <Header5
-                    text="Select bills category."
-                    overrideStyle={styles.chipLabel}
-                  />
-                  <RowView
-                    justify="isStart"
-                    align="isCenter"
-                    overrideStyle={styles.chipWrapper}>
-                    <>
-                      {categories.map(item => (
-                        <CategoryChip
-                          key={item.name}
-                          item={item}
-                          handleTextChange={handleTextChange}
-                          selectedCategory={paymentData.category}
-                        />
-                      ))}
-                    </>
-                  </RowView>
-                </View>
-              </View>
-            )}
-          </View>
-        )}
-        {step === 1 && (
-          <View style={styles.paymentWrapper}>
-            {billers && billers.length > 0 ? (
-              <View>
-                <AccountSelector
-                  value={paymentData.account}
-                  handleTextChange={handleTextChange}
-                  overrideContainerStyle={styles.acctSelector}
-                  inValid={paymentError.account}
-                  error="Please select an account"
+    <KeyboardAvoidingView
+    behavior={Platform.OS === "ios" ? "padding" : "height"} >
+      <View style={styles.containerScroll}>
+        <View style={styles.wrapper}>
+          {/* <Header title={'Bills Payments'} navigation={navigation} /> */}
+          <Header1 text='Bills Payments' overrideStyle={{
+            fontSize: fontSizes.bigHeader,
+            fontWeight: '600',
+            color: colors.sMainBlue,
+            marginTop: 30
+          }} />
+          <View style={styles.subheader} />
+          {step === 0 && (
+            <View style={styles.paymentWrapper}>
+              {!categories ? (
+                <Paragraph
+                  overrideStyle={styles.notFound}
+                  text="Loading bills categories..."
                 />
-                <View style={{
-                  height: height * 0.63
-                }}>
-                  <FlatList
-                    data={billers}
-                    renderItem={({item}) => (
-                      <TouchableOpacity onPress={() => {
-                        handleTextChange('biller', item.name);
-                        handleTextChange('billerId', item.serviceId)
-                        setStep((prev) => prev + 1);
-                      }} key={item.name} style={{
-                        marginVertical: 5,
-                        backgroundColor: colors.sTextYellow,
-                        borderRadius: 5,
-                        padding: 10
-                      }}>
-                        <RowView justify='isStart' align='isCenter'>
-                          <Image
-                            source={{uri: item.imageUrl}}
-                            style={styles.dropdownImg}
-                            resizeMethod='resize'
-                            resizeMode='contain'
+              ) : categories.length === 0 ? (
+                <Paragraph
+                  overrideStyle={styles.notFound}
+                  text="No category found or Error loading bills cateogories."
+                />
+              ) : (
+                <View style={styles.pickerWrapper}>
+                  <View>
+                    <Header5
+                      text="Select bills category."
+                      overrideStyle={styles.chipLabel}
+                    />
+                    <RowView
+                      justify="isStart"
+                      align="isCenter"
+                      overrideStyle={styles.chipWrapper}>
+                      <>
+                        {categories.map(item => (
+                          <CategoryChip
+                            key={item.name}
+                            item={item}
+                            handleTextChange={handleTextChange}
+                            selectedCategory={paymentData.category}
                           />
-                          <Header5 text={item.name} />
-                        </RowView>
-                      </TouchableOpacity>
-                    )}
-                    showsVerticalScrollIndicator={false}
-                  />
+                        ))}
+                      </>
+                    </RowView>
+                  </View>
                 </View>
+              )}
+            </View>
+          )}
+          {step === 1 && (
+            <View style={styles.paymentWrapper}>
+              {billers && billers.length > 0 ? (
+                <View>
+                  <AccountSelector
+                    value={paymentData.account}
+                    handleTextChange={handleTextChange}
+                    overrideContainerStyle={styles.acctSelector}
+                    inValid={paymentError.account}
+                    error="Please select an account"
+                  />
+                  <View style={{
+                    height: height * 0.63
+                  }}>
+                    <FlatList
+                      data={billers}
+                      renderItem={({item}) => (
+                        <TouchableOpacity onPress={() => {
+                          handleTextChange('biller', item.name);
+                          handleTextChange('billerId', item.serviceId)
+                          setStep((prev) => prev + 1);
+                        }} key={item.name} style={{
+                          marginVertical: 5,
+                          backgroundColor: colors.sTextYellow,
+                          borderRadius: 5,
+                          padding: 10
+                        }}>
+                          <RowView justify='isStart' align='isCenter'>
+                            <Image
+                              source={{uri: item.imageUrl}}
+                              style={styles.dropdownImg}
+                              resizeMethod='resize'
+                              resizeMode='contain'
+                            />
+                            <Header5 text={item.name} />
+                          </RowView>
+                        </TouchableOpacity>
+                      )}
+                      showsVerticalScrollIndicator={false}
+                    />
+                  </View>
+                </View>
+              ) : billers?.length === 0 ? (
+                <Paragraph text="No Service Provider found" />
+              ) : null}
+              <RowView justify='isBtw' overrideStyle={styles.continueWrapper}>
+                <Button
+                  overrideStyle={[styles.btn, generalStyles.transparentBtn]}
+                  label="Prev"
+                  onPress={() => setStep((prev) => prev - 1)}
+                  overrideLabelStyle={generalStyles.transparentBtnLabel}
+                />
+                <Button
+                  overrideStyle={styles.btn}
+                  label="Next"
+                  onPress={() => handleNext()}
+                  disabled={!paymentData.biller}
+                />
+              </RowView>
+            </View>
+          )}
+          {step === 2 && (
+            <>
+              <ColumnView justify='isBtw' align='isStart' overrideStyle={styles.paymentDetailsView}>
+                <Paragraph text='Bill details' />
+                <Header5 text={paymentData.category} />
+                <Header5 text={paymentData.biller} />
+              </ColumnView>
+              {billerDetail &&
+                serviceFee &&
+                paymentData.biller &&
+                switchComponent()}
+              {serviceFee && paymentData.biller && paymentData.customerReference && (
+                <>
+                  {
+                    //@ts-ignore
+                    (paymentData.selectedCategoryId === 2 || paymentData.selectedCategoryId === 4 ||
+                      // @ts-ignore
+                      paymentData.selectedCategoryId === 1) && (
+                      <View style={[styles.chargeWrapper]}>
+                        <View style={styles.serviceWrapper}>
+                          <Header3
+                            overrideStyle={styles.serviceTitle}
+                            text="Service Charge"
+                          />
+                          <Paragraph
+                            overrideStyle={styles.serviceAmt}
+                            text={paymentData.commission}
+                          />
+                        </View>
+                        <View style={styles.serviceWrapper}>
+                          <Header3
+                            overrideStyle={styles.serviceTitle}
+                            text="VAT"
+                          />
+                          <Paragraph
+                            overrideStyle={styles.serviceAmt}
+                            text={paymentData.vatRate}
+                          />
+                        </View>
+                      </View>
+                    )
+                  }
+                </>
+              )}
+              <View style={styles.btnWrapper}>
+                <Button
+                  overrideStyle={[styles.btn, generalStyles.transparentBtn]}
+                  label="Prev"
+                  onPress={() => setStep(prev => prev - 1)}
+                  overrideLabelStyle={generalStyles.transparentBtnLabel}
+                />
+                <Button
+                  overrideStyle={styles.btn}
+                  label="Continue"
+                  onPress={handleContinue}
+                />
               </View>
-            ) : billers?.length === 0 ? (
-              <Paragraph text="No Service Provider found" />
-            ) : null}
-            <RowView justify='isBtw' overrideStyle={styles.continueWrapper}>
-              <Button
-                overrideStyle={[styles.btn, generalStyles.transparentBtn]}
-                label="Prev"
-                onPress={() => setStep((prev) => prev - 1)}
-                overrideLabelStyle={generalStyles.transparentBtnLabel}
+            </>
+          )}
+          {step === 3 && (
+            <View style={styles.step1Wrapper}>
+              <Header3
+                overrideStyle={styles.authTitle}
+                text={`You are making a bill payment for ${
+                  paymentData.category
+                } worth ₦ ${
+                  parseInt(paymentData.commission, 10) +
+                  parseInt(paymentData.amount, 10)
+                }. Enter your transaction authentication details to continue.`}
               />
-              <Button
-                overrideStyle={styles.btn}
-                label="Next"
-                onPress={() => handleNext()}
-                disabled={!paymentData.biller}
-              />
-            </RowView>
-          </View>
-        )}
-        {step === 2 && (
-          <>
-            <ColumnView justify='isBtw' align='isStart' overrideStyle={styles.paymentDetailsView}>
-              <Paragraph text='Bill details' />
-              <Header5 text={paymentData.category} />
-              <Header5 text={paymentData.biller} />
-            </ColumnView>
-            {billerDetail &&
-              serviceFee &&
-              paymentData.biller &&
-              switchComponent()}
-            {serviceFee && paymentData.biller && paymentData.customerReference && (
-              <>
-                {
-                  //@ts-ignore
-                  (paymentData.selectedCategoryId === 2 || paymentData.selectedCategoryId === 4 ||
-                    // @ts-ignore
-                    paymentData.selectedCategoryId === 1) && (
-                    <View style={[styles.chargeWrapper]}>
-                      <View style={styles.serviceWrapper}>
-                        <Header3
-                          overrideStyle={styles.serviceTitle}
-                          text="Service Charge"
-                        />
-                        <Paragraph
-                          overrideStyle={styles.serviceAmt}
-                          text={paymentData.commission}
-                        />
-                      </View>
-                      <View style={styles.serviceWrapper}>
-                        <Header3
-                          overrideStyle={styles.serviceTitle}
-                          text="VAT"
-                        />
-                        <Paragraph
-                          overrideStyle={styles.serviceAmt}
-                          text={paymentData.vatRate}
-                        />
-                      </View>
-                    </View>
-                  )
-                }
-              </>
-            )}
-            <View style={styles.btnWrapper}>
-              <Button
-                overrideStyle={[styles.btn, generalStyles.transparentBtn]}
-                label="Prev"
-                onPress={() => setStep(prev => prev - 1)}
-                overrideLabelStyle={generalStyles.transparentBtnLabel}
-              />
-              <Button
-                overrideStyle={styles.btn}
-                label="Continue"
-                onPress={handleContinue}
-              />
+              <AuthTypeComponent handleAuthChange={handleTextChange} />
+              <View style={styles.btnWrapper}>
+                <Button
+                  overrideStyle={[styles.btn, generalStyles.transparentBtn]}
+                  label="Go back"
+                  onPress={() => setStep(prev => prev - 1)}
+                  overrideLabelStyle={generalStyles.transparentBtnLabel}
+                />
+                <Button
+                  overrideStyle={styles.btn}
+                  label="Confirm"
+                  onPress={handleConfirm}
+                />
+              </View>
             </View>
-          </>
-        )}
-        {step === 3 && (
-          <View style={styles.step1Wrapper}>
-            <Header3
-              overrideStyle={styles.authTitle}
-              text={`You are making a bill payment for ${
-                paymentData.category
-              } worth ₦ ${
-                parseInt(paymentData.commission, 10) +
-                parseInt(paymentData.amount, 10)
-              }. Enter your transaction authentication details to continue.`}
-            />
-            <AuthTypeComponent handleAuthChange={handleTextChange} />
-            <View style={styles.btnWrapper}>
-              <Button
-                overrideStyle={[styles.btn, generalStyles.transparentBtn]}
-                label="Go back"
-                onPress={() => setStep(prev => prev - 1)}
-                overrideLabelStyle={generalStyles.transparentBtnLabel}
-              />
-              <Button
-                overrideStyle={styles.btn}
-                label="Confirm"
-                onPress={handleConfirm}
-              />
-            </View>
-          </View>
-        )}
+          )}
+        </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 

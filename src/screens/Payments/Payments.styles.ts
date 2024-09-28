@@ -76,11 +76,10 @@ export const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 30,
+    // marginTop: '7%',
   },
   step1Wrapper: {
     width: '100%',
-    // paddingHorizontal: '10%',
     flex: 1,
   },
   authTitle: {
@@ -96,6 +95,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'flex-end',
     flexGrow: 1,
+    alignSelf: 'flex-end',
   },
   btn: {
     width: '40%',

@@ -8,7 +8,7 @@ import {Provider} from 'react-redux';
 import {store} from './src/app/store';
 import CustomToaster from './src/common/CustomToaster';
 import {fontSizes} from './src/utils/theme';
-import { PaperProvider } from 'react-native-paper';
+import { PaperProvider, DefaultTheme } from 'react-native-paper';
 
 export const toastConfig = {
   success: (props: any) => (
@@ -50,7 +50,7 @@ const App = () => {
 
   return (
     <Provider store={store}>
-      <PaperProvider>
+      <PaperProvider theme={DefaultTheme}>
         <NavigationContainer>
           <Route />
           <Toast

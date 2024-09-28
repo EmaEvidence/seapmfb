@@ -15,9 +15,10 @@ import useDeviceInfo from '../../hooks/useDeviceInfo';
 import {useAppDispatch} from '../../app/hooks';
 import {login} from '../../app/slices/auth';
 import useLanguage from '../../hooks/useLanguage';
-import { FingerPrintComponent } from '../MFA';
-import useRefreshToken from '../../hooks/useRefreshToken';
 import useHasBiometric from '../../hooks/useHasBiometric';
+import { TextInput } from 'react-native-paper';
+import Visible from '../../assets/images/visible.png';
+import InVisible from '../../assets/images/invisible.png';
 
 interface LoginProps {
   navigation: INavigation;
@@ -27,7 +28,7 @@ const reenrollError =
   'This device is not authorized to access your account. Please use the device enrollment feature to register this device for access on your account';
 
 export const Login = ({navigation}: LoginProps) => {
-  const {hasBiometric} = useHasBiometric();
+  const [visible, setVisible] = useState(false);
   const {lang} = useLanguage();
   const dispatch = useAppDispatch();
   const {deviceId} = useDeviceInfo();
@@ -159,7 +160,7 @@ export const Login = ({navigation}: LoginProps) => {
           <InputText
             label={lang.password}
             overrideStyle={styles.textInput}
-            obsureText={true}
+            obsureText={!visible}
             name="password"
             onChange={handleTextChange}
             value={userData.password}
@@ -169,6 +170,7 @@ export const Login = ({navigation}: LoginProps) => {
             autoCorrect={false}
             autoFocus={false}
             returnKeyType='done'
+            right={<TextInput.Icon icon={visible ? InVisible : Visible} onPress={() => setVisible(!visible)} />}
           />
           <View style={styles.buttonWrapper}>
             <Button
