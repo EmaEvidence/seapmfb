@@ -42,14 +42,13 @@ import { toastConfig } from '../../../App';
 
 const transferTypesArray = ['Local Transfer', 'Interbank Transfer'];
 const targetTypes = ['Saved Beneficiary', 'New Beneficiary'];
-const alpa = ["all", "0-9", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
 
 export const Transfer = ({navigation, history}: any) => {
   const refRBSheet = useRef();
   const [transaction, setTransaction] = useState({});
   const [newRec, setNewRec] = useState(false);
   const transactType = useTransactionAuthType().type;
-  const [bankFilterTerm, setBankFilterType] = useState(alpa[0]);
+  const [bankFilterTerm, setBankFilterType] = useState('');
   const [amount, setAmount] = useState('');
   const {bankList, beneficiaries} = useAppSelector(state => state.account);
   const accountSummary = useAppSelector(state => state.account.accounts);
@@ -122,12 +121,6 @@ export const Transfer = ({navigation, history}: any) => {
   });
 
   useEffect(() => {
-    if (!bankList) {
-      getBanks();
-    }
-  }, [bankList]);
-
-  useEffect(() => {
     getBeneficiaries(1);
     getBeneficiaries(2);
   }, []);
@@ -157,6 +150,9 @@ export const Transfer = ({navigation, history}: any) => {
   };
 
   const handleTextChange = (label: string, value: string) => {
+    if (label === 'rAcctNumber' && value.length === 10 ) {
+      getBanks(value);
+    }
     if (label === 'amount') {
       const formated = formatAmount(parseInt((value.replace(/,/g, '')) || '0'));
       setAmount(formated)
@@ -211,31 +207,6 @@ export const Transfer = ({navigation, history}: any) => {
     }
   };
 
-  const handleSetError = (errorObj: Record<string, boolean>) => {
-    setError({
-      ...userError,
-      ...errorObj,
-    });
-  };
-
-  const handleNextBeneficiary = () => {
-    const isValid = validateBeneficiaryData(data, handleSetError);
-    if (selectedBeneficiaries.length === 0) {
-      toaster('Error', 'No Beneficiary Selected', 'custom');
-      return;
-    }
-    if (isValid) {
-      handleNext();
-    }
-  };
-
-  const handleNextNonBeneficiary = () => {
-    const isValid = validateNonBeneficiaryData(data, handleSetError);
-    if (isValid) {
-      handleNext();
-    }
-  };
-
   const handleGetCredential = () => {
     let result: Record<string, string> = {};
     let valid = true;
@@ -287,7 +258,7 @@ export const Transfer = ({navigation, history}: any) => {
       transaferType: data.rBankName.search(/seap/gi) > -1 ? 1 : 2,
       credential,
     })) as AxiosResponse<Record<string, any>>;
-    if (resp.response.status === 200) {
+    if (resp.succeed) {
       transferSuccessCB(resp.data);
     }
   };
@@ -307,7 +278,7 @@ export const Transfer = ({navigation, history}: any) => {
       saveBeneficiaryAs: data.saveBeneficiaryAs,
       credential,
     })) as AxiosResponse<Record<string, any>>;
-    if (resp.response.status === 200) {
+    if (resp.succeed) {
       if (!!data.saveBeneficiaryAs) {
         getBeneficiaries(1);
         getBeneficiaries(2);
@@ -330,7 +301,7 @@ export const Transfer = ({navigation, history}: any) => {
       destinationAccountId: ownAccount.id,
     });
     // @ts-ignore
-    if (resp.response.status === 200) {
+    if (resp.succeed) {
       transferSuccessCB(resp.data);
     }
   };
@@ -447,13 +418,10 @@ export const Transfer = ({navigation, history}: any) => {
   }
 
   const getFilterBanks = () => {
-    if (bankFilterTerm === 'all') {
-      return bankList;
-    } else if (bankFilterTerm === '0-9') {
-      return bankList?.filter(item => parseInt(item.name.charAt(0)) >= 0);
-    } else {
-      return bankList?.filter(item => item.name.charAt(0).toLowerCase() === bankFilterTerm.toLowerCase());
-    }
+    if (bankFilterTerm.length === 0) return bankList;
+    return bankList?.filter(item => {
+      return item.name.toLowerCase().search(bankFilterTerm.toLowerCase()) >= 0
+    });
   }
 
   function processBankLogo(name: string) {
@@ -586,40 +554,24 @@ export const Transfer = ({navigation, history}: any) => {
                       data.rAcctNumber.length === 10 && bankList ? (
                         <>
                           <Paragraph text="Select recipient's bank" />
-                          <View style={{height: height * 0.05, marginVertical: 5}}>
-                            <ScrollView
-                              showsHorizontalScrollIndicator={false}
-                              horizontal
-                            >
-                              {
-                                alpa.map((itm) => (
-                                  <TouchableOpacity
-                                    key={itm}
-                                    onPress={() => setBankFilterType(itm)}
-                                    style={[
-                                    {
-                                      width: 'auto',
-                                      height: 30,
-                                      marginHorizontal: 5,
-                                      paddingHorizontal: 20,
-                                      paddingTop: 5,
-                                      justifyContent: 'center',
-                                      alignContent:'center',
-                                      alignItems: 'center',
-                                      backgroundColor: itm === bankFilterTerm.toLowerCase() ? colors.sLightBlue : 'transparent',
-                                      borderColor: itm === bankFilterTerm.toLowerCase() ? colors.sYellow : 'transparent',
-                                      borderWidth: itm === bankFilterTerm.toLowerCase() ? 1 : 0,
-                                      borderRadius: 50
-                                    }
-                                    ]}>
-                                    <Paragraph overrideStyle={{fontSize: fontSizes.paragragh, textAlign: 'center', verticalAlign: 'middle'}} text={itm.toUpperCase()} />
-                                  </TouchableOpacity>
-                                ))
-                              }
-                            </ScrollView>
+                          <View style={{height: height * 0.05, marginVertical: 0}}>
+                            <InputText
+                              value={bankFilterTerm}
+                              onChange={function (name: string, text: string): void {
+                                setBankFilterType(text);
+                              } }
+                              name={''}
+                              overrideNPInputWrapper={{
+                                height: height * 0.04
+                              }}
+                              overrideNPInputStyle={{
+                                height: height * 0.04
+                              }}
+                              placeholder='Seach banks'
+                            />
                           </View>
                           <FlatList
-                            data={[{"bankCode": "seap", "name": "SEAP MFB"}, ...(getFilterBanks() || [])]}
+                            data={[{"bankCode": "000", "name": "SEAP MFB"}, ...(getFilterBanks() || [])]}
                             renderItem={({item}) => (
                               <TouchableOpacity onPress={() => handleSelectBank(item)} key={item.name} style={styles.secCard}>
                                 <Header4 text={processBankLogo(item.name)} overrideStyle={styles.icon} />

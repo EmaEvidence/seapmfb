@@ -339,7 +339,6 @@ export const Payments = ({navigation}: {navigation: any}) => {
         Comp = TV;
         break;
       case 3:
-        paymentData.biller.search(/data/gi)
         Comp = paymentData.biller.search(/data/gi) >= 0 ? Data : Airtime;
         break;
       case 4:
@@ -641,7 +640,7 @@ export const Payments = ({navigation}: {navigation: any}) => {
             </View>
           )}
           {step === 2 && (
-            <>
+            <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
               <ColumnView justify='isBtw' align='isStart' overrideStyle={styles.paymentDetailsView}>
                 <Paragraph text='Bill details' />
                 <Header5 text={paymentData.category} />
@@ -697,7 +696,7 @@ export const Payments = ({navigation}: {navigation: any}) => {
                   onPress={handleContinue}
                 />
               </View>
-            </>
+            </KeyboardAvoidingView>
           )}
           {step === 3 && (
             <View style={styles.step1Wrapper}>

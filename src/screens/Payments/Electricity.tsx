@@ -54,6 +54,7 @@ export const Electricity = ({
           placeholder="e.g 1000"
           keyboardType='numeric'
           inputMode='numeric'
+          returnKeyType='done'
         />
       </View>
       {name && <Paragraph text={name} />}

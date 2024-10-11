@@ -27,10 +27,11 @@ export const getAccounts = async (showLoader = true) => {
   }
 };
 
-export const getBanks = async () => {
-  const resp = await getCalls('FundTransfer/bankslist', '');
+export const getBanks = async (acctNo: string) => {
+  const resp = await getCalls(`FundTransfer/bankslist?accountNumber=${acctNo}`, '');
   if (resp) {
     appDispatch(addBank(resp.data.banksList));
+    console.log(resp.data.banksList, acctNo)
     return resp;
   }
 };

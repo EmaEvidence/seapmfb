@@ -138,6 +138,7 @@ export const TV = ({
         overrideStyle={styles.tvInput}
         keyboardType='numeric'
         inputMode='numeric'
+        returnKeyType='done'
       />
       {name && <Paragraph text={name} />}
       {errorObj.name && (

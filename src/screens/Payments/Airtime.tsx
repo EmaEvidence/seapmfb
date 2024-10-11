@@ -39,6 +39,7 @@ export const Airtime = ({
         placeholder="e.g 1000"
         keyboardType='numeric'
         inputMode='numeric'
+        returnKeyType='done'
       />
     </>
   );

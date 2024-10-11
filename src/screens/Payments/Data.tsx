@@ -86,6 +86,7 @@ export const Data = ({
         placeholder="e.g 07010101010"
         keyboardType='numeric'
         inputMode='tel'
+        returnKeyType='done'
       />
     </>
   );

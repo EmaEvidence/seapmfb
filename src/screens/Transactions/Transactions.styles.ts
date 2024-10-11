@@ -6,7 +6,6 @@ export const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: colors.sTextYellow,
     paddingHorizontal: '2%',
-    borderWidth: 1,
   },
   actionBtn: {
     backgroundColor: 'transparent',
